@@ -82,22 +82,25 @@ model UserInteraction {
 }
 
 model Elf {
-  id          String              @id @default(cuid())
-  name        String
-  avatar      String?
-  element     String
-  rarity      String
-  totalStats  Int                 @default(0)
-  hp          Int                 @default(0)
-  attack      Int                 @default(0)
-  defense     Int                 @default(0)
-  speed       Int                 @default(0)
-  isHot       Boolean             @default(false)
-  tags        String?
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
-  hatchRules  HatchRule[]
-  collections UserElfCollection[]
+  id                    String              @id @default(cuid())
+  name                  String
+  avatar                String?
+  element               String
+  rarity                String
+  totalStats            Int                 @default(0)
+  hp                    Int                 @default(0)
+  attack                Int                 @default(0)
+  defense               Int                 @default(0)
+  speed                 Int                 @default(0)
+  isHot                 Boolean             @default(false)
+  tags                  String?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  hatchRules            HatchRule[]
+  collections           UserElfCollection[]
+  images                ElfImage[]
+  evolutionParentLinks  ElfEvolution[]      @relation("ElfEvolutionParent")
+  evolutionChildLinks   ElfEvolution[]      @relation("ElfEvolutionChild")
 }
 
 model Egg {
@@ -107,6 +110,7 @@ model Egg {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   rules     HatchRule[]
+  images    EggImage[]
 }
 
 model HatchRule {
@@ -133,4 +137,57 @@ model UserElfCollection {
   user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, elfId])
+}
+
+model ElfImage {
+  id        String   @id @default(cuid())
+  elfId     String
+  url       String
+  altText   String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  elf       Elf      @relation(fields: [elfId], references: [id], onDelete: Cascade)
+
+  @@index([elfId, sortOrder])
+}
+
+model EggImage {
+  id        String   @id @default(cuid())
+  eggId     String
+  url       String
+  altText   String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  egg       Egg      @relation(fields: [eggId], references: [id], onDelete: Cascade)
+
+  @@index([eggId, sortOrder])
+}
+
+model EvolutionChain {
+  id        String         @id @default(cuid())
+  name      String?
+  note      String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  links     ElfEvolution[]
+}
+
+model ElfEvolution {
+  id          String          @id @default(cuid())
+  chainId     String
+  parentElfId String?
+  childElfId  String
+  stage       Int             @default(1)
+  sortOrder   Int             @default(0)
+  requirement String?
+  note        String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  chain       EvolutionChain  @relation(fields: [chainId], references: [id], onDelete: Cascade)
+  parentElf   Elf?            @relation("ElfEvolutionParent", fields: [parentElfId], references: [id], onDelete: Cascade)
+  childElf    Elf             @relation("ElfEvolutionChild", fields: [childElfId], references: [id], onDelete: Cascade)
+
+  @@unique([chainId, childElfId])
+  @@index([chainId, stage, sortOrder])
+  @@index([parentElfId])
 }

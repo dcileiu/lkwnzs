@@ -21,8 +21,8 @@ Page({
         element: this.data.currentElement,
         keyword: this.data.keyword
       })
-      
-      this.setData({ 
+
+      this.setData({
         elves: res?.items || [],
         totalCount: res?.total || 0,
         collectedCount: res?.collectedCount || 0
@@ -47,5 +47,11 @@ Page({
 
   onSearch() {
     this.fetchPokedex()
+  },
+
+  goToDetail(e) {
+    const { id } = e.currentTarget.dataset
+    if (!id) return
+    wx.navigateTo({ url: `/pages/elf-detail/index?id=${id}` })
   }
 })

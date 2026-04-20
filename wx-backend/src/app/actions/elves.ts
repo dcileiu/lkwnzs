@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { parseImageRecords, resolveCoverImage } from "@/lib/media"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
@@ -9,6 +10,8 @@ export async function createElf(formData: FormData) {
   const element = formData.get("element") as string
   const rarity = formData.get("rarity") as string
   const isHot = formData.get("isHot") === "on"
+  const imageRecords = parseImageRecords(formData.get("galleryImages"))
+  const coverImage = resolveCoverImage(formData.get("coverImage"), imageRecords)
   
   const hp = parseInt((formData.get("hp") as string) || "0")
   const attack = parseInt((formData.get("attack") as string) || "0")
@@ -26,12 +29,18 @@ export async function createElf(formData: FormData) {
       name,
       element,
       rarity,
+      avatar: coverImage,
       isHot,
       hp,
       attack,
       defense,
       speed,
-      totalStats
+      totalStats,
+      images: imageRecords.length > 0
+        ? {
+            create: imageRecords,
+          }
+        : undefined,
     }
   })
 

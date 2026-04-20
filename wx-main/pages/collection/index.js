@@ -26,7 +26,6 @@ Page({
   async showEggDetail(e) {
     const { id, index } = e.currentTarget.dataset
     if (this.data.activeEggIndex === index) {
-      // Toggle off if same card tapped
       this.setData({ selectedEgg: null, activeEggIndex: null })
       return
     }
@@ -39,5 +38,11 @@ Page({
     } finally {
       wx.hideLoading()
     }
+  },
+
+  goElfDetail(e) {
+    const { id } = e.currentTarget.dataset
+    if (!id) return
+    wx.navigateTo({ url: `/pages/elf-detail/index?id=${id}` })
   }
 })

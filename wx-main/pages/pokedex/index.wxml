@@ -32,9 +32,9 @@
   <scroll-view class="elf-grid-scroll" scroll-y>
     <view class="elf-grid">
       <block wx:for="{{elves}}" wx:key="id">
-        <view class="elf-card">
+        <view class="elf-card" bindtap="goToDetail" data-id="{{item.id}}">
           <view class="elf-avatar-wrap">
-            <image src="{{item.avatar || '/assets/default-elf.png'}}" class="elf-avatar"></image>
+            <image src="{{item.coverImage || item.avatar || '/assets/default-elf.png'}}" class="elf-avatar"></image>
           </view>
           <text class="elf-name">{{item.name}}</text>
           <view class="elf-tags">

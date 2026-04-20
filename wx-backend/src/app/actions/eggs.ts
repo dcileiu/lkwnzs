@@ -1,11 +1,14 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { parseImageRecords, resolveCoverImage } from "@/lib/media"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
 export async function createEgg(formData: FormData) {
   const name = formData.get("name") as string
+  const imageRecords = parseImageRecords(formData.get("galleryImages"))
+  const coverImage = resolveCoverImage(formData.get("coverImage"), imageRecords)
 
   if (!name) {
     throw new Error("Missing required fields")
@@ -14,6 +17,12 @@ export async function createEgg(formData: FormData) {
   await prisma.egg.create({
     data: {
       name,
+      avatar: coverImage,
+      images: imageRecords.length > 0
+        ? {
+            create: imageRecords,
+          }
+        : undefined,
     }
   })
 

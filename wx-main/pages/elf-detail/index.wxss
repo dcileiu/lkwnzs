@@ -1,0 +1,295 @@
+.page-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #eef3ff 0%, #f7f9ff 24%, #f5f7fb 100%);
+}
+
+.detail-page {
+  padding: 24rpx;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 80rpx);
+  box-sizing: border-box;
+}
+
+.hero-card,
+.section-card {
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 28rpx;
+  padding: 28rpx;
+  box-shadow: 0 18rpx 42rpx rgba(60, 88, 150, 0.08);
+  box-sizing: border-box;
+}
+
+.hero-card {
+  margin-bottom: 24rpx;
+}
+
+.hero-main {
+  display: flex;
+  gap: 24rpx;
+  align-items: flex-start;
+}
+
+.hero-image {
+  width: 220rpx;
+  height: 220rpx;
+  border-radius: 24rpx;
+  background: #e9efff;
+  flex-shrink: 0;
+}
+
+.hero-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.hero-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.hero-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.hero-hot {
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
+  background: #ff785a;
+  color: #fff;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.hero-tag {
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  background: #edf2ff;
+  color: #5873d8;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14rpx;
+}
+
+.stat-item {
+  border-radius: 20rpx;
+  background: #f7f9ff;
+  padding: 18rpx;
+}
+
+.stat-label {
+  display: block;
+  font-size: 22rpx;
+  color: #7b879d;
+  margin-bottom: 8rpx;
+}
+
+.stat-value {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.gallery-strip {
+  width: 100%;
+  white-space: nowrap;
+  margin-top: 24rpx;
+}
+
+.gallery-track {
+  display: inline-flex;
+  gap: 14rpx;
+}
+
+.gallery-thumb {
+  width: 120rpx;
+  height: 120rpx;
+  padding: 6rpx;
+  border-radius: 20rpx;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.gallery-thumb.active {
+  background: linear-gradient(135deg, #6e89ff 0%, #86a0ff 100%);
+  box-shadow: 0 12rpx 24rpx rgba(110, 137, 255, 0.22);
+}
+
+.gallery-thumb-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 16rpx;
+  background: #e9efff;
+}
+
+.section-head {
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.section-sub {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #7b879d;
+}
+
+.tree-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.tree-node {
+  position: relative;
+}
+
+.tree-card {
+  display: flex;
+  gap: 18rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
+  border: 2rpx solid #e6ecff;
+  padding: 18rpx;
+  box-shadow: 0 12rpx 28rpx rgba(74, 98, 161, 0.07);
+}
+
+.tree-card.is-current {
+  border-color: #6e89ff;
+  box-shadow: 0 16rpx 30rpx rgba(110, 137, 255, 0.18);
+}
+
+.tree-card-image {
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 20rpx;
+  background: #edf2ff;
+  flex-shrink: 0;
+}
+
+.tree-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.tree-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.tree-card-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.tree-stage {
+  padding: 6rpx 12rpx;
+  border-radius: 999rpx;
+  background: #edf2ff;
+  color: #5d76da;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.tree-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 10rpx;
+}
+
+.tree-tag {
+  padding: 6rpx 12rpx;
+  border-radius: 999rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.tree-tag-element {
+  background: #eef8ff;
+  color: #2c7be5;
+}
+
+.tree-tag-rarity {
+  background: #fff6e8;
+  color: #d9822b;
+}
+
+.tree-note {
+  display: block;
+  font-size: 22rpx;
+  color: #4f5d78;
+  line-height: 1.6;
+}
+
+.tree-note.secondary {
+  color: #7b879d;
+  margin-top: 6rpx;
+}
+
+.tree-children-wrap {
+  margin-left: 40rpx;
+  padding-top: 18rpx;
+}
+
+.tree-vertical {
+  width: 4rpx;
+  height: 28rpx;
+  margin-left: 36rpx;
+  background: linear-gradient(180deg, #b7c7ff 0%, #d8e0ff 100%);
+  border-radius: 999rpx;
+}
+
+.tree-children {
+  margin-top: 12rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.tree-child-item {
+  position: relative;
+  padding-left: 36rpx;
+}
+
+.tree-child-line {
+  position: absolute;
+  left: 0;
+  top: 46rpx;
+  width: 24rpx;
+  height: 4rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #b7c7ff 0%, #d8e0ff 100%);
+}
+
+.empty-state,
+.loading-state {
+  padding: 80rpx 0;
+  text-align: center;
+  color: #7b879d;
+  font-size: 28rpx;
+}

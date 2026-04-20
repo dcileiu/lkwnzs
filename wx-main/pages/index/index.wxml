@@ -51,9 +51,9 @@
     </view>
     <scroll-view class="elf-scroll" scroll-x>
       <block wx:for="{{hotElves}}" wx:key="id">
-        <view class="elf-card">
+        <view class="elf-card" bindtap="goElfDetail" data-id="{{item.id}}">
           <view class="elf-avatar-bg">
-            <image src="{{item.avatar || '/assets/default-elf.png'}}" class="elf-avatar"></image>
+            <image src="{{item.coverImage || item.avatar || '/assets/default-elf.png'}}" class="elf-avatar"></image>
           </view>
           <text class="elf-name">{{item.name}}</text>
           <view class="elf-tags">

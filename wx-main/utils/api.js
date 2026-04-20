@@ -46,6 +46,9 @@ const api = {
   getElves(params) {
     return request('/elves', 'GET', params);
   },
+  getElfDetail(id) {
+    return request(`/elves/${id}`, 'GET');
+  },
   // Egg Collection Data
   getEggCollection() {
     return request('/eggs', 'GET');

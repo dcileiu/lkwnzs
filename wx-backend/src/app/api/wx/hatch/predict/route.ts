@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { sortImageRecords } from "@/lib/media"
 import { prisma } from "@/lib/prisma"
 
 export async function POST(request: Request) {
@@ -13,32 +14,47 @@ export async function POST(request: Request) {
     const numericHeight = parseFloat(height)
     const numericWeight = parseFloat(weight)
 
-    // Find rules that match the egg and where the height/weight fall within min/max bounds
     const matchedRules = await prisma.hatchRule.findMany({
       where: {
-        eggId: eggId,
+        eggId,
         minHeight: { lte: numericHeight },
         maxHeight: { gte: numericHeight },
         minWeight: { lte: numericWeight },
-        maxWeight: { gte: numericWeight }
+        maxWeight: { gte: numericWeight },
       },
       include: {
-        elf: true
-      }
+        elf: {
+          include: {
+            images: {
+              orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+            },
+          },
+        },
+      },
     })
 
-    // If no exact rules match, we could return a fallback or an empty list
     return NextResponse.json({
       code: 200,
       message: "success",
-      data: matchedRules.map(rule => ({
-        elfName: rule.elf.name,
-        elfRarity: rule.elf.rarity,
-        elfElement: rule.elf.element,
-        probability: rule.probability
-      }))
-    })
+      data: matchedRules.map((rule) => {
+        const elfImages = sortImageRecords(rule.elf.images).map((image) => ({
+          id: image.id,
+          url: image.url,
+          altText: image.altText ?? "",
+          sortOrder: image.sortOrder,
+        }))
 
+        return {
+          elfId: rule.elf.id,
+          elfName: rule.elf.name,
+          elfRarity: rule.elf.rarity,
+          elfElement: rule.elf.element,
+          elfCoverImage: rule.elf.avatar ?? elfImages[0]?.url ?? null,
+          elfImages,
+          probability: rule.probability,
+        }
+      }),
+    })
   } catch (error) {
     console.error("Predict Hatching Error:", error)
     return NextResponse.json({ code: 500, message: "Internal Server Error" }, { status: 500 })

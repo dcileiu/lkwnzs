@@ -14,7 +14,17 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, FileTextIcon, Settings2Icon, SearchIcon, GhostIcon, BookHeartIcon, UsersIcon, ShieldIcon } from "lucide-react"
+import {
+  BookHeartIcon,
+  FileTextIcon,
+  GhostIcon,
+  LayoutDashboardIcon,
+  SearchIcon,
+  Settings2Icon,
+  Share2Icon,
+  ShieldIcon,
+  UsersIcon,
+} from "lucide-react"
 
 const data = {
   user: {
@@ -24,55 +34,46 @@ const data = {
   },
   navMain: [
     {
-      title: "数据总览 Dashboard",
+      title: "Dashboard",
       url: "/dashboard",
-      icon: (
-        <LayoutDashboardIcon />
-      ),
+      icon: <LayoutDashboardIcon />,
     },
     {
-      title: "攻略管理 Articles",
+      title: "Articles",
       url: "/dashboard/articles",
-      icon: (
-        <FileTextIcon />
-      ),
+      icon: <FileTextIcon />,
     },
     {
-      title: "图鉴管理 Elves",
+      title: "Elves",
       url: "/dashboard/elves",
-      icon: (
-        <GhostIcon />
-      ),
+      icon: <GhostIcon />,
     },
     {
-      title: "宠物蛋集 Eggs",
+      title: "Evolutions",
+      url: "/dashboard/evolutions",
+      icon: <Share2Icon />,
+    },
+    {
+      title: "Eggs",
       url: "/dashboard/eggs",
-      icon: (
-        <BookHeartIcon />
-      ),
+      icon: <BookHeartIcon />,
     },
     {
-      title: "用户管理 Users",
+      title: "Users",
       url: "/dashboard/users",
-      icon: (
-        <UsersIcon />
-      ),
+      icon: <UsersIcon />,
     },
   ],
   navSecondary: [
     {
-      title: "全局设置 Settings",
+      title: "Settings",
       url: "/dashboard/settings",
-      icon: (
-        <Settings2Icon />
-      ),
+      icon: <Settings2Icon />,
     },
     {
-      title: "搜索系统 Search",
+      title: "Search",
       url: "/dashboard/search",
-      icon: (
-        <SearchIcon />
-      ),
+      icon: <SearchIcon />,
     },
   ],
 }

@@ -43,7 +43,7 @@
   <!-- Visual Display Card -->
   <view class="card visual-card">
     <view class="egg-visual-bg">
-      <image class="egg-visual" src="/assets/default-egg.png"></image>
+      <image class="egg-visual" src="{{eggIndex !== null ? (eggs[eggIndex].coverImage || eggs[eggIndex].image || '/assets/default-egg.png') : '/assets/default-egg.png'}}"></image>
     </view>
     <button class="btn-predict" bindtap="predict">✨ 查询</button>
   </view>
@@ -56,9 +56,9 @@
     </view>
     <view class="results-list">
       <block wx:for="{{results}}" wx:key="elfName">
-        <view class="result-item">
+        <view class="result-item" bindtap="goElfDetail" data-id="{{item.elfId}}">
           <view class="elf-avatar-bg">
-            <image src="/assets/default-elf.png" class="elf-avatar-small"></image>
+            <image src="{{item.elfCoverImage || '/assets/default-elf.png'}}" class="elf-avatar-small"></image>
           </view>
           <view class="elf-info">
             <text class="elf-name">{{item.elfName}}</text>

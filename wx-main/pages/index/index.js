@@ -41,5 +41,11 @@ Page({
 
   goToSearch() {
     wx.navigateTo({ url: '/pages/search/index' })
+  },
+
+  goElfDetail(e) {
+    const { id } = e.currentTarget.dataset
+    if (!id) return
+    wx.navigateTo({ url: `/pages/elf-detail/index?id=${id}` })
   }
 })

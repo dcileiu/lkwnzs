@@ -1,58 +1,87 @@
+import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
 import { PlusIcon } from "lucide-react"
 
 export default async function ElvesPage() {
   const elves = await prisma.elf.findMany({
-    orderBy: { createdAt: "desc" }
+    orderBy: { createdAt: "desc" },
+    include: {
+      _count: {
+        select: {
+          images: true,
+        },
+      },
+    },
   })
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">图鉴管理 (Elves)</h1>
-          <p className="text-muted-foreground mt-1">
-            Manage your Pokedex entries and Pet base stats here.
+          <h1 className="text-2xl font-bold tracking-tight">图鉴管理</h1>
+          <p className="mt-1 text-muted-foreground">
+            Manage elf cover images, galleries, and base stats.
           </p>
         </div>
-        <Button>
-          <PlusIcon className="mr-2 h-4 w-4" />
-          新增精灵
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/evolutions">进化路线</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/dashboard/elves/new">
+              <PlusIcon className="mr-2 h-4 w-4" />
+              新增精灵
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>所有精灵</CardTitle>
-          <CardDescription>
-            {elves.length} 只精灵在册
-          </CardDescription>
+          <CardTitle>全部精灵</CardTitle>
+          <CardDescription>{elves.length} 只精灵在册</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>名称 (Name)</TableHead>
-                <TableHead>属性 (Element)</TableHead>
-                <TableHead>稀有度 (Rarity)</TableHead>
-                <TableHead className="text-right">种族值 (Total Stats)</TableHead>
-                <TableHead>操作 (Actions)</TableHead>
+                <TableHead>主图</TableHead>
+                <TableHead>名称</TableHead>
+                <TableHead>属性</TableHead>
+                <TableHead>稀有度</TableHead>
+                <TableHead className="text-right">图集数</TableHead>
+                <TableHead className="text-right">总种族值</TableHead>
+                <TableHead>操作</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {elves.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                    暂无精灵，请点击右上角新增
+                  <TableCell colSpan={7} className="py-8 text-center text-muted-foreground">
+                    暂无精灵，请先新增。
                   </TableCell>
                 </TableRow>
               ) : (
                 elves.map((elf) => (
                   <TableRow key={elf.id}>
+                    <TableCell>
+                      {elf.avatar ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={elf.avatar}
+                          alt={elf.name}
+                          className="h-12 w-12 rounded-lg border object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-12 w-12 items-center justify-center rounded-lg border text-xs text-muted-foreground">
+                          无图
+                        </div>
+                      )}
+                    </TableCell>
                     <TableCell className="font-medium">{elf.name}</TableCell>
                     <TableCell>
                       <Badge variant="outline">{elf.element}</Badge>
@@ -60,10 +89,18 @@ export default async function ElvesPage() {
                     <TableCell>
                       <Badge>{elf.rarity}</Badge>
                     </TableCell>
+                    <TableCell className="text-right">{elf._count.images}</TableCell>
                     <TableCell className="text-right">{elf.totalStats}</TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm" className="mr-2">编辑</Button>
-                      <Button variant="destructive" size="sm">删除</Button>
+                      <Button variant="outline" size="sm" className="mr-2" asChild>
+                        <Link href="/dashboard/evolutions">进化路线</Link>
+                      </Button>
+                      <Button variant="outline" size="sm" className="mr-2">
+                        编辑
+                      </Button>
+                      <Button variant="destructive" size="sm">
+                        删除
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))

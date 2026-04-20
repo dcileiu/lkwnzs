@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,57 +10,81 @@ export default async function EggsPage() {
     orderBy: { createdAt: "desc" },
     include: {
       _count: {
-        select: { rules: true }
-      }
-    }
+        select: {
+          rules: true,
+          images: true,
+        },
+      },
+    },
   })
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">宠物蛋集 (Eggs & Hatch Rules)</h1>
-          <p className="text-muted-foreground mt-1">
-            Manage Pet Eggs and their hatching probability rules.
+          <h1 className="text-2xl font-bold tracking-tight">蛋集管理</h1>
+          <p className="mt-1 text-muted-foreground">
+            Manage egg cover images, galleries, and hatch rules.
           </p>
         </div>
-        <Button>
-          <PlusIcon className="mr-2 h-4 w-4" />
-          新增宠物蛋
+        <Button asChild>
+          <Link href="/dashboard/eggs/new">
+            <PlusIcon className="mr-2 h-4 w-4" />
+            新增宠物蛋
+          </Link>
         </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>所有宠物蛋</CardTitle>
-          <CardDescription>
-            {eggs.length} 种宠物蛋在册
-          </CardDescription>
+          <CardTitle>全部宠物蛋</CardTitle>
+          <CardDescription>{eggs.length} 种宠物蛋在册</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>名称 (Name)</TableHead>
-                <TableHead className="text-right">孵化规则数 (Rules Count)</TableHead>
-                <TableHead>操作 (Actions)</TableHead>
+                <TableHead>主图</TableHead>
+                <TableHead>名称</TableHead>
+                <TableHead className="text-right">图集数</TableHead>
+                <TableHead className="text-right">孵化规则数</TableHead>
+                <TableHead>操作</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {eggs.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
-                    暂无宠物蛋，请点击右上角新增
+                  <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
+                    暂无宠物蛋，请先新增。
                   </TableCell>
                 </TableRow>
               ) : (
                 eggs.map((egg) => (
                   <TableRow key={egg.id}>
+                    <TableCell>
+                      {egg.avatar ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={egg.avatar}
+                          alt={egg.name}
+                          className="h-12 w-12 rounded-lg border object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-12 w-12 items-center justify-center rounded-lg border text-xs text-muted-foreground">
+                          无图
+                        </div>
+                      )}
+                    </TableCell>
                     <TableCell className="font-medium">{egg.name}</TableCell>
+                    <TableCell className="text-right">{egg._count.images}</TableCell>
                     <TableCell className="text-right">{egg._count.rules}</TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm" className="mr-2">管理孵化规则</Button>
-                      <Button variant="destructive" size="sm">删除</Button>
+                      <Button variant="outline" size="sm" className="mr-2">
+                        管理规则
+                      </Button>
+                      <Button variant="destructive" size="sm">
+                        删除
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))
