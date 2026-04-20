@@ -1,0 +1,78 @@
+<view class="page-container">
+  <view class="page-header">
+    <text class="page-title">○ 孵蛋预测</text>
+    <text class="page-sub">预测你的宠物蛋能孵化出什么精灵</text>
+  </view>
+
+  <!-- Pickers Card -->
+  <view class="card picker-card">
+    <view class="picker-item">
+      <view class="picker-label">选择蛋类型</view>
+      <picker bindchange="onEggChange" value="{{eggIndex}}" range="{{eggs}}" range-key="name">
+        <view class="picker-value">
+          <text wx:if="{{eggIndex !== null}}">🥚 {{eggs[eggIndex].name}}</text>
+          <text wx:else class="placeholder">请选择蛋类型</text>
+          <text class="arrow">v</text>
+        </view>
+      </picker>
+    </view>
+    
+    <view class="picker-item">
+      <view class="picker-label">选择身高</view>
+      <picker bindchange="onHeightChange" value="{{heightIndex}}" range="{{heights}}">
+        <view class="picker-value">
+          <text wx:if="{{heightIndex !== null}}">{{heights[heightIndex]}} cm</text>
+          <text wx:else class="placeholder">请选择身高范围</text>
+          <text class="arrow">v</text>
+        </view>
+      </picker>
+    </view>
+    
+    <view class="picker-item border-none">
+      <view class="picker-label">选择体重</view>
+      <picker bindchange="onWeightChange" value="{{weightIndex}}" range="{{weights}}">
+        <view class="picker-value">
+          <text wx:if="{{weightIndex !== null}}">{{weights[weightIndex]}} kg</text>
+          <text wx:else class="placeholder">请选择体重范围</text>
+          <text class="arrow">v</text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- Visual Display Card -->
+  <view class="card visual-card">
+    <view class="egg-visual-bg">
+      <image class="egg-visual" src="/assets/default-egg.png"></image>
+    </view>
+    <button class="btn-predict" bindtap="predict">✨ 查询</button>
+  </view>
+
+  <!-- Results Card -->
+  <view class="card results-card" wx:if="{{results.length > 0}}">
+    <view class="results-header">
+      <icon type="info" size="14" color="#999"></icon>
+      <text>{{eggs[eggIndex].name}}可孵化精灵</text>
+    </view>
+    <view class="results-list">
+      <block wx:for="{{results}}" wx:key="elfName">
+        <view class="result-item">
+          <view class="elf-avatar-bg">
+            <image src="/assets/default-elf.png" class="elf-avatar-small"></image>
+          </view>
+          <view class="elf-info">
+            <text class="elf-name">{{item.elfName}}</text>
+            <view class="elf-meta">
+              <text class="tag-rarity">{{item.elfRarity}}</text>
+              <text class="tag-element">{{item.elfElement}}属性</text>
+            </view>
+          </view>
+          <view class="probability">
+            <text class="prob-num">{{item.probability}}%</text>
+            <text class="prob-label">概率</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

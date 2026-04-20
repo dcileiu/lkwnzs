@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id           String              @id @default(cuid())
+  openId       String              @unique
+  nickname     String?
+  avatar       String?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  comments     Comment[]
+  collections  UserElfCollection[]
+  interactions UserInteraction[]
+}
+
+model Author {
+  id          String    @id @default(cuid())
+  name        String
+  avatar      String?
+  bio         String?
+  guidesCount Int       @default(0)
+  totalLikes  Int       @default(0)
+  createdAt   DateTime  @default(now())
+  articles    Article[]
+}
+
+model Article {
+  id           String            @id @default(cuid())
+  title        String
+  summary      String?
+  thumbnail    String?
+  content      String
+  category     String
+  readingTime  Int               @default(5)
+  views        Int               @default(0)
+  likes        Int               @default(0)
+  bookmarks    Int               @default(0)
+  isHot        Boolean           @default(false)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  authorId     String
+  author       Author            @relation(fields: [authorId], references: [id])
+  comments     Comment[]
+  interactions UserInteraction[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  likes     Int      @default(0)
+  createdAt DateTime @default(now())
+  articleId String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+}
+
+model UserInteraction {
+  id        String   @id @default(cuid())
+  type      String
+  createdAt DateTime @default(now())
+  userId    String
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId, type])
+}
+
+model Elf {
+  id          String              @id @default(cuid())
+  name        String
+  avatar      String?
+  element     String
+  rarity      String
+  totalStats  Int                 @default(0)
+  hp          Int                 @default(0)
+  attack      Int                 @default(0)
+  defense     Int                 @default(0)
+  speed       Int                 @default(0)
+  isHot       Boolean             @default(false)
+  tags        String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  hatchRules  HatchRule[]
+  collections UserElfCollection[]
+}
+
+model Egg {
+  id        String      @id @default(cuid())
+  name      String
+  avatar    String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  rules     HatchRule[]
+}
+
+model HatchRule {
+  id          String   @id @default(cuid())
+  eggId       String
+  elfId       String
+  minHeight   Float
+  maxHeight   Float
+  minWeight   Float
+  maxWeight   Float
+  probability Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  elf         Elf      @relation(fields: [elfId], references: [id])
+  egg         Egg      @relation(fields: [eggId], references: [id])
+}
+
+model UserElfCollection {
+  id        String   @id @default(cuid())
+  userId    String
+  elfId     String
+  createdAt DateTime @default(now())
+  elf       Elf      @relation(fields: [elfId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, elfId])
+}

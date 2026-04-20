@@ -1,62 +1,199 @@
-/**index.wxss**/
-page {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-.scrollarea {
-  flex: 1;
-  overflow-y: hidden;
+.page-container {
+  width: 100%;
+  padding: 20rpx;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 160rpx);
+  background-color: #f5f7fb;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
-.userinfo {
+.search-wrap {
+  background: #fff;
+  border-radius: 40rpx;
+  padding: 15rpx 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.03);
+}
+
+.search-input {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.quick-actions {
   display: flex;
+  gap: 20rpx;
+  margin-bottom: 40rpx;
+}
+
+.action-item {
+  display: flex;
+  flex: 1;
+  min-width: 0;
   flex-direction: column;
   align-items: center;
-  color: #aaa;
-  width: 80%;
-}
-
-.userinfo-avatar {
-  overflow: hidden;
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.usermotto {
-  margin-top: 200px;
-}
-
-.avatar-wrapper {
-  padding: 0;
-  width: 56px !important;
-  border-radius: 8px;
-  margin-top: 40px;
-  margin-bottom: 40px;
-}
-
-.avatar {
-  display: block;
-  width: 56px;
-  height: 56px;
-}
-
-.nickname-wrapper {
-  display: flex;
-  width: 100%;
-  padding: 16px;
+  justify-content: center;
+  background: #fff;
+  padding: 30rpx 16rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.02);
   box-sizing: border-box;
-  border-top: .5px solid rgba(0, 0, 0, 0.1);
-  border-bottom: .5px solid rgba(0, 0, 0, 0.1);
-  color: black;
 }
 
-.nickname-label {
-  width: 105px;
+.icon-wrap {
+  font-size: 60rpx;
+  margin-bottom: 10rpx;
 }
 
-.nickname-input {
+.action-item text {
+  font-size: 24rpx;
+  color: #333;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.section {
+  margin-bottom: 40rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.more {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.guide-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.guide-item {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  box-sizing: border-box;
+}
+
+.guide-rank {
+  width: 40rpx;
+  height: 40rpx;
+  background: #ffdbdb;
+  color: #ff4d4f;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40rpx;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.guide-info {
   flex: 1;
+  min-width: 0;
+}
+
+.guide-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  min-width: 0;
+}
+
+.tag-hot {
+  font-size: 20rpx;
+  background: #ff4d4f;
+  color: #fff;
+  padding: 2rpx 8rpx;
+  border-radius: 8rpx;
+}
+
+.guide-meta {
+  font-size: 24rpx;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.elf-scroll {
+  white-space: nowrap;
+  width: 100%;
+}
+
+.elf-card {
+  display: inline-block;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-right: 20rpx;
+  text-align: center;
+  width: 180rpx;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.02);
+  box-sizing: border-box;
+}
+
+.elf-avatar-bg {
+  background: #f0f4ff;
+  border-radius: 50%;
+  width: 100rpx;
+  height: 100rpx;
+  margin: 0 auto 15rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.elf-avatar {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.elf-name {
+  font-size: 26rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.elf-tags {
+  display: flex;
+  justify-content: center;
+  gap: 10rpx;
+}
+
+.tag-element, .tag-rarity {
+  font-size: 20rpx;
+  background: #f5f5f5;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  color: #666;
+  box-sizing: border-box;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

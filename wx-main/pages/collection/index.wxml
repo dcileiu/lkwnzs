@@ -1,0 +1,64 @@
+<view class="page-container">
+  <view class="page-header">
+    <text class="page-title">🎁 宠物蛋集</text>
+    <text class="page-sub">收集各种宠物蛋，查看可孵化精灵</text>
+  </view>
+
+  <!-- Egg Grid -->
+  <view class="egg-grid">
+    <block wx:for="{{eggs}}" wx:key="id">
+      <view class="egg-card" bindtap="showEggDetail" data-id="{{item.id}}" data-index="{{index}}">
+        <view class="egg-img-wrap {{activeEggIndex === index ? 'active' : ''}}">
+          <image class="egg-img" src="{{item.image || '/assets/default-egg.png'}}" mode="aspectFit"></image>
+        </view>
+        <text class="egg-name">{{item.name}}</text>
+        <text class="egg-rules-count">{{item.rulesCount || 0}} 种精灵</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- Selected Egg Detail -->
+  <view class="detail-panel" wx:if="{{selectedEgg}}">
+    <view class="detail-header">
+      <view class="detail-egg-icon">
+        <image src="{{selectedEgg.image || '/assets/default-egg.png'}}" class="detail-egg-img"></image>
+      </view>
+      <view class="detail-info">
+        <text class="detail-name">{{selectedEgg.name}}</text>
+        <text class="detail-desc">可孵化 {{selectedEgg.rules.length}} 种精灵</text>
+      </view>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="hatch-list">
+      <view class="hatch-title">可孵化精灵概率一览</view>
+      <block wx:for="{{selectedEgg.rules}}" wx:key="id">
+        <view class="hatch-item">
+          <view class="hatch-elf-icon">
+            <image src="{{item.elf.avatar || '/assets/default-elf.png'}}" class="hatch-elf-img"></image>
+          </view>
+          <view class="hatch-elf-info">
+            <text class="hatch-elf-name">{{item.elf.name}}</text>
+            <view class="hatch-elf-meta">
+              <text class="tag-element-sm">{{item.elf.element}}系</text>
+              <text class="tag-rarity-sm {{item.elf.rarity}}">{{item.elf.rarity}}</text>
+            </view>
+          </view>
+          <view class="hatch-prob">
+            <view class="prob-bar-bg">
+              <view class="prob-bar" style="width: {{item.probability}}%"></view>
+            </view>
+            <text class="prob-text">{{item.probability}}%</text>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <view class="detail-tip">
+      <text>💡 Tip: 不同身高体重组合会影响孵化概率，去「孵蛋预测」试试吧</text>
+    </view>
+  </view>
+
+  <view wx:if="{{eggs.length === 0}}" class="empty-state">暂无宠物蛋数据</view>
+</view>

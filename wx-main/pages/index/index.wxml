@@ -1,27 +1,67 @@
-<!--index.wxml-->
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
+<scroll-view class="page-container" scroll-y>
+  <!-- Search Bar -->
+  <view class="search-wrap">
+    <input class="search-input" placeholder="搜索精灵、攻略、蛋..." bindtap="goToSearch" disabled="{{true}}" />
+  </view>
+
+  <!-- Quick Actions -->
+  <view class="quick-actions">
+    <view class="action-item" bindtap="navTo" data-url="/pages/hatch/index">
+      <view class="icon-wrap">🥚</view>
+      <text>孵蛋预测</text>
+    </view>
+    <view class="action-item" bindtap="navTo" data-url="/pages/pokedex/index">
+      <view class="icon-wrap bg-green">✨</view>
+      <text>精灵图鉴</text>
+    </view>
+    <view class="action-item" bindtap="navTo" data-url="/pages/collection/index">
+      <view class="icon-wrap bg-pink">🎁</view>
+      <text>宠物蛋集</text>
+    </view>
+    <view class="action-item" bindtap="navTo" data-url="/pages/guide/index">
+      <view class="icon-wrap bg-blue">📖</view>
+      <text>新手攻略</text>
+    </view>
+  </view>
+
+  <!-- Popular Guides -->
+  <view class="section">
+    <view class="section-header">
+      <text class="title">📈 热门攻略</text>
+      <text class="more" bindtap="navTo" data-url="/pages/guide/index">查看更多 ></text>
+    </view>
+    <view class="guide-list">
+      <block wx:for="{{hotArticles}}" wx:key="id">
+        <view class="guide-item" bindtap="navTo" data-url="/pages/article/index?id={{item.id}}">
+          <view class="guide-rank">{{index + 1}}</view>
+          <view class="guide-info">
+            <view class="guide-title">{{item.title}} <text class="tag-hot">HOT</text></view>
+            <view class="guide-meta">{{item.authorName}} · {{item.views}}阅读</view>
+          </view>
         </view>
       </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
     </view>
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
+  </view>
+
+  <!-- Popular Elves -->
+  <view class="section">
+    <view class="section-header">
+      <text class="title">⭐ 热门精灵</text>
+      <text class="more" bindtap="navTo" data-url="/pages/pokedex/index">全部图鉴 ></text>
     </view>
+    <scroll-view class="elf-scroll" scroll-x>
+      <block wx:for="{{hotElves}}" wx:key="id">
+        <view class="elf-card">
+          <view class="elf-avatar-bg">
+            <image src="{{item.avatar || '/assets/default-elf.png'}}" class="elf-avatar"></image>
+          </view>
+          <text class="elf-name">{{item.name}}</text>
+          <view class="elf-tags">
+            <text class="tag-element">{{item.element}}</text>
+            <text class="tag-rarity">{{item.rarity}}</text>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
   </view>
 </scroll-view>

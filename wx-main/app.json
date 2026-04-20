@@ -1,12 +1,45 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/guide/index",
+    "pages/hatch/index",
+    "pages/pokedex/index",
+    "pages/collection/index",
+    "pages/article/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "Weixin",
+    "navigationBarTitleText": "\u6d1b\u514b\u738b\u56fd\u52a9\u624b",
     "navigationBarBackgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#7A7E83",
+    "selectedColor": "#667eea",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "\u9996\u9875"
+      },
+      {
+        "pagePath": "pages/guide/index",
+        "text": "\u653b\u7565"
+      },
+      {
+        "pagePath": "pages/hatch/index",
+        "text": "\u5b75\u86cb"
+      },
+      {
+        "pagePath": "pages/pokedex/index",
+        "text": "\u56fe\u9274"
+      },
+      {
+        "pagePath": "pages/collection/index",
+        "text": "\u6536\u85cf"
+      }
+    ]
   },
   "style": "v2",
   "componentFramework": "glass-easel",

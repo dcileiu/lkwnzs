@@ -1,0 +1,110 @@
+<scroll-view class="page-container" scroll-y>
+  <!-- Cover Image -->
+  <view class="cover-wrap" wx:if="{{article}}">
+    <image class="cover-img" src="{{article.thumbnail || '/assets/default-article.png'}}" mode="aspectFill"></image>
+    <view class="cover-overlay"></view>
+    <view class="cover-badge-wrap">
+      <text class="cover-badge {{article.isHot ? 'hot' : 'normal'}}">
+        {{article.isHot ? '🔥 HOT' : '普通'}}
+      </text>
+      <text class="cover-category">{{article.category}}</text>
+    </view>
+  </view>
+
+  <view class="content-area" wx:if="{{article}}">
+    <!-- Title -->
+    <text class="article-title">{{article.title}}</text>
+
+    <!-- Meta Info -->
+    <view class="meta-row">
+      <view class="author-info">
+        <image class="author-avatar" src="{{article.author.avatar || '/assets/default-avatar.png'}}"></image>
+        <view class="author-text">
+          <text class="author-name">{{article.author.name}}</text>
+          <text class="author-bio">{{article.author.bio}}</text>
+        </view>
+      </view>
+      <view class="stats-row">
+        <text class="stat">👁 {{article.views}}</text>
+        <text class="stat">♡ {{article.likes}}</text>
+        <text class="stat">⏱ {{article.readingTime}}分钟阅读</text>
+      </view>
+    </view>
+
+    <!-- Interaction Buttons -->
+    <view class="action-bar">
+      <view class="action-btn {{isLiked ? 'active' : ''}}" bindtap="toggleLike">
+        <text class="action-icon">{{isLiked ? '❤️' : '♡'}}</text>
+        <text class="action-label">{{isLiked ? '已点赞' : '点赞'}}</text>
+      </view>
+      <view class="action-btn {{isFavorited ? 'active' : ''}}" bindtap="toggleFavorite">
+        <text class="action-icon">{{isFavorited ? '⭐' : '☆'}}</text>
+        <text class="action-label">{{isFavorited ? '已收藏' : '收藏'}}</text>
+      </view>
+      <view class="action-btn" open-type="share">
+        <text class="action-icon">↗</text>
+        <text class="action-label">分享</text>
+      </view>
+    </view>
+
+    <view class="divider"></view>
+
+    <!-- Article Content -->
+    <view class="article-body">
+      <text class="body-text">{{article.content}}</text>
+    </view>
+
+    <!-- Author Card -->
+    <view class="author-card">
+      <view class="author-card-header">
+        <image class="author-card-avatar" src="{{article.author.avatar || '/assets/default-avatar.png'}}"></image>
+        <view class="author-card-info">
+          <text class="author-card-name">{{article.author.name}}</text>
+          <text class="author-card-bio">{{article.author.bio}}</text>
+          <view class="author-card-stats">
+            <text>{{article.author.guidesCount || 0}} 篇攻略</text>
+            <text>{{article.author.totalLikes || 0}} 获赞</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Comments -->
+    <view class="comments-section">
+      <text class="section-title">💬 评论 ({{article.comments ? article.comments.length : 0}})</text>
+
+      <view class="comment-input-row">
+        <image class="my-avatar" src="/assets/default-avatar.png"></image>
+        <input
+          class="comment-input"
+          placeholder="写下你的评论..."
+          value="{{commentInput}}"
+          bindinput="onCommentInput"
+          confirm-type="send"
+          bindconfirm="submitComment"
+        />
+        <view class="send-btn" bindtap="submitComment">发送</view>
+      </view>
+
+      <block wx:for="{{article.comments}}" wx:key="id">
+        <view class="comment-item">
+          <image class="comment-avatar" src="{{item.user.avatar || '/assets/default-avatar.png'}}"></image>
+          <view class="comment-body">
+            <text class="comment-name">{{item.user.nickname}}</text>
+            <text class="comment-text">{{item.content}}</text>
+            <text class="comment-time">{{item.createdAt}}</text>
+          </view>
+        </view>
+      </block>
+
+      <view wx:if="{{!article.comments || article.comments.length === 0}}" class="empty-comments">
+        还没有评论，快来抢沙发吧！
+      </view>
+    </view>
+  </view>
+
+  <!-- Loading State -->
+  <view wx:if="{{!article}}" class="loading-state">
+    <text>加载中...</text>
+  </view>
+</scroll-view>

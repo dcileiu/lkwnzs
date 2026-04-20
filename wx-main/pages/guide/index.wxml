@@ -1,0 +1,46 @@
+<view class="page-container">
+  <!-- Search -->
+  <view class="search-box">
+    <icon type="search" size="14" color="#999"></icon>
+    <input class="search-input" placeholder="搜索攻略..." bindinput="onSearchInput" bindconfirm="onSearch" />
+    <view class="filter-icon">🔍</view>
+  </view>
+
+  <!-- Tabs -->
+  <scroll-view class="tabs-scroll" scroll-x>
+    <view class="tabs">
+      <block wx:for="{{tabs}}" wx:key="*this">
+        <view class="tab-item {{currentTab === item ? 'active' : ''}}" data-tab="{{item}}" bindtap="switchTab">
+          {{item}}
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <!-- Article List -->
+  <scroll-view class="article-list" scroll-y bindscrolltolower="loadMore">
+    <block wx:for="{{articles}}" wx:key="id">
+      <view class="article-card" data-id="{{item.id}}" bindtap="goToDetail">
+        <view class="article-thumb-wrapper">
+          <image class="article-thumb" mode="aspectFill" src="{{item.thumbnail || '/assets/default-article.png'}}"></image>
+        </view>
+        <view class="article-content">
+          <text class="article-title line-clamp-2">{{item.title}}</text>
+          <text class="article-summary line-clamp-2">{{item.summary || '暂无简介...'}}</text>
+          <view class="article-footer">
+            <view class="author">
+              <image class="author-avatar" src="{{item.author.avatar || '/assets/default-avatar.png'}}"></image>
+              <text class="author-name">{{item.author.name}}</text>
+            </view>
+            <view class="stats">
+              <text>👁 {{item.views}}</text>
+              <text>♡ {{item.likes}}</text>
+              <text>💬 {{item.comments ? item.comments.length : 0}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <view wx:if="{{articles.length === 0}}" class="empty-state">没有找到相关攻略~</view>
+  </scroll-view>
+</view>

@@ -1,0 +1,166 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: #f5f7fb;
+  box-sizing: border-box;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 15rpx 30rpx;
+  margin: 20rpx;
+  border-radius: 40rpx;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.02);
+  box-sizing: border-box;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  margin-left: 10rpx;
+}
+
+.filter-icon {
+  font-size: 32rpx;
+  color: #666;
+  margin-left: 20rpx;
+}
+
+.tabs-scroll {
+  width: 100%;
+  background: #fff;
+  white-space: nowrap;
+  padding: 10rpx 0;
+  margin-bottom: 20rpx;
+}
+
+.tabs {
+  display: inline-flex;
+  padding: 0 20rpx;
+}
+
+.tab-item {
+  padding: 10rpx 30rpx;
+  font-size: 28rpx;
+  color: #666;
+  border-radius: 30rpx;
+  margin-right: 20rpx;
+  background: #f5f7fb;
+}
+
+.tab-item.active {
+  background: #1890ff;
+  color: #fff;
+}
+
+.article-list {
+  flex: 1;
+  padding: 0 20rpx;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 160rpx);
+  box-sizing: border-box;
+}
+
+.article-card {
+  display: flex;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.02);
+  gap: 20rpx;
+  box-sizing: border-box;
+}
+
+.article-thumb-wrapper {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  background: #f0f4ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.article-thumb {
+  width: 100%;
+  height: 100%;
+}
+
+.article-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.article-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.article-summary {
+  font-size: 24rpx;
+  color: #666;
+  margin-top: 8rpx;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.article-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20rpx;
+  margin-top: 15rpx;
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  min-width: 0;
+  flex: 1;
+}
+
+.author-avatar {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 50%;
+  background: #ccc;
+}
+
+.author-name {
+  font-size: 22rpx;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 15rpx;
+  font-size: 22rpx;
+  color: #bbb;
+}
+
+.empty-state {
+  text-align: center;
+  color: #999;
+  font-size: 28rpx;
+  padding: 100rpx 0;
+}
