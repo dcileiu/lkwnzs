@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 
-const ELEMENT_OPTIONS = ["火", "水", "草", "光", "暗", "电", "冰", "普通"]
+const ELEMENT_OPTIONS = ["光", "冰", "地", "幻", "幽", "恶", "普通", "机械", "武", "毒", "水", "火", "电", "翼", "草", "萌", "虫", "龙"]
 
 export default function NewElfPage() {
   return (

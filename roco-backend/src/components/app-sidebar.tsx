@@ -18,6 +18,8 @@ import {
   BookHeartIcon,
   FileTextIcon,
   GhostIcon,
+  GemIcon,
+  PackageIcon,
   LayoutDashboardIcon,
   SearchIcon,
   Settings2Icon,
@@ -47,6 +49,16 @@ const data = {
       title: "精灵图鉴",
       url: "/dashboard/elves",
       icon: <GhostIcon />,
+    },
+    {
+      title: "属性管理",
+      url: "/dashboard/attrs",
+      icon: <GemIcon />,
+    },
+    {
+      title: "道具管理",
+      url: "/dashboard/items",
+      icon: <PackageIcon />,
     },
     {
       title: "进化路线",
