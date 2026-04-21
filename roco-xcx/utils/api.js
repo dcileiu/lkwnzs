@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.200.43:3000/api/wx'; // Assuming local backend IP shown via npm run dev
+const BASE_URL = 'http://192.168.200.43:3090/api/wx'; // Assuming local backend IP shown via npm run dev
 
 /**
  * 封装微信请求 (Encapsulate WeChat Request)
