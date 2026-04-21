@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
-import { sortImageRecords } from "@/lib/media"
+
+import { normalizeElementList, serializeElementList } from "@/lib/elements"
+import { sortImageRecords, type StoredImageRecord } from "@/lib/media"
 import { prisma } from "@/lib/prisma"
 
 export async function GET(
@@ -33,12 +35,14 @@ export async function GET(
     return NextResponse.json({ code: 404, message: "not found" }, { status: 404 })
   }
 
-  const eggImages = sortImageRecords(egg.images).map((image) => ({
-    id: image.id,
-    url: image.url,
-    altText: image.altText ?? "",
-    sortOrder: image.sortOrder,
-  }))
+  const eggImages = sortImageRecords(egg.images as StoredImageRecord[]).map(
+    (image: StoredImageRecord) => ({
+      id: image.id,
+      url: image.url,
+      altText: image.altText ?? "",
+      sortOrder: image.sortOrder,
+    })
+  )
   const coverImage = egg.avatar ?? eggImages[0]?.url ?? null
 
   return NextResponse.json({
@@ -52,13 +56,16 @@ export async function GET(
       image: coverImage,
       images: eggImages,
       rules: egg.rules.map((rule) => {
-        const elfImages = sortImageRecords(rule.elf.images).map((image) => ({
+        const elfImages = sortImageRecords(
+          rule.elf.images as StoredImageRecord[]
+        ).map((image: StoredImageRecord) => ({
           id: image.id,
           url: image.url,
           altText: image.altText ?? "",
           sortOrder: image.sortOrder,
         }))
         const elfCoverImage = rule.elf.avatar ?? elfImages[0]?.url ?? null
+        const elfElements = normalizeElementList(rule.elf.element)
 
         return {
           id: rule.id,
@@ -70,7 +77,8 @@ export async function GET(
           elf: {
             id: rule.elf.id,
             name: rule.elf.name,
-            element: rule.elf.element,
+            element: serializeElementList(elfElements),
+            elements: elfElements,
             rarity: rule.elf.rarity,
             avatar: elfCoverImage,
             coverImage: elfCoverImage,

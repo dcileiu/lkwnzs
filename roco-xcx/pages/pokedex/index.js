@@ -1,4 +1,5 @@
 const api = require('../../utils/api.js')
+const { setTabBarSelected } = require('../../utils/tabbar.js')
 
 Page({
   data: {
@@ -12,6 +13,10 @@ Page({
 
   onLoad() {
     this.fetchPokedex()
+  },
+
+  onShow() {
+    setTabBarSelected(this, 3)
   },
 
   async fetchPokedex() {

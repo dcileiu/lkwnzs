@@ -1,4 +1,5 @@
 import Link from "next/link"
+
 import { createElf } from "@/app/actions/elves"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,6 +9,8 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 
+const ELEMENT_OPTIONS = ["火", "水", "草", "光", "暗", "电", "冰", "普通"]
+
 export default function NewElfPage() {
   return (
     <div className="flex max-w-4xl flex-col gap-4 p-4 lg:p-8">
@@ -15,7 +18,7 @@ export default function NewElfPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">新增图鉴精灵</h1>
           <p className="mt-1 text-muted-foreground">
-            Create a new elf with a cover image and optional gallery.
+            支持单属性和多属性精灵，勾选多个属性后会同步到小程序图鉴展示。
           </p>
         </div>
         <Button variant="outline" asChild>
@@ -27,7 +30,7 @@ export default function NewElfPage() {
         <CardHeader>
           <CardTitle>精灵资料</CardTitle>
           <CardDescription>
-            建议填写一张主图，再把幼年图、进化图、立绘图按顺序放进图集。
+            建议填写一张主图，并按顺序补充其他展示图；多属性精灵可同时勾选多个属性。
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -35,29 +38,8 @@ export default function NewElfPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="name">名称</Label>
-                <Input id="name" name="name" required placeholder="例如：迪莫" />
+                <Input id="name" name="name" required placeholder="例如：迷你乌极夜的样子" />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="element">属性</Label>
-                <Select name="element" required defaultValue="光">
-                  <SelectTrigger id="element">
-                    <SelectValue placeholder="选择属性" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="火">火系</SelectItem>
-                    <SelectItem value="水">水系</SelectItem>
-                    <SelectItem value="草">草系</SelectItem>
-                    <SelectItem value="光">光系</SelectItem>
-                    <SelectItem value="暗">暗系</SelectItem>
-                    <SelectItem value="电">电系</SelectItem>
-                    <SelectItem value="冰">冰系</SelectItem>
-                    <SelectItem value="普通">普通系</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="rarity">稀有度</Label>
                 <Select name="rarity" required defaultValue="SSR">
@@ -73,13 +55,34 @@ export default function NewElfPage() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="flex items-end pb-2">
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="isHot" name="isHot" />
-                  <Label htmlFor="isHot" className="font-medium">
-                    标记为热门精灵
-                  </Label>
-                </div>
+            </div>
+
+            <div className="space-y-3">
+              <Label>属性（可多选）</Label>
+              <div className="grid grid-cols-4 gap-3 rounded-lg border p-4">
+                {ELEMENT_OPTIONS.map((element) => (
+                  <label key={element} className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      name="elements"
+                      value={element}
+                      className="h-4 w-4 rounded border-input"
+                    />
+                    <span>{element}系</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2 rounded-md border p-4">
+              <Checkbox id="isHot" name="isHot" />
+              <div className="space-y-1 leading-none">
+                <Label htmlFor="isHot" className="font-medium">
+                  标记为热门精灵
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  勾选后会在小程序首页热门精灵区域优先展示。
+                </p>
               </div>
             </div>
 
@@ -89,7 +92,7 @@ export default function NewElfPage() {
                 <Input
                   id="coverImage"
                   name="coverImage"
-                  placeholder="https://cdn.example.com/elves/cover.png"
+                  placeholder="https://roco.cdn.itianci.cn/elves/cover.png"
                 />
               </div>
               <div className="space-y-2">
@@ -99,9 +102,9 @@ export default function NewElfPage() {
                   name="galleryImages"
                   className="min-h-[120px]"
                   placeholder={[
-                    "https://cdn.example.com/elves/stage-1.png",
-                    "https://cdn.example.com/elves/stage-2.png",
-                    "https://cdn.example.com/elves/stage-3.png",
+                    "https://roco.cdn.itianci.cn/elves/stage-1.png",
+                    "https://roco.cdn.itianci.cn/elves/stage-2.png",
+                    "https://roco.cdn.itianci.cn/elves/stage-3.png",
                   ].join("\n")}
                 />
               </div>

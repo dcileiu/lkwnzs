@@ -4,6 +4,26 @@ import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
+function extractArticleThumbnail(content: string) {
+  const match = content.match(/!\[[^\]]*]\((https?:\/\/[^)\s]+)\)/i)
+  return match?.[1] || null
+}
+
+function extractArticleSummary(content: string, limit = 140) {
+  const plainText = content
+    .replace(/!\[[^\]]*]\(([^)]+)\)/g, " ")
+    .replace(/\[([^\]]+)]\(([^)]+)\)/g, "$1")
+    .replace(/[`#>*_~\-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+
+  if (!plainText) {
+    return null
+  }
+
+  return plainText.slice(0, limit)
+}
+
 export async function createArticle(formData: FormData) {
   const title = formData.get("title") as string
   const category = formData.get("category") as string
@@ -31,6 +51,8 @@ export async function createArticle(formData: FormData) {
       title,
       category,
       content,
+      thumbnail: extractArticleThumbnail(content),
+      summary: extractArticleSummary(content),
       isHot,
       authorId: author.id,
       readingTime: Math.ceil(content.length / 400) // Rough estimation

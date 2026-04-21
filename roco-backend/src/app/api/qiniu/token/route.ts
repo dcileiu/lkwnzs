@@ -1,29 +1,34 @@
 import { NextResponse } from "next/server"
+import { createUploadToken } from "@/lib/qiniu"
 
-// import qiniu from "qiniu"
+export const runtime = "nodejs"
 
-export async function GET() {
-  /**
-   * Qiniu Token Generation Logic
-   * 
-   * const accessKey = process.env.QINIU_AK;
-   * const secretKey = process.env.QINIU_SK;
-   * const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
-   * 
-   * const options = {
-   *   scope: process.env.QINIU_BUCKET,
-   *   expires: 7200
-   * };
-   * const putPolicy = new qiniu.rs.PutPolicy(options);
-   * const uploadToken = putPolicy.uploadToken(mac);
-   */
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const folder = searchParams.get("folder") || "articles"
+    const fileName = searchParams.get("fileName") || "image.png"
+    const mimeType = searchParams.get("mimeType") || "image/png"
+    const tokenInfo = createUploadToken({ folder, fileName, mimeType })
 
-  return NextResponse.json({
-    code: 200,
-    message: "success",
-    data: {
-      token: "mock-qiniu-token-12345",
-      domain: "https://your-qiniu-domain.com"
-    }
-  })
+    return NextResponse.json({
+      code: 200,
+      message: "success",
+      data: {
+        token: tokenInfo.token,
+        key: tokenInfo.key,
+        domain: tokenInfo.domain,
+        uploadUrl: tokenInfo.uploadUrl,
+        expiresAt: tokenInfo.deadline * 1000,
+      },
+    })
+  } catch (error) {
+    return NextResponse.json(
+      {
+        code: 500,
+        message: error instanceof Error ? error.message : "Failed to create upload token",
+      },
+      { status: 500 }
+    )
+  }
 }

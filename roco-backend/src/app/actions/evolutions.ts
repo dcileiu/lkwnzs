@@ -122,10 +122,10 @@ export async function deleteEvolutionBranch(formData: FormData) {
   }
 
   const descendants = new Set<string>([rootLink.childElfId])
-  let cursor = [rootLink.childElfId]
+  let cursor: string[] = [rootLink.childElfId]
 
   while (cursor.length > 0) {
-    const children = await prisma.elfEvolution.findMany({
+    const children: Array<{ childElfId: string }> = await prisma.elfEvolution.findMany({
       where: {
         chainId: rootLink.chainId,
         parentElfId: { in: cursor },
@@ -136,10 +136,10 @@ export async function deleteEvolutionBranch(formData: FormData) {
     })
 
     cursor = children
-      .map((item) => item.childElfId)
-      .filter((childElfId) => !descendants.has(childElfId))
+      .map((item: { childElfId: string }) => item.childElfId)
+      .filter((childElfId: string) => !descendants.has(childElfId))
 
-    cursor.forEach((childElfId) => descendants.add(childElfId))
+    cursor.forEach((childElfId: string) => descendants.add(childElfId))
   }
 
   await prisma.elfEvolution.deleteMany({

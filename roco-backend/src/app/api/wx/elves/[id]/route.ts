@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
-import { sortImageRecords } from "@/lib/media"
+
+import { normalizeElementList, serializeElementList } from "@/lib/elements"
+import { sortImageRecords, type StoredImageRecord } from "@/lib/media"
 import { prisma } from "@/lib/prisma"
 
 export async function GET(
@@ -21,12 +23,14 @@ export async function GET(
     return NextResponse.json({ code: 404, message: "not found" }, { status: 404 })
   }
 
-  const images = sortImageRecords(elf.images).map((image) => ({
-    id: image.id,
-    url: image.url,
-    altText: image.altText ?? "",
-    sortOrder: image.sortOrder,
-  }))
+  const images = sortImageRecords(elf.images as StoredImageRecord[]).map(
+    (image: StoredImageRecord) => ({
+      id: image.id,
+      url: image.url,
+      altText: image.altText ?? "",
+      sortOrder: image.sortOrder,
+    })
+  )
   const coverImage = elf.avatar ?? images[0]?.url ?? null
 
   const relation = await prisma.elfEvolution.findFirst({
@@ -54,13 +58,16 @@ export async function GET(
     evolution = {
       chainId: relation.chainId,
       nodes: links.map((link) => {
-        const childImages = sortImageRecords(link.childElf.images).map((image) => ({
+        const childImages = sortImageRecords(
+          link.childElf.images as StoredImageRecord[]
+        ).map((image: StoredImageRecord) => ({
           id: image.id,
           url: image.url,
           altText: image.altText ?? "",
           sortOrder: image.sortOrder,
         }))
         const childCoverImage = link.childElf.avatar ?? childImages[0]?.url ?? null
+        const childElements = normalizeElementList(link.childElf.element)
 
         return {
           id: link.id,
@@ -73,7 +80,8 @@ export async function GET(
           elf: {
             id: link.childElf.id,
             name: link.childElf.name,
-            element: link.childElf.element,
+            element: serializeElementList(childElements),
+            elements: childElements,
             rarity: link.childElf.rarity,
             avatar: childCoverImage,
             coverImage: childCoverImage,
@@ -84,13 +92,16 @@ export async function GET(
     }
   }
 
+  const elements = normalizeElementList(elf.element)
+
   return NextResponse.json({
     code: 200,
     message: "success",
     data: {
       id: elf.id,
       name: elf.name,
-      element: elf.element,
+      element: serializeElementList(elements),
+      elements,
       rarity: elf.rarity,
       totalStats: elf.totalStats,
       hp: elf.hp,

@@ -1,5 +1,6 @@
 "use server"
 
+import { normalizeElementList, serializeElementList } from "@/lib/elements"
 import { prisma } from "@/lib/prisma"
 import { parseImageRecords, resolveCoverImage } from "@/lib/media"
 import { revalidatePath } from "next/cache"
@@ -7,7 +8,10 @@ import { redirect } from "next/navigation"
 
 export async function createElf(formData: FormData) {
   const name = formData.get("name") as string
-  const element = formData.get("element") as string
+  const elements = normalizeElementList([
+    ...(formData.getAll("elements") as string[]),
+    (formData.get("element") as string | null) || "",
+  ])
   const rarity = formData.get("rarity") as string
   const isHot = formData.get("isHot") === "on"
   const imageRecords = parseImageRecords(formData.get("galleryImages"))
@@ -20,14 +24,14 @@ export async function createElf(formData: FormData) {
 
   const totalStats = hp + attack + defense + speed
 
-  if (!name || !element || !rarity) {
+  if (!name || elements.length === 0 || !rarity) {
     throw new Error("Missing required fields")
   }
 
   await prisma.elf.create({
     data: {
       name,
-      element,
+      element: serializeElementList(elements),
       rarity,
       avatar: coverImage,
       isHot,

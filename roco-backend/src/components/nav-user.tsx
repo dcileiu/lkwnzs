@@ -80,24 +80,24 @@ export function NavUser({
               <DropdownMenuItem>
                 <CircleUserRoundIcon
                 />
-                Account
+                账号信息
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCardIcon
                 />
-                Billing
+                计费信息
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <BellIcon
                 />
-                Notifications
+                通知
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOutIcon
               />
-              Log out
+              退出登录
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

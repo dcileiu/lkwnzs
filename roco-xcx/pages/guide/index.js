@@ -1,4 +1,5 @@
 const api = require('../../utils/api.js')
+const { setTabBarSelected } = require('../../utils/tabbar.js')
 
 Page({
   data: {
@@ -10,6 +11,10 @@ Page({
 
   onLoad() {
     this.fetchArticles()
+  },
+
+  onShow() {
+    setTabBarSelected(this, 1)
   },
 
   async fetchArticles() {

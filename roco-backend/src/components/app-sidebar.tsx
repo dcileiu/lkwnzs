@@ -28,50 +28,50 @@ import {
 
 const data = {
   user: {
-    name: "Admin",
+    name: "管理员",
     email: "admin@roco.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
     {
-      title: "Dashboard",
+      title: "仪表盘",
       url: "/dashboard",
       icon: <LayoutDashboardIcon />,
     },
     {
-      title: "Articles",
+      title: "攻略管理",
       url: "/dashboard/articles",
       icon: <FileTextIcon />,
     },
     {
-      title: "Elves",
+      title: "精灵图鉴",
       url: "/dashboard/elves",
       icon: <GhostIcon />,
     },
     {
-      title: "Evolutions",
+      title: "进化路线",
       url: "/dashboard/evolutions",
       icon: <Share2Icon />,
     },
     {
-      title: "Eggs",
+      title: "宠物蛋",
       url: "/dashboard/eggs",
       icon: <BookHeartIcon />,
     },
     {
-      title: "Users",
+      title: "用户管理",
       url: "/dashboard/users",
       icon: <UsersIcon />,
     },
   ],
   navSecondary: [
     {
-      title: "Settings",
+      title: "系统设置",
       url: "/dashboard/settings",
       icon: <Settings2Icon />,
     },
     {
-      title: "Search",
+      title: "搜索",
       url: "/dashboard/search",
       icon: <SearchIcon />,
     },

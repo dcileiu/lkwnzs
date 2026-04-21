@@ -57,7 +57,9 @@
           </view>
           <text class="elf-name">{{item.name}}</text>
           <view class="elf-tags">
-            <text class="tag-element">{{item.element}}</text>
+            <block wx:for="{{item.elements}}" wx:key="*this">
+              <text class="tag-element">{{item}}系</text>
+            </block>
             <text class="tag-rarity">{{item.rarity}}</text>
           </view>
         </view>

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
-import { sortImageRecords } from "@/lib/media"
+
+import { matchesElement, normalizeElementList, serializeElementList } from "@/lib/elements"
+import { sortImageRecords, type StoredImageRecord } from "@/lib/media"
 import { prisma } from "@/lib/prisma"
 
 export async function GET(request: Request) {
@@ -12,14 +14,13 @@ export async function GET(request: Request) {
   const shouldTake = Number.isFinite(parsedLimit) && parsedLimit > 0
 
   const whereCondition: {
-    element?: string
     isHot?: boolean
     name?: { contains: string }
   } = {}
 
-  if (element && !["all", "全部", "鍏ㄩ儴"].includes(element)) {
-    whereCondition.element = element
-  }
+  const shouldFilterElement =
+    typeof element === "string" && !["all", "全部", "鍏ㄩ儴"].includes(element)
+
   if (keyword) whereCondition.name = { contains: keyword }
   if (isHot === "true") whereCondition.isHot = true
 
@@ -34,23 +35,32 @@ export async function GET(request: Request) {
     },
   })
 
+  const filteredElves = shouldFilterElement
+    ? elves.filter((elf) => matchesElement(elf.element, element))
+    : elves
+
   const totalInDb = await prisma.elf.count()
 
   return NextResponse.json({
     code: 200,
     message: "success",
     data: {
-      items: elves.map((elf) => {
-        const images = sortImageRecords(elf.images).map((image) => ({
-          id: image.id,
-          url: image.url,
-          altText: image.altText ?? "",
-          sortOrder: image.sortOrder,
-        }))
+      items: filteredElves.map((elf) => {
+        const images = sortImageRecords(elf.images as StoredImageRecord[]).map(
+          (image: StoredImageRecord) => ({
+            id: image.id,
+            url: image.url,
+            altText: image.altText ?? "",
+            sortOrder: image.sortOrder,
+          })
+        )
         const coverImage = elf.avatar ?? images[0]?.url ?? null
+        const elements = normalizeElementList(elf.element)
 
         return {
           ...elf,
+          element: serializeElementList(elements),
+          elements,
           avatar: coverImage,
           coverImage,
           images,

@@ -140,7 +140,8 @@
 
 .elf-tags {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 8rpx;
   align-items: center;
   width: 100%;

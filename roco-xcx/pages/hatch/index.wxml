@@ -1,72 +1,85 @@
 <view class="page-container">
   <view class="page-header">
-    <text class="page-title">○ 孵蛋预测</text>
-    <text class="page-sub">预测你的宠物蛋能孵化出什么精灵</text>
+    <text class="page-title">孵蛋预测</text>
+    <text class="page-sub">选择宠物蛋、身高和体重，快速推测可能孵化的精灵</text>
   </view>
 
-  <!-- Pickers Card -->
-  <view class="card picker-card">
+  <view class="card">
     <view class="picker-item">
-      <view class="picker-label">选择蛋类型</view>
-      <picker bindchange="onEggChange" value="{{eggIndex}}" range="{{eggs}}" range-key="name">
+      <view class="picker-label">选择宠物蛋</view>
+      <picker range="{{eggs}}" range-key="name" value="{{eggIndex}}" bindchange="onEggChange">
         <view class="picker-value">
-          <text wx:if="{{eggIndex !== null}}">🥚 {{eggs[eggIndex].name}}</text>
-          <text wx:else class="placeholder">请选择蛋类型</text>
-          <text class="arrow">v</text>
+          <text class="{{eggIndex === null ? 'placeholder' : ''}}">
+            {{eggIndex === null ? '请选择宠物蛋' : eggs[eggIndex].name}}
+          </text>
+          <text class="arrow">></text>
         </view>
       </picker>
     </view>
-    
+
     <view class="picker-item">
-      <view class="picker-label">选择身高</view>
-      <picker bindchange="onHeightChange" value="{{heightIndex}}" range="{{heights}}">
+      <view class="picker-label">身高</view>
+      <picker range="{{heights}}" value="{{heightIndex}}" bindchange="onHeightChange">
         <view class="picker-value">
-          <text wx:if="{{heightIndex !== null}}">{{heights[heightIndex]}} cm</text>
-          <text wx:else class="placeholder">请选择身高范围</text>
-          <text class="arrow">v</text>
+          <text class="{{heightIndex === null ? 'placeholder' : ''}}">
+            {{heightIndex === null ? '请选择身高' : heights[heightIndex] + ' cm'}}
+          </text>
+          <text class="arrow">></text>
         </view>
       </picker>
     </view>
-    
+
     <view class="picker-item border-none">
-      <view class="picker-label">选择体重</view>
-      <picker bindchange="onWeightChange" value="{{weightIndex}}" range="{{weights}}">
+      <view class="picker-label">体重</view>
+      <picker range="{{weights}}" value="{{weightIndex}}" bindchange="onWeightChange">
         <view class="picker-value">
-          <text wx:if="{{weightIndex !== null}}">{{weights[weightIndex]}} kg</text>
-          <text wx:else class="placeholder">请选择体重范围</text>
-          <text class="arrow">v</text>
+          <text class="{{weightIndex === null ? 'placeholder' : ''}}">
+            {{weightIndex === null ? '请选择体重' : weights[weightIndex] + ' kg'}}
+          </text>
+          <text class="arrow">></text>
         </view>
       </picker>
     </view>
   </view>
 
-  <!-- Visual Display Card -->
   <view class="card visual-card">
     <view class="egg-visual-bg">
-      <image class="egg-visual" src="{{eggIndex !== null ? (eggs[eggIndex].coverImage || eggs[eggIndex].image || '/assets/default-egg.png') : '/assets/default-egg.png'}}"></image>
+      <image
+        class="egg-visual"
+        src="{{eggIndex === null ? '/assets/default-egg.png' : (eggs[eggIndex].coverImage || eggs[eggIndex].avatar || eggs[eggIndex].image || '/assets/default-egg.png')}}"
+        mode="aspectFit"
+      ></image>
     </view>
-    <button class="btn-predict" bindtap="predict">✨ 查询</button>
+    <button class="btn-predict" bindtap="predict">开始预测</button>
   </view>
 
-  <!-- Results Card -->
-  <view class="card results-card" wx:if="{{results.length > 0}}">
+  <view wx:if="{{results.length}}" class="card">
     <view class="results-header">
-      <icon type="info" size="14" color="#999"></icon>
-      <text>{{eggs[eggIndex].name}}可孵化精灵</text>
+      <text>预测结果</text>
+      <text>共 {{results.length}} 种可能</text>
     </view>
+
     <view class="results-list">
-      <block wx:for="{{results}}" wx:key="elfName">
+      <block wx:for="{{results}}" wx:key="elfId">
         <view class="result-item" bindtap="goElfDetail" data-id="{{item.elfId}}">
           <view class="elf-avatar-bg">
-            <image src="{{item.elfCoverImage || '/assets/default-elf.png'}}" class="elf-avatar-small"></image>
+            <image
+              class="elf-avatar-small"
+              src="{{item.elfCoverImage || '/assets/default-elf.png'}}"
+              mode="aspectFit"
+            ></image>
           </view>
+
           <view class="elf-info">
             <text class="elf-name">{{item.elfName}}</text>
             <view class="elf-meta">
+              <block wx:for="{{item.elfElements}}" wx:key="*this">
+                <text class="tag-element">{{item}}系</text>
+              </block>
               <text class="tag-rarity">{{item.elfRarity}}</text>
-              <text class="tag-element">{{item.elfElement}}属性</text>
             </view>
           </view>
+
           <view class="probability">
             <text class="prob-num">{{item.probability}}%</text>
             <text class="prob-label">概率</text>

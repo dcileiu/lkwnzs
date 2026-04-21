@@ -4,6 +4,14 @@ type ImageRecord = {
   sortOrder: number
 }
 
+export type StoredImageRecord = {
+  id: string
+  url: string
+  altText?: string | null
+  sortOrder: number
+  createdAt?: Date
+}
+
 function splitLines(value: string) {
   return value
     .split(/\r?\n/)
@@ -33,10 +41,12 @@ export function resolveCoverImage(
   return imageRecords[0]?.url ?? null
 }
 
-export function sortImageRecords<T extends { sortOrder: number; createdAt?: Date; url: string; altText?: string | null }>(
-  images: T[]
-) {
-  return [...images].sort((left, right) => {
+export function sortImageRecords<
+  T extends { sortOrder: number; createdAt?: Date; url: string; altText?: string | null }
+>(images: T[]): T[] {
+  const sorted = [...images] as T[]
+
+  return sorted.sort((left, right) => {
     if (left.sortOrder !== right.sortOrder) {
       return left.sortOrder - right.sortOrder
     }

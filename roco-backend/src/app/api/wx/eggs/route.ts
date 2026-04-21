@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { sortImageRecords } from "@/lib/media"
+import { sortImageRecords, type StoredImageRecord } from "@/lib/media"
 import { prisma } from "@/lib/prisma"
 
 export async function GET() {
@@ -16,8 +16,8 @@ export async function GET() {
   return NextResponse.json({
     code: 200,
     message: "success",
-    data: eggs.map((egg) => {
-      const images = sortImageRecords(egg.images).map((image) => ({
+    data: eggs.map((egg: (typeof eggs)[number]) => {
+      const images = sortImageRecords(egg.images as StoredImageRecord[]).map((image: StoredImageRecord) => ({
         id: image.id,
         url: image.url,
         altText: image.altText ?? "",

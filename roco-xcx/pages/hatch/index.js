@@ -1,4 +1,5 @@
 const api = require('../../utils/api.js')
+const { setTabBarSelected } = require('../../utils/tabbar.js')
 
 Page({
   data: {
@@ -16,6 +17,10 @@ Page({
 
   onLoad() {
     this.fetchEggs()
+  },
+
+  onShow() {
+    setTabBarSelected(this, 2)
   },
 
   async fetchEggs() {
