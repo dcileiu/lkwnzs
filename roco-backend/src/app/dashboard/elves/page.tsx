@@ -50,6 +50,9 @@ export default async function ElvesPage() {
                 <TableHead>名称</TableHead>
                 <TableHead>组别</TableHead>
                 <TableHead>属性</TableHead>
+                <TableHead>身高</TableHead>
+                <TableHead>体重</TableHead>
+                <TableHead>种族值</TableHead>
                 <TableHead>稀有度</TableHead>
                 <TableHead className="text-right">图集数</TableHead>
                 <TableHead className="text-right">总种族值</TableHead>
@@ -59,7 +62,7 @@ export default async function ElvesPage() {
             <TableBody>
               {elves.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="py-8 text-center text-muted-foreground">
+                  <TableCell colSpan={11} className="py-8 text-center text-muted-foreground">
                     暂无精灵，请先新增。
                   </TableCell>
                 </TableRow>
@@ -87,6 +90,9 @@ export default async function ElvesPage() {
                     <TableCell>
                       <Badge variant="outline">{elf.element}</Badge>
                     </TableCell>
+                    <TableCell>{elf.height ?? "-"}</TableCell>
+                    <TableCell>{elf.weight ?? "-"}</TableCell>
+                    <TableCell>{elf.raceValue ?? "-"}</TableCell>
                     <TableCell>
                       <Badge>{elf.rarity}</Badge>
                     </TableCell>

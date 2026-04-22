@@ -46,6 +46,18 @@ export default function NewElfPage() {
                 <Input id="group" name="group" placeholder="例如：迪莫家族 / 新手御三家" />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="height">身高</Label>
+                <Input id="height" name="height" placeholder="例如：0.65~0.92M" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="weight">体重</Label>
+                <Input id="weight" name="weight" placeholder="例如：14.2~15.6KG" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="raceValue">种族值（字符串）</Label>
+                <Input id="raceValue" name="raceValue" placeholder="例如：460 / 430~520" />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="rarity">稀有度</Label>
                 <Select name="rarity" required defaultValue="SSR">
                   <SelectTrigger id="rarity">
@@ -116,7 +128,7 @@ export default function NewElfPage() {
             </div>
 
             <div className="space-y-4 border-t pt-4">
-              <h3 className="text-lg font-medium">基础种族值</h3>
+              <h3 className="text-lg font-medium">基础种族值（数值计算）</h3>
               <div className="grid grid-cols-4 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="hp">HP</Label>

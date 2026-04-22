@@ -63,6 +63,9 @@ export async function GET(request: Request) {
         return {
           ...elf,
           group: elf.group ?? "",
+          height: elf.height ?? "",
+          weight: elf.weight ?? "",
+          raceValue: elf.raceValue ?? "",
           element: serializeElementList(elements),
           elements,
           avatar: coverImage,

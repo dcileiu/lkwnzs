@@ -88,6 +88,9 @@ model Elf {
   element               String
   rarity                String
   group                 String?
+  height                String?
+  weight                String?
+  raceValue             String?
   totalStats            Int                 @default(0)
   hp                    Int                 @default(0)
   attack                Int                 @default(0)
