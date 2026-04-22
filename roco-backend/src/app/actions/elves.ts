@@ -13,7 +13,13 @@ export async function createElf(formData: FormData) {
     (formData.get("element") as string | null) || "",
   ])
   const rarity = formData.get("rarity") as string
+  const group = ((formData.get("group") as string | null) ?? "").trim()
+  const category = ((formData.get("category") as string | null) ?? "").trim()
   const isHot = formData.get("isHot") === "on"
+  const height = ((formData.get("height") as string | null) ?? "").trim()
+  const weight = ((formData.get("weight") as string | null) ?? "").trim()
+  const raceValue = ((formData.get("raceValue") as string | null) ?? "").trim()
+  const eggImageUrl = ((formData.get("eggImageUrl") as string | null) ?? "").trim()
   const imageRecords = parseImageRecords(formData.get("galleryImages"))
   const coverImage = resolveCoverImage(formData.get("coverImage"), imageRecords)
   
@@ -33,7 +39,13 @@ export async function createElf(formData: FormData) {
       name,
       element: serializeElementList(elements),
       rarity,
+      group: group || null,
+      category: category || null,
       avatar: coverImage,
+      height: height || null,
+      weight: weight || null,
+      raceValue: raceValue || null,
+      eggImageUrl: eggImageUrl || null,
       isHot,
       hp,
       attack,

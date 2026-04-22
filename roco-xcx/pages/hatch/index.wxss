@@ -156,6 +156,14 @@
   text-overflow: ellipsis;
 }
 
+
+.elf-range {
+  margin-top: 6rpx;
+  display: block;
+  font-size: 20rpx;
+  color: #7b879d;
+}
+
 .elf-meta {
   display: flex;
   flex-wrap: wrap;

@@ -1,0 +1,49 @@
+.page-container {
+  min-height: 100vh;
+  padding: 24rpx;
+  background: #f5f7fb;
+  box-sizing: border-box;
+}
+
+.empty-state {
+  padding: 120rpx 0;
+  text-align: center;
+  color: #7b879d;
+  font-size: 28rpx;
+}
+
+.article-card {
+  display: flex;
+  gap: 16rpx;
+  padding: 18rpx;
+  margin-bottom: 16rpx;
+  border-radius: 20rpx;
+  background: #fff;
+}
+
+.thumb {
+  width: 140rpx;
+  height: 100rpx;
+  border-radius: 12rpx;
+  background: #eef2ff;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  display: block;
+  font-size: 28rpx;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.meta {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #7b879d;
+}
