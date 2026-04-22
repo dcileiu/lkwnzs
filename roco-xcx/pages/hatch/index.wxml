@@ -1,7 +1,7 @@
 <view class="page-container">
   <view class="page-header">
     <text class="page-title">孵蛋预测</text>
-    <text class="page-sub">选择宠物蛋、身高和体重，快速推测可能孵化的精灵</text>
+    <text class="page-sub">输入身高和体重后按范围匹配，可能命中同一蛋中的多个精灵</text>
   </view>
 
   <view class="card">
@@ -72,6 +72,7 @@
 
           <view class="elf-info">
             <text class="elf-name">{{item.elfName}}</text>
+            <text class="elf-range" wx:if="{{item.elfHeight || item.elfWeight}}">身高 {{item.elfHeight || "-"}} / 体重 {{item.elfWeight || "-"}}</text>
             <view class="elf-meta">
               <block wx:for="{{item.elfElements}}" wx:key="*this">
                 <text class="tag-element">{{item}}系</text>
