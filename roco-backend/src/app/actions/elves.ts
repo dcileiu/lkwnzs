@@ -45,6 +45,7 @@ export async function createElf(formData: FormData) {
       weight: weight || null,
       raceValue: raceValue || null,
       isHot,
+      hotOrder,
       hp,
       attack,
       defense,
