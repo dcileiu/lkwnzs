@@ -87,6 +87,9 @@ export default async function ElvesPage() {
                     <TableCell>
                       {elf.group ? <Badge variant="secondary">{elf.group}</Badge> : <span className="text-xs text-muted-foreground">未分组</span>}
                     </TableCell>
+                    <TableCell>{elf.height ?? "-"}</TableCell>
+                    <TableCell>{elf.weight ?? "-"}</TableCell>
+                    <TableCell>{elf.raceValue ?? "-"}</TableCell>
                     <TableCell>
                       <Badge variant="outline">{elf.element}</Badge>
                     </TableCell>
