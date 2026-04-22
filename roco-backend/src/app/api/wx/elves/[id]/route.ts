@@ -23,6 +23,18 @@ export async function GET(
     return NextResponse.json({ code: 404, message: "not found" }, { status: 404 })
   }
 
+  const incrementedElf = await prisma.elf.update({
+    where: { id: elf.id },
+    data: {
+      detailQueryCount: {
+        increment: 1,
+      },
+    },
+    select: {
+      detailQueryCount: true,
+    },
+  })
+
   const images = sortImageRecords(elf.images as StoredImageRecord[]).map(
     (image: StoredImageRecord) => ({
       id: image.id,
@@ -39,7 +51,7 @@ export async function GET(
           group: elf.group,
           NOT: { id: elf.id },
         },
-        orderBy: [{ rarity: "desc" }, { name: "asc" }],
+        orderBy: [{ detailQueryCount: "desc" }, { rarity: "desc" }, { name: "asc" }],
         include: {
           images: {
             orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
@@ -69,7 +81,7 @@ export async function GET(
       defense: elf.defense,
       speed: elf.speed,
       isHot: elf.isHot,
-      hotOrder: elf.hotOrder ?? 0,
+      detailQueryCount: incrementedElf.detailQueryCount,
       avatar: coverImage,
       coverImage,
       images,
@@ -86,7 +98,7 @@ export async function GET(
           height: member.height ?? "",
           weight: member.weight ?? "",
           raceValue: member.raceValue ?? "",
-          hotOrder: member.hotOrder ?? 0,
+          detailQueryCount: member.detailQueryCount ?? 0,
           element: serializeElementList(memberElements),
           elements: memberElements,
           avatar: memberCoverImage,

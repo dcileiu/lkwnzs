@@ -13,9 +13,9 @@ export async function GET(request: Request) {
   const limit = searchParams.get("limit")
   const parsedLimit = limit ? parseInt(limit, 10) : NaN
   const shouldTake = Number.isFinite(parsedLimit) && parsedLimit > 0
+  const shouldUseHotRanking = isHot === "true"
 
   const whereCondition: {
-    isHot?: boolean
     name?: { contains: string }
     group?: { equals: string }
   } = {}
@@ -24,11 +24,10 @@ export async function GET(request: Request) {
     typeof element === "string" && !["all", "全部", "鍏ㄩ儴"].includes(element)
 
   if (keyword) whereCondition.name = { contains: keyword }
-  if (isHot === "true") whereCondition.isHot = true
   if (group) whereCondition.group = { equals: group }
 
-  const orderBy = isHot === "true"
-    ? [{ hotOrder: "desc" as const }, { updatedAt: "desc" as const }, { createdAt: "desc" as const }]
+  const orderBy = shouldUseHotRanking
+    ? [{ detailQueryCount: "desc" as const }, { updatedAt: "desc" as const }, { createdAt: "desc" as const }]
     : [{ createdAt: "desc" as const }]
 
   const elves = await prisma.elf.findMany({
@@ -70,7 +69,7 @@ export async function GET(request: Request) {
           height: elf.height ?? "",
           weight: elf.weight ?? "",
           raceValue: elf.raceValue ?? "",
-          hotOrder: elf.hotOrder ?? 0,
+          detailQueryCount: elf.detailQueryCount ?? 0,
           element: serializeElementList(elements),
           elements,
           avatar: coverImage,

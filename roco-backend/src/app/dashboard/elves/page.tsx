@@ -8,7 +8,7 @@ import { PlusIcon } from "lucide-react"
 
 export default async function ElvesPage() {
   const elves = await prisma.elf.findMany({
-    orderBy: [{ isHot: "desc" }, { hotOrder: "desc" }, { createdAt: "desc" }],
+    orderBy: [{ detailQueryCount: "desc" }, { createdAt: "desc" }],
     include: {
       _count: {
         select: {
@@ -53,8 +53,7 @@ export default async function ElvesPage() {
                 <TableHead>身高</TableHead>
                 <TableHead>体重</TableHead>
                 <TableHead>种族值</TableHead>
-                <TableHead>热门</TableHead>
-                <TableHead>热门排序</TableHead>
+                <TableHead className="text-right">详情查询</TableHead>
                 <TableHead className="text-right">图集数</TableHead>
                 <TableHead>操作</TableHead>
               </TableRow>
@@ -62,7 +61,7 @@ export default async function ElvesPage() {
             <TableBody>
               {elves.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={11} className="py-8 text-center text-muted-foreground">
+                  <TableCell colSpan={10} className="py-8 text-center text-muted-foreground">
                     暂无精灵，请先新增。
                   </TableCell>
                 </TableRow>
@@ -96,8 +95,7 @@ export default async function ElvesPage() {
                     <TableCell>{elf.height ?? "-"}</TableCell>
                     <TableCell>{elf.weight ?? "-"}</TableCell>
                     <TableCell>{elf.raceValue ?? "-"}</TableCell>
-                    <TableCell>{elf.isHot ? <Badge>热门</Badge> : <span className="text-xs text-muted-foreground">否</span>}</TableCell>
-                    <TableCell>{elf.hotOrder}</TableCell>
+                    <TableCell className="text-right">{elf.detailQueryCount}</TableCell>
                     <TableCell className="text-right">{elf._count.images}</TableCell>
                     <TableCell>
                       <Button variant="outline" size="sm" className="mr-2">

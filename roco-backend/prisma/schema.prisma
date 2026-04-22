@@ -97,7 +97,7 @@ model Elf {
   defense               Int                 @default(0)
   speed                 Int                 @default(0)
   isHot                 Boolean             @default(false)
-  hotOrder              Int                 @default(0)
+  detailQueryCount      Int                 @default(0)
   tags                  String?
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
