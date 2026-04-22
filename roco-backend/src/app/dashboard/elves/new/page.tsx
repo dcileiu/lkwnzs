@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { ELEMENT_NAMES } from "@/lib/game-data"
 
-const ELEMENT_OPTIONS = ["火", "水", "草", "光", "暗", "电", "冰", "普通"]
+const ELEMENT_OPTIONS = [...ELEMENT_NAMES]
 
 export default function NewElfPage() {
   return (
@@ -39,6 +40,22 @@ export default function NewElfPage() {
               <div className="space-y-2">
                 <Label htmlFor="name">名称</Label>
                 <Input id="name" name="name" required placeholder="例如：迷你乌极夜的样子" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="group">组别</Label>
+                <Input id="group" name="group" placeholder="例如：迪莫家族 / 新手御三家" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="height">身高</Label>
+                <Input id="height" name="height" placeholder="例如：0.65~0.92M" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="weight">体重</Label>
+                <Input id="weight" name="weight" placeholder="例如：14.2~15.6KG" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="raceValue">种族值（字符串）</Label>
+                <Input id="raceValue" name="raceValue" placeholder="例如：460 / 430~520" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="rarity">稀有度</Label>
@@ -74,15 +91,21 @@ export default function NewElfPage() {
               </div>
             </div>
 
-            <div className="flex items-center space-x-2 rounded-md border p-4">
-              <Checkbox id="isHot" name="isHot" />
-              <div className="space-y-1 leading-none">
-                <Label htmlFor="isHot" className="font-medium">
-                  标记为热门精灵
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  勾选后会在小程序首页热门精灵区域优先展示。
-                </p>
+            <div className="grid grid-cols-[1fr_180px] gap-4 rounded-md border p-4">
+              <div className="flex items-center space-x-2">
+                <Checkbox id="isHot" name="isHot" />
+                <div className="space-y-1 leading-none">
+                  <Label htmlFor="isHot" className="font-medium">
+                    标记为热门精灵
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    勾选后会在小程序首页热门精灵区域展示，并按热门排序值倒序排列。
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="hotOrder">热门排序值</Label>
+                <Input id="hotOrder" name="hotOrder" type="number" defaultValue="0" min="0" />
               </div>
             </div>
 
@@ -111,7 +134,7 @@ export default function NewElfPage() {
             </div>
 
             <div className="space-y-4 border-t pt-4">
-              <h3 className="text-lg font-medium">基础种族值</h3>
+              <h3 className="text-lg font-medium">基础种族值（数值计算）</h3>
               <div className="grid grid-cols-4 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="hp">HP</Label>

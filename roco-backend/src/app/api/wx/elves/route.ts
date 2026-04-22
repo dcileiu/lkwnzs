@@ -9,6 +9,7 @@ export async function GET(request: Request) {
   const element = searchParams.get("element")
   const keyword = searchParams.get("keyword")
   const isHot = searchParams.get("isHot")
+  const group = searchParams.get("group")
   const limit = searchParams.get("limit")
   const parsedLimit = limit ? parseInt(limit, 10) : NaN
   const shouldTake = Number.isFinite(parsedLimit) && parsedLimit > 0
@@ -16,6 +17,7 @@ export async function GET(request: Request) {
   const whereCondition: {
     isHot?: boolean
     name?: { contains: string }
+    group?: { equals: string }
   } = {}
 
   const shouldFilterElement =
@@ -23,10 +25,15 @@ export async function GET(request: Request) {
 
   if (keyword) whereCondition.name = { contains: keyword }
   if (isHot === "true") whereCondition.isHot = true
+  if (group) whereCondition.group = { equals: group }
+
+  const orderBy = isHot === "true"
+    ? [{ hotOrder: "desc" as const }, { updatedAt: "desc" as const }, { createdAt: "desc" as const }]
+    : [{ createdAt: "desc" as const }]
 
   const elves = await prisma.elf.findMany({
     where: whereCondition,
-    orderBy: { createdAt: "desc" },
+    orderBy,
     take: shouldTake ? parsedLimit : undefined,
     include: {
       images: {
@@ -59,6 +66,11 @@ export async function GET(request: Request) {
 
         return {
           ...elf,
+          group: elf.group ?? "",
+          height: elf.height ?? "",
+          weight: elf.weight ?? "",
+          raceValue: elf.raceValue ?? "",
+          hotOrder: elf.hotOrder ?? 0,
           element: serializeElementList(elements),
           elements,
           avatar: coverImage,
