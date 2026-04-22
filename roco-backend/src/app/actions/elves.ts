@@ -13,6 +13,7 @@ export async function createElf(formData: FormData) {
     (formData.get("element") as string | null) || "",
   ])
   const rarity = formData.get("rarity") as string
+  const group = ((formData.get("group") as string | null) ?? "").trim()
   const isHot = formData.get("isHot") === "on"
   const imageRecords = parseImageRecords(formData.get("galleryImages"))
   const coverImage = resolveCoverImage(formData.get("coverImage"), imageRecords)
@@ -33,6 +34,7 @@ export async function createElf(formData: FormData) {
       name,
       element: serializeElementList(elements),
       rarity,
+      group: group || null,
       avatar: coverImage,
       isHot,
       hp,

@@ -23,7 +23,6 @@ import {
   LayoutDashboardIcon,
   SearchIcon,
   Settings2Icon,
-  Share2Icon,
   ShieldIcon,
   UsersIcon,
 } from "lucide-react"
@@ -59,11 +58,6 @@ const data = {
       title: "道具管理",
       url: "/dashboard/items",
       icon: <PackageIcon />,
-    },
-    {
-      title: "进化路线",
-      url: "/dashboard/evolutions",
-      icon: <Share2Icon />,
     },
     {
       title: "宠物蛋",

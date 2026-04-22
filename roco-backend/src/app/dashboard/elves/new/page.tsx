@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { ELEMENT_NAMES } from "@/lib/game-data"
 
-const ELEMENT_OPTIONS = ["光", "冰", "地", "幻", "幽", "恶", "普通", "机械", "武", "毒", "水", "火", "电", "翼", "草", "萌", "虫", "龙"]
+const ELEMENT_OPTIONS = [...ELEMENT_NAMES]
 
 export default function NewElfPage() {
   return (
@@ -39,6 +40,10 @@ export default function NewElfPage() {
               <div className="space-y-2">
                 <Label htmlFor="name">名称</Label>
                 <Input id="name" name="name" required placeholder="例如：迷你乌极夜的样子" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="group">组别</Label>
+                <Input id="group" name="group" placeholder="例如：迪莫家族 / 新手御三家" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="rarity">稀有度</Label>

@@ -87,6 +87,7 @@ model Elf {
   avatar                String?
   element               String
   rarity                String
+  group                 String?
   totalStats            Int                 @default(0)
   hp                    Int                 @default(0)
   attack                Int                 @default(0)
