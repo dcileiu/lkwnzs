@@ -91,15 +91,21 @@ export default function NewElfPage() {
               </div>
             </div>
 
-            <div className="flex items-center space-x-2 rounded-md border p-4">
-              <Checkbox id="isHot" name="isHot" />
-              <div className="space-y-1 leading-none">
-                <Label htmlFor="isHot" className="font-medium">
-                  标记为热门精灵
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  勾选后会在小程序首页热门精灵区域优先展示。
-                </p>
+            <div className="grid grid-cols-[1fr_180px] gap-4 rounded-md border p-4">
+              <div className="flex items-center space-x-2">
+                <Checkbox id="isHot" name="isHot" />
+                <div className="space-y-1 leading-none">
+                  <Label htmlFor="isHot" className="font-medium">
+                    标记为热门精灵
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    勾选后会在小程序首页热门精灵区域展示，并按热门排序值倒序排列。
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="hotOrder">热门排序值</Label>
+                <Input id="hotOrder" name="hotOrder" type="number" defaultValue="0" min="0" />
               </div>
             </div>
 

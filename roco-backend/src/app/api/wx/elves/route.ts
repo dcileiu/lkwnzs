@@ -27,9 +27,13 @@ export async function GET(request: Request) {
   if (isHot === "true") whereCondition.isHot = true
   if (group) whereCondition.group = { equals: group }
 
+  const orderBy = isHot === "true"
+    ? [{ hotOrder: "desc" as const }, { updatedAt: "desc" as const }, { createdAt: "desc" as const }]
+    : [{ createdAt: "desc" as const }]
+
   const elves = await prisma.elf.findMany({
     where: whereCondition,
-    orderBy: { createdAt: "desc" },
+    orderBy,
     take: shouldTake ? parsedLimit : undefined,
     include: {
       images: {
@@ -66,6 +70,7 @@ export async function GET(request: Request) {
           height: elf.height ?? "",
           weight: elf.weight ?? "",
           raceValue: elf.raceValue ?? "",
+          hotOrder: elf.hotOrder ?? 0,
           element: serializeElementList(elements),
           elements,
           avatar: coverImage,

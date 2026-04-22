@@ -8,7 +8,7 @@ import { PlusIcon } from "lucide-react"
 
 export default async function ElvesPage() {
   const elves = await prisma.elf.findMany({
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ isHot: "desc" }, { hotOrder: "desc" }, { createdAt: "desc" }],
     include: {
       _count: {
         select: {
@@ -24,7 +24,7 @@ export default async function ElvesPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">图鉴管理</h1>
           <p className="mt-1 text-muted-foreground">
-            Manage elf cover images, galleries, base stats, and custom grouping tags.
+            Manage elf cover images, galleries, base stats, grouping tags, and hot ranking.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -53,9 +53,9 @@ export default async function ElvesPage() {
                 <TableHead>身高</TableHead>
                 <TableHead>体重</TableHead>
                 <TableHead>种族值</TableHead>
-                <TableHead>稀有度</TableHead>
+                <TableHead>热门</TableHead>
+                <TableHead>热门排序</TableHead>
                 <TableHead className="text-right">图集数</TableHead>
-                <TableHead className="text-right">总种族值</TableHead>
                 <TableHead>操作</TableHead>
               </TableRow>
             </TableHeader>
@@ -87,17 +87,18 @@ export default async function ElvesPage() {
                     <TableCell>
                       {elf.group ? <Badge variant="secondary">{elf.group}</Badge> : <span className="text-xs text-muted-foreground">未分组</span>}
                     </TableCell>
+                    <TableCell>{elf.height ?? "-"}</TableCell>
+                    <TableCell>{elf.weight ?? "-"}</TableCell>
+                    <TableCell>{elf.raceValue ?? "-"}</TableCell>
                     <TableCell>
                       <Badge variant="outline">{elf.element}</Badge>
                     </TableCell>
                     <TableCell>{elf.height ?? "-"}</TableCell>
                     <TableCell>{elf.weight ?? "-"}</TableCell>
                     <TableCell>{elf.raceValue ?? "-"}</TableCell>
-                    <TableCell>
-                      <Badge>{elf.rarity}</Badge>
-                    </TableCell>
+                    <TableCell>{elf.isHot ? <Badge>热门</Badge> : <span className="text-xs text-muted-foreground">否</span>}</TableCell>
+                    <TableCell>{elf.hotOrder}</TableCell>
                     <TableCell className="text-right">{elf._count.images}</TableCell>
-                    <TableCell className="text-right">{elf.totalStats}</TableCell>
                     <TableCell>
                       <Button variant="outline" size="sm" className="mr-2">
                         编辑

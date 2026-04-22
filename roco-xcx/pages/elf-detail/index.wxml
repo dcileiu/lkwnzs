@@ -38,7 +38,7 @@
               <text class="stat-value">{{elf.raceValue || '-'}}</text>
             </view>
             <view class="stat-item">
-              <text class="stat-label">总和</text>
+              <text class="stat-label">基础四维</text>
               <text class="stat-value">{{elf.totalStats}}</text>
             </view>
             <view class="stat-item">
