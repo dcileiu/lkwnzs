@@ -8,7 +8,7 @@ import { PlusIcon } from "lucide-react"
 
 export default async function ElvesPage() {
   const elves = await prisma.elf.findMany({
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ detailQueryCount: "desc" }, { createdAt: "desc" }],
     include: {
       _count: {
         select: {
@@ -24,13 +24,10 @@ export default async function ElvesPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">图鉴管理</h1>
           <p className="mt-1 text-muted-foreground">
-            Manage elf cover images, galleries, and base stats.
+            Manage elf cover images, galleries, base stats, grouping tags, and hot ranking.
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" asChild>
-            <Link href="/dashboard/evolutions">进化路线</Link>
-          </Button>
           <Button asChild>
             <Link href="/dashboard/elves/new">
               <PlusIcon className="mr-2 h-4 w-4" />
@@ -51,17 +48,20 @@ export default async function ElvesPage() {
               <TableRow>
                 <TableHead>主图</TableHead>
                 <TableHead>名称</TableHead>
+                <TableHead>组别</TableHead>
                 <TableHead>属性</TableHead>
-                <TableHead>稀有度</TableHead>
+                <TableHead>身高</TableHead>
+                <TableHead>体重</TableHead>
+                <TableHead>种族值</TableHead>
+                <TableHead className="text-right">详情查询</TableHead>
                 <TableHead className="text-right">图集数</TableHead>
-                <TableHead className="text-right">总种族值</TableHead>
                 <TableHead>操作</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {elves.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="py-8 text-center text-muted-foreground">
+                  <TableCell colSpan={10} className="py-8 text-center text-muted-foreground">
                     暂无精灵，请先新增。
                   </TableCell>
                 </TableRow>
@@ -84,17 +84,17 @@ export default async function ElvesPage() {
                     </TableCell>
                     <TableCell className="font-medium">{elf.name}</TableCell>
                     <TableCell>
+                      {elf.group ? <Badge variant="secondary">{elf.group}</Badge> : <span className="text-xs text-muted-foreground">未分组</span>}
+                    </TableCell>
+                    <TableCell>
                       <Badge variant="outline">{elf.element}</Badge>
                     </TableCell>
-                    <TableCell>
-                      <Badge>{elf.rarity}</Badge>
-                    </TableCell>
+                    <TableCell>{elf.height ?? "-"}</TableCell>
+                    <TableCell>{elf.weight ?? "-"}</TableCell>
+                    <TableCell>{elf.raceValue ?? "-"}</TableCell>
+                    <TableCell className="text-right">{elf.detailQueryCount}</TableCell>
                     <TableCell className="text-right">{elf._count.images}</TableCell>
-                    <TableCell className="text-right">{elf.totalStats}</TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm" className="mr-2" asChild>
-                        <Link href="/dashboard/evolutions">进化路线</Link>
-                      </Button>
                       <Button variant="outline" size="sm" className="mr-2">
                         编辑
                       </Button>
