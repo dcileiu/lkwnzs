@@ -1,9 +1,9 @@
 const TABS = [
-  { pagePath: "/pages/index/index", text: "\u9996\u9875" },
-  { pagePath: "/pages/guide/index", text: "\u653b\u7565" },
-  { pagePath: "/pages/hatch/index", text: "\u5b75\u86cb" },
-  { pagePath: "/pages/pokedex/index", text: "\u56fe\u9274" },
-  { pagePath: "/pages/collection/index", text: "\u6536\u85cf" },
+  { pagePath: "/pages/index/index", text: "首页" },
+  { pagePath: "/pages/guide/index", text: "攻略" },
+  { pagePath: "/pages/hatch/index", text: "孵蛋" },
+  { pagePath: "/pages/pokedex/index", text: "图鉴" },
+  { pagePath: "/pages/me/index", text: "我的" },
 ]
 
 Component({

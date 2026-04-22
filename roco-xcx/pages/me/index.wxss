@@ -1,0 +1,70 @@
+.page-container {
+  min-height: 100vh;
+  padding: 24rpx;
+  background: #f5f7fb;
+  box-sizing: border-box;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 24rpx;
+  border-radius: 24rpx;
+  background: #fff;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+}
+
+.nickname {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.desc {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #7b879d;
+}
+
+.stats-grid {
+  margin-top: 24rpx;
+  display: grid;
+  gap: 18rpx;
+}
+
+.stat-card {
+  padding: 24rpx;
+  border-radius: 24rpx;
+  background: #fff;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.stat-label {
+  display: block;
+  color: #7b879d;
+  font-size: 24rpx;
+}
+
+.stat-value {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 52rpx;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.stat-link {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #4f74ff;
+}

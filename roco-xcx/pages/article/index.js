@@ -1,4 +1,5 @@
 const api = require('../../utils/api.js')
+const userActions = require('../../utils/user-actions.js')
 
 Page({
   data: {
@@ -20,7 +21,12 @@ Page({
     try {
       wx.showLoading({ title: '加载中' })
       const res = await api.getArticleDetail(id)
-      this.setData({ article: res })
+      userActions.saveArticleSnapshot(res)
+      this.setData({
+        article: res,
+        isLiked: userActions.isLiked(id),
+        isFavorited: userActions.isFavorited(id)
+      })
       wx.setNavigationBarTitle({ title: res.title || '攻略详情' })
     } catch (err) {
       wx.showToast({ title: '加载失败', icon: 'error' })
@@ -31,20 +37,24 @@ Page({
   },
 
   toggleLike() {
-    const { isLiked } = this.data
-    this.setData({ isLiked: !isLiked })
+    const { article } = this.data
+    if (!article) return
+    const nextState = userActions.toggleLike(article)
+    this.setData({ isLiked: nextState })
     wx.showToast({
-      title: !isLiked ? '已点赞！' : '取消点赞',
+      title: nextState ? '已点赞！' : '取消点赞',
       icon: 'none',
       duration: 800
     })
   },
 
   toggleFavorite() {
-    const { isFavorited } = this.data
-    this.setData({ isFavorited: !isFavorited })
+    const { article } = this.data
+    if (!article) return
+    const nextState = userActions.toggleFavorite(article)
+    this.setData({ isFavorited: nextState })
     wx.showToast({
-      title: !isFavorited ? '收藏成功！' : '取消收藏',
+      title: nextState ? '收藏成功！' : '取消收藏',
       icon: 'none',
       duration: 800
     })
@@ -61,7 +71,6 @@ Page({
       return
     }
 
-    // Optimistic UI update - add comment locally
     const newComment = {
       id: Date.now(),
       content: commentInput,
