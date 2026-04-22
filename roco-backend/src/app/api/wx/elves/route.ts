@@ -66,6 +66,7 @@ export async function GET(request: Request) {
         return {
           ...elf,
           group: elf.group ?? "",
+          category: elf.category ?? "",
           height: elf.height ?? "",
           weight: elf.weight ?? "",
           raceValue: elf.raceValue ?? "",

@@ -14,6 +14,7 @@ export async function createElf(formData: FormData) {
   ])
   const rarity = formData.get("rarity") as string
   const group = ((formData.get("group") as string | null) ?? "").trim()
+  const category = ((formData.get("category") as string | null) ?? "").trim()
   const isHot = formData.get("isHot") === "on"
   const height = ((formData.get("height") as string | null) ?? "").trim()
   const weight = ((formData.get("weight") as string | null) ?? "").trim()
@@ -38,6 +39,7 @@ export async function createElf(formData: FormData) {
       element: serializeElementList(elements),
       rarity,
       group: group || null,
+      category: category || null,
       avatar: coverImage,
       height: height || null,
       weight: weight || null,

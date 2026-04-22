@@ -2,6 +2,7 @@ import { promises as fs } from "node:fs"
 import path from "node:path"
 
 const DATA_DIR = path.join(process.cwd(), "data")
+const CATEGORIES_FILE = "categories.json"
 
 export const ELEMENT_NAMES = [
   "光",
@@ -24,11 +25,20 @@ export const ELEMENT_NAMES = [
   "龙",
 ] as const
 
+export type CategoryTarget = "elf" | "item"
+
+export type CategoryRecord = {
+  id: string
+  name: string
+  target: CategoryTarget
+}
+
 export type ItemRecord = {
   id?: string | number
   no?: string
   name?: string
   type?: string
+  category?: string
   quality?: string
   icon?: string
   image?: string
@@ -44,6 +54,25 @@ async function readJsonFile<T>(filename: string): Promise<T | null> {
   } catch {
     return null
   }
+}
+
+export async function writeCategoriesData(categories: CategoryRecord[]) {
+  const fullPath = path.join(DATA_DIR, CATEGORIES_FILE)
+  await fs.writeFile(fullPath, `${JSON.stringify(categories, null, 2)}\n`, "utf8")
+}
+
+export async function readCategoriesData() {
+  const categories = await readJsonFile<CategoryRecord[]>(CATEGORIES_FILE)
+
+  if (!Array.isArray(categories)) return []
+
+  return categories
+    .filter((item) => item && typeof item.id === "string" && typeof item.name === "string" && (item.target === "elf" || item.target === "item"))
+    .map((item) => ({
+      id: item.id,
+      name: item.name,
+      target: item.target,
+    }))
 }
 
 export async function readElvesData() {

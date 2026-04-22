@@ -49,6 +49,7 @@ export default async function ElvesPage() {
                 <TableHead>主图</TableHead>
                 <TableHead>名称</TableHead>
                 <TableHead>组别</TableHead>
+                <TableHead>分类</TableHead>
                 <TableHead>属性</TableHead>
                 <TableHead>身高</TableHead>
                 <TableHead>体重</TableHead>
@@ -61,7 +62,7 @@ export default async function ElvesPage() {
             <TableBody>
               {elves.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={10} className="py-8 text-center text-muted-foreground">
+                  <TableCell colSpan={11} className="py-8 text-center text-muted-foreground">
                     暂无精灵，请先新增。
                   </TableCell>
                 </TableRow>
@@ -86,9 +87,7 @@ export default async function ElvesPage() {
                     <TableCell>
                       {elf.group ? <Badge variant="secondary">{elf.group}</Badge> : <span className="text-xs text-muted-foreground">未分组</span>}
                     </TableCell>
-                    <TableCell>{elf.height ?? "-"}</TableCell>
-                    <TableCell>{elf.weight ?? "-"}</TableCell>
-                    <TableCell>{elf.raceValue ?? "-"}</TableCell>
+                    <TableCell>{elf.category ?? "-"}</TableCell>
                     <TableCell>
                       <Badge variant="outline">{elf.element}</Badge>
                     </TableCell>

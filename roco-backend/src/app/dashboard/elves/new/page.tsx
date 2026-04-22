@@ -8,11 +8,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { ELEMENT_NAMES } from "@/lib/game-data"
+import { ELEMENT_NAMES, readCategoriesData } from "@/lib/game-data"
 
 const ELEMENT_OPTIONS = [...ELEMENT_NAMES]
 
-export default function NewElfPage() {
+export default async function NewElfPage() {
+  const categories = (await readCategoriesData()).filter((category) => category.target === "elf")
+
   return (
     <div className="flex max-w-4xl flex-col gap-4 p-4 lg:p-8">
       <div className="flex items-center justify-between">
@@ -44,6 +46,22 @@ export default function NewElfPage() {
               <div className="space-y-2">
                 <Label htmlFor="group">组别</Label>
                 <Input id="group" name="group" placeholder="例如：迪莫家族 / 新手御三家" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="category">分类</Label>
+                <select
+                  id="category"
+                  name="category"
+                  defaultValue=""
+                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+                >
+                  <option value="">未分类</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="height">身高</Label>

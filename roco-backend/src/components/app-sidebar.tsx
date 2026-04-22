@@ -18,7 +18,7 @@ import {
   BookHeartIcon,
   FileTextIcon,
   GhostIcon,
-  GemIcon,
+  FolderTreeIcon,
   PackageIcon,
   LayoutDashboardIcon,
   SearchIcon,
@@ -50,9 +50,9 @@ const data = {
       icon: <GhostIcon />,
     },
     {
-      title: "属性管理",
-      url: "/dashboard/attrs",
-      icon: <GemIcon />,
+      title: "分类管理",
+      url: "/dashboard/categories",
+      icon: <FolderTreeIcon />,
     },
     {
       title: "道具管理",
