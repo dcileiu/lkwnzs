@@ -23,6 +23,11 @@ type RuleWithElf = {
   }
 }
 
+type PredictionEntry = {
+  elf: RuleWithElf["elf"]
+  probability: number
+}
+
 function parseRangeValue(raw: string | null | undefined, unit: "height" | "weight") {
   if (!raw) return null
 
@@ -47,27 +52,84 @@ function parseRangeValue(raw: string | null | undefined, unit: "height" | "weigh
   return { min, max }
 }
 
-function normalizePrediction(rule: RuleWithElf, probability: number) {
+function buildComparableValues(value: number, unit: "height" | "weight") {
+  const candidates = new Set<number>([value])
+
+  if (unit === "height" && value > 0) {
+    if (value < 10) {
+      candidates.add(value * 100)
+    } else {
+      candidates.add(value / 100)
+    }
+  }
+
+  return Array.from(candidates)
+}
+
+function isWithinRange(value: number, min: number, max: number) {
+  return value >= min && value <= max
+}
+
+function matchesRuleRange(rule: RuleWithElf, height: number, weight: number) {
+  const heightCandidates = buildComparableValues(height, "height")
+  const weightCandidates = buildComparableValues(weight, "weight")
+
+  return (
+    heightCandidates.some((value) => isWithinRange(value, rule.minHeight, rule.maxHeight)) &&
+    weightCandidates.some((value) => isWithinRange(value, rule.minWeight, rule.maxWeight))
+  )
+}
+
+function matchesElfRange(elf: RuleWithElf["elf"], height: number, weight: number) {
+  const parsedHeight = parseRangeValue(elf.height, "height")
+  const parsedWeight = parseRangeValue(elf.weight, "weight")
+
+  if (!parsedHeight || !parsedWeight) return false
+
+  const heightCandidates = buildComparableValues(height, "height")
+  const weightCandidates = buildComparableValues(weight, "weight")
+
+  return (
+    heightCandidates.some((value) => isWithinRange(value, parsedHeight.min, parsedHeight.max)) &&
+    weightCandidates.some((value) => isWithinRange(value, parsedWeight.min, parsedWeight.max))
+  )
+}
+
+function mergePredictionEntries(entries: PredictionEntry[]) {
+  const merged = new Map<string, PredictionEntry>()
+
+  for (const entry of entries) {
+    const existing = merged.get(entry.elf.id)
+
+    if (!existing || entry.probability > existing.probability) {
+      merged.set(entry.elf.id, entry)
+    }
+  }
+
+  return Array.from(merged.values())
+}
+
+function normalizePrediction(elf: RuleWithElf["elf"], probability: number) {
   const elfImages = sortImageRecords(
-    rule.elf.images as StoredImageRecord[]
+    elf.images as StoredImageRecord[]
   ).map((image: StoredImageRecord) => ({
     id: image.id,
     url: image.url,
     altText: image.altText ?? "",
     sortOrder: image.sortOrder,
   }))
-  const elfElements = normalizeElementList(rule.elf.element)
+  const elfElements = normalizeElementList(elf.element)
 
   return {
-    elfId: rule.elf.id,
-    elfName: rule.elf.name,
-    elfRarity: rule.elf.rarity,
+    elfId: elf.id,
+    elfName: elf.name,
+    elfRarity: elf.rarity,
     elfElement: serializeElementList(elfElements),
     elfElements,
-    elfCoverImage: rule.elf.avatar ?? elfImages[0]?.url ?? null,
+    elfCoverImage: elf.avatar ?? elfImages[0]?.url ?? null,
     elfImages,
-    elfHeight: rule.elf.height ?? "",
-    elfWeight: rule.elf.weight ?? "",
+    elfHeight: elf.height ?? "",
+    elfWeight: elf.weight ?? "",
     probability,
   }
 }
@@ -75,20 +137,19 @@ function normalizePrediction(rule: RuleWithElf, probability: number) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { eggId, height, weight } = body
+    const eggId = typeof body.eggId === "string" && body.eggId.trim() ? body.eggId.trim() : null
+    const numericHeight = parseFloat(String(body.height ?? ""))
+    const numericWeight = parseFloat(String(body.weight ?? ""))
 
-    if (!eggId || height === undefined || weight === undefined) {
+    if (!Number.isFinite(numericHeight) || !Number.isFinite(numericWeight)) {
       return NextResponse.json(
         { code: 400, message: "Missing required parameters" },
         { status: 400 }
       )
     }
 
-    const numericHeight = parseFloat(height)
-    const numericWeight = parseFloat(weight)
-
     const rules = await prisma.hatchRule.findMany({
-      where: { eggId },
+      where: eggId ? { eggId } : undefined,
       include: {
         elf: {
           include: {
@@ -98,48 +159,65 @@ export async function POST(request: Request) {
           },
         },
       },
-      orderBy: [{ probability: "desc" }, { createdAt: "asc" }],
+      orderBy: eggId
+        ? [{ probability: "desc" }, { createdAt: "asc" }]
+        : [{ createdAt: "asc" }],
     }) as unknown as RuleWithElf[]
 
-    const matchedByRule = rules.filter((rule) => (
-      rule.minHeight <= numericHeight &&
-      rule.maxHeight >= numericHeight &&
-      rule.minWeight <= numericWeight &&
-      rule.maxWeight >= numericWeight
-    ))
+    const matchedByRuleEntries = mergePredictionEntries(
+      rules
+        .filter((rule) => matchesRuleRange(rule, numericHeight, numericWeight))
+        .map((rule) => ({
+          elf: rule.elf,
+          probability: rule.probability,
+        }))
+    )
 
-    if (matchedByRule.length > 0) {
+    if (eggId && matchedByRuleEntries.length > 0) {
       return NextResponse.json({
         code: 200,
         message: "success",
-        data: matchedByRule.map((rule) => normalizePrediction(rule, rule.probability)),
+        data: matchedByRuleEntries.map((entry) => normalizePrediction(entry.elf, entry.probability)),
       })
     }
 
-    // Fallback: if hatch rules are not configured by numeric range,
-    // use elf height/weight range strings to infer candidates.
-    const matchedByElfRange = rules.filter((rule) => {
-      const parsedHeight = parseRangeValue(rule.elf.height, "height")
-      const parsedWeight = parseRangeValue(rule.elf.weight, "weight")
+    const matchedByElfRangeEntries = mergePredictionEntries(
+      rules
+        .filter((rule) => matchesElfRange(rule.elf, numericHeight, numericWeight))
+        .map((rule) => ({
+          elf: rule.elf,
+          probability: 0,
+        }))
+    )
 
-      if (!parsedHeight || !parsedWeight) return false
+    if (eggId) {
+      const fallbackProbability = matchedByElfRangeEntries.length > 0
+        ? Number((100 / matchedByElfRangeEntries.length).toFixed(2))
+        : 0
 
-      return (
-        parsedHeight.min <= numericHeight &&
-        parsedHeight.max >= numericHeight &&
-        parsedWeight.min <= numericWeight &&
-        parsedWeight.max >= numericWeight
-      )
-    })
+      return NextResponse.json({
+        code: 200,
+        message: "success",
+        data: matchedByElfRangeEntries.map((entry) => normalizePrediction(entry.elf, fallbackProbability)),
+      })
+    }
 
-    const fallbackProbability = matchedByElfRange.length > 0
-      ? Number((100 / matchedByElfRange.length).toFixed(2))
+    const mergedGlobalEntries = mergePredictionEntries([
+      ...matchedByRuleEntries.map((entry) => ({
+        elf: entry.elf,
+        probability: 0,
+      })),
+      ...matchedByElfRangeEntries,
+    ])
+
+    const globalProbability = mergedGlobalEntries.length > 0
+      ? Number((100 / mergedGlobalEntries.length).toFixed(2))
       : 0
 
     return NextResponse.json({
       code: 200,
       message: "success",
-      data: matchedByElfRange.map((rule) => normalizePrediction(rule, fallbackProbability)),
+      data: mergedGlobalEntries.map((entry) => normalizePrediction(entry.elf, globalProbability)),
     })
   } catch (error) {
     console.error("Predict Hatching Error:", error)

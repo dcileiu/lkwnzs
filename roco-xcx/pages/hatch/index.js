@@ -3,68 +3,57 @@ const { setTabBarSelected } = require('../../utils/tabbar.js')
 
 Page({
   data: {
-    eggs: [],
-    eggIndex: null,
-
-    heights: Array.from({ length: 30 }, (_, i) => (i + 1) * 5),
-    heightIndex: null,
-
-    weights: Array.from({ length: 30 }, (_, i) => (i + 1) * 2),
-    weightIndex: null,
-
+    heightValue: '',
+    weightValue: '',
+    searched: false,
     results: []
-  },
-
-  onLoad() {
-    this.fetchEggs()
   },
 
   onShow() {
     setTabBarSelected(this, 2)
   },
 
-  async fetchEggs() {
-    try {
-      wx.showLoading({ title: '加载中' })
-      const eggs = await api.getEggCollection()
-      this.setData({ eggs: eggs || [] })
-    } catch (err) {
-      console.error(err)
-    } finally {
-      wx.hideLoading()
-    }
+  onHeightInput(e) {
+    this.setData({
+      heightValue: (e.detail.value || '').trim(),
+      results: [],
+      searched: false
+    })
   },
 
-  onEggChange(e) {
-    this.setData({ eggIndex: e.detail.value, results: [] })
-  },
-
-  onHeightChange(e) {
-    this.setData({ heightIndex: e.detail.value, results: [] })
-  },
-
-  onWeightChange(e) {
-    this.setData({ weightIndex: e.detail.value, results: [] })
+  onWeightInput(e) {
+    this.setData({
+      weightValue: (e.detail.value || '').trim(),
+      results: [],
+      searched: false
+    })
   },
 
   async predict() {
-    const { eggIndex, heightIndex, weightIndex, eggs, heights, weights } = this.data
+    const { heightValue, weightValue } = this.data
+    const numericHeight = parseFloat(heightValue)
+    const numericWeight = parseFloat(weightValue)
 
-    if (eggIndex === null || heightIndex === null || weightIndex === null) {
-      wx.showToast({ title: '请先补全预测条件', icon: 'none' })
+    if (!heightValue || !weightValue) {
+      wx.showToast({ title: '请先输入身高和体重', icon: 'none' })
+      return
+    }
+
+    if (!Number.isFinite(numericHeight) || !Number.isFinite(numericWeight)) {
+      wx.showToast({ title: '请输入有效数字', icon: 'none' })
       return
     }
 
     try {
       wx.showLoading({ title: '预测中...' })
       const res = await api.predictHatch({
-        eggId: eggs[eggIndex].id,
-        height: heights[heightIndex],
-        weight: weights[weightIndex]
+        height: numericHeight,
+        weight: numericWeight
       })
 
       this.setData({
-        results: res || []
+        results: res || [],
+        searched: true
       })
     } catch (err) {
       console.error(err)
