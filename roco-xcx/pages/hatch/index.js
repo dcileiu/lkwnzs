@@ -6,6 +6,8 @@ Page({
     heightValue: '',
     weightValue: '',
     searched: false,
+    selectedResultIndex: -1,
+    selectedResult: null,
     results: []
   },
 
@@ -17,7 +19,9 @@ Page({
     this.setData({
       heightValue: (e.detail.value || '').trim(),
       results: [],
-      searched: false
+      searched: false,
+      selectedResultIndex: -1,
+      selectedResult: null
     })
   },
 
@@ -25,7 +29,21 @@ Page({
     this.setData({
       weightValue: (e.detail.value || '').trim(),
       results: [],
-      searched: false
+      searched: false,
+      selectedResultIndex: -1,
+      selectedResult: null
+    })
+  },
+
+  onSelectResult(e) {
+    const index = Number(e.currentTarget.dataset.index)
+    const { results } = this.data
+
+    if (!Number.isInteger(index) || index < 0 || index >= results.length) return
+
+    this.setData({
+      selectedResultIndex: index,
+      selectedResult: results[index]
     })
   },
 
@@ -51,9 +69,13 @@ Page({
         weight: numericWeight
       })
 
+      const results = Array.isArray(res) ? res : []
+
       this.setData({
-        results: res || [],
-        searched: true
+        results,
+        searched: true,
+        selectedResultIndex: results.length ? 0 : -1,
+        selectedResult: results.length ? results[0] : null
       })
     } catch (err) {
       console.error(err)

@@ -23,6 +23,7 @@ If the SQLite database is empty or has been replaced, initialize the schema and 
 ```bash
 npm run db:push
 npm run db:bootstrap
+npm run db:sync-egg-media
 ```
 
 `db:bootstrap` will:
@@ -30,6 +31,12 @@ npm run db:bootstrap
 - sync `data/jingling.json` into the `Elf` table
 - rebuild each elf's image gallery records
 - create a sample starter guide article in the `Article` table
+
+`db:sync-egg-media` will:
+
+- read `data/eggs.json`
+- sync egg image URLs into `Elf.eggImageUrl`
+- sync fruit image URLs into `Elf.fruitImageUrl`
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

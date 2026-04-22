@@ -10,8 +10,10 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:bootstrap": "node scripts/bootstrap-db.mjs",
-    "db:init": "npm run db:push && npm run db:bootstrap",
-    "assets:eggs": "node scripts/download-egg-assets.mjs"
+    "db:sync-egg-media": "node scripts/sync-egg-media-to-db.mjs",
+    "db:init": "npm run db:push && npm run db:bootstrap && npm run db:sync-egg-media",
+    "assets:eggs": "node scripts/download-egg-assets.mjs",
+    "data:sync-jingling-egg-media": "node scripts/sync-egg-media-to-jingling.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",

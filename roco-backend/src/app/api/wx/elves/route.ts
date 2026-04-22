@@ -71,6 +71,7 @@ export async function GET(request: Request) {
           weight: elf.weight ?? "",
           raceValue: elf.raceValue ?? "",
           eggImageUrl: elf.eggImageUrl ?? "",
+          fruitImageUrl: elf.fruitImageUrl ?? "",
           detailQueryCount: elf.detailQueryCount ?? 0,
           element: serializeElementList(elements),
           elements,

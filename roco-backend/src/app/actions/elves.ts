@@ -20,6 +20,7 @@ export async function createElf(formData: FormData) {
   const weight = ((formData.get("weight") as string | null) ?? "").trim()
   const raceValue = ((formData.get("raceValue") as string | null) ?? "").trim()
   const eggImageUrl = ((formData.get("eggImageUrl") as string | null) ?? "").trim()
+  const fruitImageUrl = ((formData.get("fruitImageUrl") as string | null) ?? "").trim()
   const imageRecords = parseImageRecords(formData.get("galleryImages"))
   const coverImage = resolveCoverImage(formData.get("coverImage"), imageRecords)
   
@@ -46,6 +47,7 @@ export async function createElf(formData: FormData) {
       weight: weight || null,
       raceValue: raceValue || null,
       eggImageUrl: eggImageUrl || null,
+      fruitImageUrl: fruitImageUrl || null,
       isHot,
       hp,
       attack,

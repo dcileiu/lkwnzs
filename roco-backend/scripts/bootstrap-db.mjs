@@ -170,7 +170,8 @@ async function syncElves() {
       height: typeof record.height === "string" && record.height.trim() ? record.height.trim() : null,
       weight: typeof record.weight === "string" && record.weight.trim() ? record.weight.trim() : null,
       raceValue: null,
-      eggImageUrl: null,
+      eggImageUrl: typeof record.eggImageUrl === "string" && record.eggImageUrl.trim() ? record.eggImageUrl.trim() : null,
+      fruitImageUrl: typeof record.fruitImageUrl === "string" && record.fruitImageUrl.trim() ? record.fruitImageUrl.trim() : null,
       tags: JSON.stringify({
         no: record.no ?? "",
         type: record.type ?? "",

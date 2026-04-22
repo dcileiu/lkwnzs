@@ -18,6 +18,8 @@ type RuleWithElf = {
     element: string
     height: string | null
     weight: string | null
+    eggImageUrl: string | null
+    fruitImageUrl: string | null
     images: StoredImageRecord[]
     avatar: string | null
   }
@@ -132,6 +134,8 @@ function normalizePrediction(elf: ElfWithImages, probability: number) {
     elfImages,
     elfHeight: elf.height ?? "",
     elfWeight: elf.weight ?? "",
+    eggImageUrl: elf.eggImageUrl ?? "",
+    fruitImageUrl: elf.fruitImageUrl ?? "",
     probability,
   }
 }
