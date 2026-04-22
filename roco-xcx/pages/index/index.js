@@ -37,7 +37,7 @@ Page({
   navTo(e) {
     const url = e.currentTarget.dataset.url
     // Basic navigation routing 
-    if (url.includes('guide') || url.includes('hatch') || url.includes('pokedex') || url.includes('collection')) {
+    if (url.includes('guide') || url.includes('hatch') || url.includes('pokedex') || url.includes('/pages/me/index')) {
       wx.switchTab({ url })
     } else {
       wx.navigateTo({ url })

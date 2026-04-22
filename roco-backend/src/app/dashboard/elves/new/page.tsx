@@ -76,6 +76,10 @@ export default async function NewElfPage() {
                 <Input id="raceValue" name="raceValue" placeholder="例如：460 / 430~520" />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="eggImageUrl">精灵蛋图片 URL</Label>
+                <Input id="eggImageUrl" name="eggImageUrl" placeholder="https://roco.cdn.itianci.cn/imgs/eggs/demo.webp" />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="rarity">稀有度</Label>
                 <Select name="rarity" required defaultValue="SSR">
                   <SelectTrigger id="rarity">

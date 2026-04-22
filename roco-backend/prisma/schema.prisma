@@ -92,6 +92,7 @@ model Elf {
   height                String?
   weight                String?
   raceValue             String?
+  eggImageUrl           String?
   totalStats            Int                 @default(0)
   hp                    Int                 @default(0)
   attack                Int                 @default(0)

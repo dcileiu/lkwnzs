@@ -70,6 +70,7 @@ export async function GET(request: Request) {
           height: elf.height ?? "",
           weight: elf.weight ?? "",
           raceValue: elf.raceValue ?? "",
+          eggImageUrl: elf.eggImageUrl ?? "",
           detailQueryCount: elf.detailQueryCount ?? 0,
           element: serializeElementList(elements),
           elements,
