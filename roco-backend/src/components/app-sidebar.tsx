@@ -18,10 +18,11 @@ import {
   BookHeartIcon,
   FileTextIcon,
   GhostIcon,
+  FolderTreeIcon,
+  PackageIcon,
   LayoutDashboardIcon,
   SearchIcon,
   Settings2Icon,
-  Share2Icon,
   ShieldIcon,
   UsersIcon,
 } from "lucide-react"
@@ -49,9 +50,14 @@ const data = {
       icon: <GhostIcon />,
     },
     {
-      title: "进化路线",
-      url: "/dashboard/evolutions",
-      icon: <Share2Icon />,
+      title: "分类管理",
+      url: "/dashboard/categories",
+      icon: <FolderTreeIcon />,
+    },
+    {
+      title: "道具管理",
+      url: "/dashboard/items",
+      icon: <PackageIcon />,
     },
     {
       title: "宠物蛋",

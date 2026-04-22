@@ -6,11 +6,13 @@
     "pages/pokedex/index",
     "pages/elf-detail/index",
     "pages/collection/index",
-    "pages/article/index"
+    "pages/article/index",
+    "pages/me/index",
+    "pages/me-articles/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "\u6d1b\u514b\u738b\u56fd\u52a9\u624b",
+    "navigationBarTitleText": "洛克王国助手",
     "navigationBarBackgroundColor": "#ffffff"
   },
   "tabBar": {
@@ -22,23 +24,23 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "\u9996\u9875"
+        "text": "首页"
       },
       {
         "pagePath": "pages/guide/index",
-        "text": "\u653b\u7565"
+        "text": "攻略"
       },
       {
         "pagePath": "pages/hatch/index",
-        "text": "\u5b75\u86cb"
+        "text": "孵蛋"
       },
       {
         "pagePath": "pages/pokedex/index",
-        "text": "\u56fe\u9274"
+        "text": "图鉴"
       },
       {
-        "pagePath": "pages/collection/index",
-        "text": "\u6536\u85cf"
+        "pagePath": "pages/me/index",
+        "text": "我的"
       }
     ]
   },
