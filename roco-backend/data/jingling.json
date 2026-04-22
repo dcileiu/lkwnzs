@@ -173,7 +173,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（蓬松的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（蓬松的样子）.wepb",
+    "height": "0.3-0.39",
+    "weight": "5.59-6.94"
   },
   {
     "no": "NO.011",
@@ -189,7 +191,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（紧实的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（紧实的样子）.wepb",
+    "height": "0.3-0.39",
+    "weight": "5.59-6.94"
   },
   {
     "no": "NO.011",
@@ -205,7 +209,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（急急急鸭）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（急急急鸭）.wepb",
+    "height": "0.3-0.39",
+    "weight": "5.59-6.94"
   },
   {
     "no": "NO.011",
@@ -221,7 +227,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（等一等鸭）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（等一等鸭）.wepb",
+    "height": "0.3-0.39",
+    "weight": "5.59-6.94"
   },
   {
     "no": "NO.011",
@@ -237,7 +245,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（起来鸭）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（起来鸭）.wepb",
+    "height": "0.3-0.39",
+    "weight": "5.59-6.94"
   },
   {
     "no": "NO.011",
@@ -253,7 +263,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（燃了鸭）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/鸭吉吉（燃了鸭）.wepb",
+    "height": "0.3-0.39",
+    "weight": "5.59-6.94"
   },
   {
     "no": "NO.012",
@@ -269,7 +281,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/板板壳（本来的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/板板壳（本来的样子）.wepb",
+    "height": "0.23-0.31",
+    "weight": "2.63-4.0"
   },
   {
     "no": "NO.013",
@@ -317,7 +331,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/锥尾羊.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/锥尾羊.wepb",
+    "height": "0.26-0.31",
+    "weight": "4.92-6.05"
   },
   {
     "no": "NO.016",
@@ -467,7 +483,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/石肤蜥（本来的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/石肤蜥（本来的样子）.wepb",
+    "height": "0.21-0.29",
+    "weight": "7.67-13.4"
   },
   {
     "no": "NO.025",
@@ -515,7 +533,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/布是石.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/布是石.wepb",
+    "height": "0.18-0.25",
+    "weight": "7.1-12.51"
   },
   {
     "no": "NO.028",
@@ -565,7 +585,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/恶魔叮.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/恶魔叮.wepb",
+    "height": "0.17-0.21",
+    "weight": "1.26-1.49"
   },
   {
     "no": "NO.031",
@@ -601,7 +623,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/毛毛.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/毛毛.wepb",
+    "height": "0.14-0.19",
+    "weight": "1.23-1.78"
   },
   {
     "no": "NO.033",
@@ -655,7 +679,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/幽影树.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/幽影树.wepb",
+    "height": "0.28-0.36",
+    "weight": "10.73-14.03"
   },
   {
     "no": "NO.036",
@@ -673,7 +699,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小鼠獭.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小鼠獭.wepb",
+    "height": "0.17-0.2",
+    "weight": "2.49-2.77"
   },
   {
     "no": "NO.037",
@@ -761,7 +789,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/奇丽草.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/奇丽草.wepb",
+    "height": "0.18-0.21",
+    "weight": "1.65-2.06"
   },
   {
     "no": "NO.042",
@@ -809,7 +839,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/丢丢（草地附近的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/丢丢（草地附近的样子）.wepb",
+    "height": "0.17-0.21",
+    "weight": "1.84-2.41"
   },
   {
     "no": "NO.045",
@@ -857,7 +889,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/护主犬.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/护主犬.wepb",
+    "height": "0.27-0.37",
+    "weight": "4.85-6.75"
   },
   {
     "no": "NO.048",
@@ -889,7 +923,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/绿耳松鼠.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/绿耳松鼠.wepb",
+    "height": "0.24-0.28",
+    "weight": "1.79-2.3"
   },
   {
     "no": "NO.050",
@@ -937,7 +973,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/嘟嘟煲.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/嘟嘟煲.wepb",
+    "height": "0.28-0.33",
+    "weight": "17.45-22.31"
   },
   {
     "no": "NO.053",
@@ -969,7 +1007,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小灵面.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小灵面.wepb",
+    "height": "0.17-0.2",
+    "weight": "0.038-0.05"
   },
   {
     "no": "NO.055",
@@ -1051,7 +1091,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/兽花蕾.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/兽花蕾.wepb",
+    "height": "0.17",
+    "weight": "1.8-1.99"
   },
   {
     "no": "NO.060",
@@ -1117,7 +1159,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/蹦蹦种子（海神球形态）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/蹦蹦种子（海神球形态）.wepb",
+    "height": "0.22-0.27",
+    "weight": "1.69-2.12"
   },
   {
     "no": "NO.064",
@@ -1169,7 +1213,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/电咩咩.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/电咩咩.wepb",
+    "height": "0.27-0.28",
+    "weight": "2.8-2.96"
   },
   {
     "no": "NO.067",
@@ -1219,7 +1265,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/蒲公英.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/蒲公英.wepb",
+    "height": "0.14-0.17",
+    "weight": "0.05-0.08"
   },
   {
     "no": "NO.070",
@@ -1285,7 +1333,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/白发懒人.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/白发懒人.wepb",
+    "height": "0.31-0.43",
+    "weight": "7.03-9.31"
   },
   {
     "no": "NO.074",
@@ -1391,7 +1441,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/菊花梨.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/菊花梨.wepb",
+    "height": "0.3",
+    "weight": "1.73"
   },
   {
     "no": "NO.080",
@@ -1407,7 +1459,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小星光（星光能量的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小星光（星光能量的样子）.wepb",
+    "height": "0.33-0.42",
+    "weight": "9.62-12.93"
   },
   {
     "no": "NO.081",
@@ -1441,7 +1495,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/一窝蜂.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/一窝蜂.wepb",
+    "height": "0.17-0.22",
+    "weight": "1.56-2.16"
   },
   {
     "no": "NO.083",
@@ -1493,7 +1549,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小夜.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小夜.wepb",
+    "height": "0.23-0.29",
+    "weight": "1.62-2.73"
   },
   {
     "no": "NO.086",
@@ -1543,7 +1601,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/乖乖鹄.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/乖乖鹄.wepb",
+    "height": "0.22-0.27",
+    "weight": "1.66-2.11"
   },
   {
     "no": "NO.089",
@@ -1615,7 +1675,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/锤头鹳.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/锤头鹳.wepb",
+    "height": "0.47-0.63",
+    "weight": "18.58-25.36"
   },
   {
     "no": "NO.093",
@@ -1667,7 +1729,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/记忆石.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/记忆石.wepb",
+    "height": "0.43-0.58",
+    "weight": "33.73-44.33"
   },
   {
     "no": "NO.096",
@@ -1739,7 +1803,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小草虫.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小草虫.wepb",
+    "height": "0.2-0.26",
+    "weight": "0.75-1.14"
   },
   {
     "no": "NO.100",
@@ -1793,7 +1859,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/绿翼鸟.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/绿翼鸟.wepb",
+    "height": "0.21-0.22",
+    "weight": "1.27-1.47"
   },
   {
     "no": "NO.103",
@@ -1845,7 +1913,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/阿米亚特.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/阿米亚特.wepb",
+    "height": "0.28-0.46",
+    "weight": "16.22-19.15"
   },
   {
     "no": "NO.106",
@@ -1897,7 +1967,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/风铃鲨.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/风铃鲨.wepb",
+    "height": "0.2-0.24",
+    "weight": "5.63-6.45"
   },
   {
     "no": "NO.109",
@@ -1949,7 +2021,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/石石.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/石石.wepb",
+    "height": "0.17-0.2",
+    "weight": "24.53-27.59"
   },
   {
     "no": "NO.112",
@@ -2037,7 +2111,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小独角兽.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小独角兽.wepb",
+    "height": "0.42-0.58",
+    "weight": "14.55-21.84"
   },
   {
     "no": "NO.117",
@@ -2071,7 +2147,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/旋叶虫（金黄的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/旋叶虫（金黄的样子）.wepb",
+    "height": "0.04-0.06",
+    "weight": "0.057-0.09"
   },
   {
     "no": "NO.119",
@@ -2123,7 +2201,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小黑猫.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小黑猫.wepb",
+    "height": "0.25-0.27",
+    "weight": "1.5-1.78"
   },
   {
     "no": "NO.122",
@@ -2193,7 +2273,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/多多.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/多多.wepb",
+    "height": "0.21-0.25",
+    "weight": "5.6-6.84"
   },
   {
     "no": "NO.126",
@@ -2245,7 +2327,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/哭哭菇.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/哭哭菇.wepb",
+    "height": "0.14-0.2",
+    "weight": "0.71-1.23"
   },
   {
     "no": "NO.129",
@@ -2293,7 +2377,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/恶魔狼.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/恶魔狼.wepb",
+    "height": "0.52-0.72",
+    "weight": "26-36"
   },
   {
     "no": "NO.132",
@@ -2311,7 +2397,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小电企鹅.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小电企鹅.wepb",
+    "height": "0.19-0.23",
+    "weight": "1.3-2.0"
   },
   {
     "no": "NO.133",
@@ -2345,7 +2433,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/雪豆丁.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/雪豆丁.wepb",
+    "height": "0.39-0.45",
+    "weight": "3.63-4.31"
   },
   {
     "no": "NO.135",
@@ -2395,7 +2485,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/呼呼猪.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/呼呼猪.wepb",
+    "height": "0.22-0.31",
+    "weight": "2.43-3.52"
   },
   {
     "no": "NO.138",
@@ -2429,7 +2521,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/雪娃娃.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/雪娃娃.wepb",
+    "height": "0.12-0.17",
+    "weight": "2.45-3.12"
   },
   {
     "no": "NO.140",
@@ -2531,7 +2625,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/权杖-Ⅱ.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/权杖-Ⅱ.wepb",
+    "height": "0.19-0.23",
+    "weight": "9.99-13.9"
   },
   {
     "no": "NO.146",
@@ -2565,7 +2661,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/灵狐.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/灵狐.wepb",
+    "height": "0.24-0.31",
+    "weight": "2.68-3.35"
   },
   {
     "no": "NO.148",
@@ -2827,7 +2925,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/公平鸽.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/公平鸽.wepb",
+    "height": "0.2-0.23",
+    "weight": "0.99-1.29"
   },
   {
     "no": "NO.163",
@@ -2843,7 +2943,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小怂猫.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小怂猫.wepb",
+    "height": "0.25-0.35",
+    "weight": "6.86-8.93"
   },
   {
     "no": "NO.164",
@@ -2875,7 +2977,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小狮鹫（崖间地的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小狮鹫（崖间地的样子）.wepb",
+    "height": "0.31-0.33",
+    "weight": "4.3-4.92"
   },
   {
     "no": "NO.166",
@@ -2977,7 +3081,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/波波螺.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/波波螺.wepb",
+    "height": "0.15-0.16",
+    "weight": "1.89-2.11"
   },
   {
     "no": "NO.172",
@@ -3031,7 +3137,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/菇菇丁.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/菇菇丁.wepb",
+    "height": "0.11-0.15",
+    "weight": "0.38-0.48"
   },
   {
     "no": "NO.175",
@@ -3083,7 +3191,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/斑斑.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/斑斑.wepb",
+    "height": "0.2-0.25",
+    "weight": "1.69-2.46"
   },
   {
     "no": "NO.178",
@@ -3115,7 +3225,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/草头鸭.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/草头鸭.wepb",
+    "height": "0.23-0.27",
+    "weight": "1.93-2.36"
   },
   {
     "no": "NO.180",
@@ -3151,7 +3263,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/海豹战士.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/海豹战士.wepb",
+    "height": "0.28-0.38",
+    "weight": "25.67-34.48"
   },
   {
     "no": "NO.182",
@@ -3185,7 +3299,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/号儿鱼.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/号儿鱼.wepb",
+    "height": "0.13-0.17",
+    "weight": "1.4-2.02"
   },
   {
     "no": "NO.184",
@@ -3219,7 +3335,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/甜田螺.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/甜田螺.wepb",
+    "height": "0.2",
+    "weight": "3.12-3.16"
   },
   {
     "no": "NO.186",
@@ -3273,7 +3391,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/棋棋（白子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/棋棋（白子）.wepb",
+    "height": "0.17-0.19",
+    "weight": "4.4-5.3"
   },
   {
     "no": "NO.189",
@@ -3361,7 +3481,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/奔波鼠.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/奔波鼠.wepb",
+    "height": "0.22-0.3",
+    "weight": "1.77-2.4"
   },
   {
     "no": "NO.194",
@@ -3395,7 +3517,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/呆小路.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/呆小路.wepb",
+    "height": "0.3-0.32",
+    "weight": "1.98-2.12"
   },
   {
     "no": "NO.196",
@@ -3447,7 +3571,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/逗逗.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/逗逗.wepb",
+    "height": "0.13-0.15",
+    "weight": "0.27-0.28"
   },
   {
     "no": "NO.199",
@@ -3497,7 +3623,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/花怨鳗.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/花怨鳗.wepb",
+    "height": "0.25-0.27",
+    "weight": "1.01-1.38"
   },
   {
     "no": "NO.202",
@@ -3531,7 +3659,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/伊雷龙.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/伊雷龙.wepb",
+    "height": "0.31-0.36",
+    "weight": "9.59-12.26"
   },
   {
     "no": "NO.204",
@@ -3563,7 +3693,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/拉特.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/拉特.wepb",
+    "height": "0.22-0.25",
+    "weight": "2.93-3.37"
   },
   {
     "no": "NO.206",
@@ -3595,7 +3727,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/闪电环.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/闪电环.wepb",
+    "height": "0.16-0.19",
+    "weight": "0.89-1.2"
   },
   {
     "no": "NO.208",
@@ -3645,7 +3779,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小箱怪.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小箱怪.wepb",
+    "height": "0.16-0.18",
+    "weight": "1.98-2.51"
   },
   {
     "no": "NO.211",
@@ -3681,7 +3817,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/古钟蛇（本来的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/古钟蛇（本来的样子）.wepb",
+    "height": "0.45-0.46",
+    "weight": "2.52-3.12"
   },
   {
     "no": "NO.213",
@@ -3749,7 +3887,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/火尾瓦特.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/火尾瓦特.wepb",
+    "height": "0.31-0.38",
+    "weight": "7.14-8.34"
   },
   {
     "no": "NO.217",
@@ -3797,7 +3937,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/里拉鳐.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/里拉鳐.wepb",
+    "height": "0.41-0.46",
+    "weight": "14.65-19.2"
   },
   {
     "no": "NO.220",
@@ -3815,7 +3957,9 @@
     "type": "final",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/海枝枝（碧蓝珊瑚）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/海枝枝（碧蓝珊瑚）.wepb",
+    "height": "0.32-0.35",
+    "weight": "1.24-2.5"
   },
   {
     "no": "NO.221",
@@ -3833,7 +3977,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/多西.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/多西.wepb",
+    "height": "0.34",
+    "weight": "2.42"
   },
   {
     "no": "NO.222",
@@ -3919,7 +4065,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/电动长颈鹿.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/电动长颈鹿.wepb",
+    "height": "0.33-0.42",
+    "weight": "11.58-14.86"
   },
   {
     "no": "NO.227",
@@ -3999,7 +4147,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小鹬.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小鹬.wepb",
+    "height": "0.11-0.13",
+    "weight": "0.49-0.7"
   },
   {
     "no": "NO.232",
@@ -4097,7 +4247,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/刺轮砣（上弦的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/刺轮砣（上弦的样子）.wepb",
+    "height": "0.09-0.13",
+    "weight": "1.06-1.49"
   },
   {
     "no": "NO.238",
@@ -4133,7 +4285,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/豆丁鱼.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/豆丁鱼.wepb",
+    "height": "0.13-0.18",
+    "weight": "0.44-0.59"
   },
   {
     "no": "NO.240",
@@ -4187,7 +4341,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/胆小鳗鱼.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/胆小鳗鱼.wepb",
+    "height": "0.33-0.39",
+    "weight": "6.76-8.94"
   },
   {
     "no": "NO.243",
@@ -4403,7 +4559,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/治愈兔.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/治愈兔.wepb",
+    "height": "0.25-0.34",
+    "weight": "4.33-5.71"
   },
   {
     "no": "NO.256",
@@ -4457,7 +4615,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/乌达（极昼的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/乌达（极昼的样子）.wepb",
+    "height": "0.2-0.23",
+    "weight": "1.77-2.28"
   },
   {
     "no": "NO.259",
@@ -4511,7 +4671,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/螺旋帕帕.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/螺旋帕帕.wepb",
+    "height": "0.15-0.17",
+    "weight": "0.83-1.32"
   },
   {
     "no": "NO.262",
@@ -4545,7 +4707,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/机械方方.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/机械方方.wepb",
+    "height": "0.22",
+    "weight": "3.67"
   },
   {
     "no": "NO.264",
@@ -4593,7 +4757,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/可立鸡.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/可立鸡.wepb",
+    "height": "0.17-0.22",
+    "weight": "1.66-2.68"
   },
   {
     "no": "NO.267",
@@ -4663,7 +4829,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/优优.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/优优.wepb",
+    "height": "0.18-0.21",
+    "weight": "1.28-1.48"
   },
   {
     "no": "NO.271",
@@ -4731,7 +4899,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/格兰种子.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/格兰种子.wepb",
+    "height": "0.19-0.22",
+    "weight": "1.49-1.91"
   },
   {
     "no": "NO.275",
@@ -4779,7 +4949,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/地鼠（枯水期的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/地鼠（枯水期的样子）.wepb",
+    "height": "0.2-0.26",
+    "weight": "0.64-0.88"
   },
   {
     "no": "NO.278",
@@ -4879,7 +5051,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小甲虫.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小甲虫.wepb",
+    "height": "0.22-0.23",
+    "weight": "2.61-2.64"
   },
   {
     "no": "NO.284",
@@ -4945,7 +5119,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/吸泥鸥.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/吸泥鸥.wepb",
+    "height": "0.23-0.29",
+    "weight": "3.55-4.91"
   },
   {
     "no": "NO.288",
@@ -4981,7 +5157,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/大头骨龙.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/大头骨龙.wepb",
+    "height": "0.37-0.4",
+    "weight": "8.3-11.41"
   },
   {
     "no": "NO.290",
@@ -5391,7 +5569,9 @@
     "type": "stage1",
     "formName": "原始形态",
     "form": "original",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/果冻.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/果冻.wepb",
+    "height": "0.13-0.15",
+    "weight": "1.55-2.23"
   },
   {
     "no": "NO.314",
@@ -5987,7 +6167,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/板板壳（蜕皮时的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/板板壳（蜕皮时的样子）.wepb",
+    "height": "0.23-0.31",
+    "weight": "2.63-4.0"
   },
   {
     "no": "NO.013",
@@ -6179,7 +6361,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/石肤蜥（球球尾巴的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/石肤蜥（球球尾巴的样子）.wepb",
+    "height": "0.21-0.29",
+    "weight": "7.67-13.4"
   },
   {
     "no": "NO.025",
@@ -6373,7 +6557,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/丢丢（沙地附近的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/丢丢（沙地附近的样子）.wepb",
+    "height": "0.17-0.21",
+    "weight": "1.84-2.41"
   },
   {
     "no": "NO.044",
@@ -6391,7 +6577,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/丢丢（雪山附近的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/丢丢（雪山附近的样子）.wepb",
+    "height": "0.17-0.21",
+    "weight": "1.84-2.41"
   },
   {
     "no": "NO.044",
@@ -6409,7 +6597,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/丢丢（火山附近的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/丢丢（火山附近的样子）.wepb",
+    "height": "0.17-0.21",
+    "weight": "1.84-2.41"
   },
   {
     "no": "NO.045",
@@ -6603,7 +6793,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/蹦蹦种子（彩玉球形态）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/蹦蹦种子（彩玉球形态）.wepb",
+    "height": "0.22-0.27",
+    "weight": "1.69-2.12"
   },
   {
     "no": "NO.063",
@@ -6621,7 +6813,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/蹦蹦种子（短毛球形态）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/蹦蹦种子（短毛球形态）.wepb",
+    "height": "0.22-0.27",
+    "weight": "1.69-2.12"
   },
   {
     "no": "NO.063",
@@ -6639,7 +6833,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/蹦蹦种子（象牙球形态）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/蹦蹦种子（象牙球形态）.wepb",
+    "height": "0.22-0.27",
+    "weight": "1.69-2.12"
   },
   {
     "no": "NO.064",
@@ -6819,7 +7015,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小星光（月光能量的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小星光（月光能量的样子）.wepb",
+    "height": "0.33-0.42",
+    "weight": "9.62-12.93"
   },
   {
     "no": "NO.081",
@@ -6855,7 +7053,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/旋叶虫（枯叶的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/旋叶虫（枯叶的样子）.wepb",
+    "height": "0.04-0.06",
+    "weight": "0.057-0.09"
   },
   {
     "no": "NO.119",
@@ -6907,7 +7107,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小怂猫（山间竹林的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小怂猫（山间竹林的样子）.wepb",
+    "height": "0.25-0.35",
+    "weight": "6.86-8.93"
   },
   {
     "no": "NO.164",
@@ -6939,7 +7141,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小狮鹫（高山地的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/小狮鹫（高山地的样子）.wepb",
+    "height": "0.31-0.33",
+    "weight": "4.3-4.92"
   },
   {
     "no": "NO.166",
@@ -6989,7 +7193,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/波波螺（被污染的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/波波螺（被污染的样子）.wepb",
+    "height": "0.15-0.16",
+    "weight": "1.89-2.11"
   },
   {
     "no": "NO.172",
@@ -7043,7 +7249,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/棋棋（黑子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/棋棋（黑子）.wepb",
+    "height": "0.17-0.19",
+    "weight": "4.4-5.3"
   },
   {
     "no": "NO.189",
@@ -7133,7 +7341,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/古钟蛇（本命年的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/古钟蛇（本命年的样子）.wepb",
+    "height": "0.45-0.46",
+    "weight": "2.52-3.12"
   },
   {
     "no": "NO.213",
@@ -7169,7 +7379,9 @@
     "type": "final",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/海枝枝（杏黄百合）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/海枝枝（杏黄百合）.wepb",
+    "height": "0.32-0.35",
+    "weight": "1.24-2.5"
   },
   {
     "no": "NO.220",
@@ -7187,7 +7399,9 @@
     "type": "final",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/海枝枝（洋红沙丁）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/海枝枝（洋红沙丁）.wepb",
+    "height": "0.32-0.35",
+    "weight": "1.24-2.5"
   },
   {
     "no": "NO.220",
@@ -7205,7 +7419,9 @@
     "type": "final",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/海枝枝（翠绿纶布）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/海枝枝（翠绿纶布）.wepb",
+    "height": "0.32-0.35",
+    "weight": "1.24-2.5"
   },
   {
     "no": "NO.235",
@@ -7383,7 +7599,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/刺轮砣（下弦的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/刺轮砣（下弦的样子）.wepb",
+    "height": "0.09-0.13",
+    "weight": "1.06-1.49"
   },
   {
     "no": "NO.238",
@@ -7419,7 +7637,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/乌达（极夜的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/乌达（极夜的样子）.wepb",
+    "height": "0.2-0.23",
+    "weight": "1.77-2.28"
   },
   {
     "no": "NO.259",
@@ -7471,7 +7691,9 @@
     "type": "stage1",
     "formName": "地区形态",
     "form": "regional",
-    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/地鼠（储水期的样子）.wepb"
+    "detailImgUrl": "https://roco.cdn.itianci.cn/imgs/精灵/地鼠（储水期的样子）.wepb",
+    "height": "0.2-0.26",
+    "weight": "0.64-0.88"
   },
   {
     "no": "NO.278",
