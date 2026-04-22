@@ -1,45 +1,3 @@
-<template name="evolutionNode">
-  <view class="tree-node">
-    <view
-      class="tree-card {{node.childElfId === currentElfId ? 'is-current' : ''}}"
-      bindtap="openElf"
-      data-id="{{node.childElfId}}"
-    >
-      <image
-        class="tree-card-image"
-        src="{{node.elf.coverImage || node.elf.avatar || '/assets/default-elf.png'}}"
-        mode="aspectFit"
-      ></image>
-      <view class="tree-card-body">
-        <view class="tree-card-head">
-          <text class="tree-card-name">{{node.elf.name}}</text>
-          <text class="tree-stage">第{{node.stage}}阶段</text>
-        </view>
-        <view class="tree-tags">
-          <block wx:for="{{node.elf.elements}}" wx:key="*this">
-            <text class="tree-tag tree-tag-element">{{item}}系</text>
-          </block>
-          <text class="tree-tag tree-tag-rarity">{{node.elf.rarity}}</text>
-        </view>
-        <text wx:if="{{node.requirement}}" class="tree-note">进化条件：{{node.requirement}}</text>
-        <text wx:if="{{node.note}}" class="tree-note secondary">{{node.note}}</text>
-      </view>
-    </view>
-
-    <view wx:if="{{node.children && node.children.length}}" class="tree-children-wrap">
-      <view class="tree-vertical"></view>
-      <view class="tree-children">
-        <block wx:for="{{node.children}}" wx:key="id">
-          <view class="tree-child-item">
-            <view class="tree-child-line"></view>
-            <template is="evolutionNode" data="{{node: item, currentElfId: currentElfId}}" />
-          </view>
-        </block>
-      </view>
-    </view>
-  </view>
-</template>
-
 <view class="page-container">
   <view wx:if="{{!elf}}" class="loading-state">正在加载精灵资料...</view>
 
@@ -63,9 +21,22 @@
               <text class="hero-tag">{{item}}系</text>
             </block>
             <text class="hero-tag">{{elf.rarity}}</text>
+            <text wx:if="{{elf.group}}" class="hero-tag group">组别：{{elf.group}}</text>
           </view>
 
-          <view class="stats-grid">
+<view class="stats-grid">
+            <view class="stat-item">
+              <text class="stat-label">身高</text>
+              <text class="stat-value">{{elf.height || '-'}}</text>
+            </view>
+            <view class="stat-item">
+              <text class="stat-label">体重</text>
+              <text class="stat-value">{{elf.weight || '-'}}</text>
+            </view>
+            <view class="stat-item">
+              <text class="stat-label">种族值</text>
+              <text class="stat-value">{{elf.raceValue || '-'}}</text>
+            </view>
             <view class="stat-item">
               <text class="stat-label">总和</text>
               <text class="stat-value">{{elf.totalStats}}</text>
@@ -107,17 +78,34 @@
 
     <view class="section-card">
       <view class="section-head">
-        <text class="section-title">进化路线</text>
-        <text class="section-sub">同一只精灵可以在进化链中出现多个分支</text>
+        <text class="section-title">同组精灵</text>
+        <text class="section-sub">按精灵组字段自动关联展示</text>
       </view>
 
-      <view wx:if="{{evolutionRoots.length}}" class="tree-shell">
-        <block wx:for="{{evolutionRoots}}" wx:key="id">
-          <template is="evolutionNode" data="{{node: item, currentElfId: elf.id}}" />
+      <view wx:if="{{relatedElves.length}}" class="group-list">
+        <block wx:for="{{relatedElves}}" wx:key="id">
+          <view class="group-card" bindtap="openElf" data-id="{{item.id}}">
+            <image
+              class="group-card-image"
+              src="{{item.coverImage || item.avatar || '/assets/default-elf.png'}}"
+              mode="aspectFit"
+            ></image>
+            <view class="group-card-body">
+              <view class="group-card-head">
+                <text class="group-card-name">{{item.name}}</text>
+                <text class="group-card-rarity">{{item.rarity}}</text>
+              </view>
+              <view class="group-tags">
+                <block wx:for="{{item.elements}}" wx:key="*this">
+                  <text class="group-tag">{{item}}系</text>
+                </block>
+              </view>
+            </view>
+          </view>
         </block>
       </view>
 
-      <view wx:else class="empty-state">暂未配置该精灵的进化路线</view>
+      <view wx:else class="empty-state">该精灵暂无同组成员</view>
     </view>
   </view>
 </view>
