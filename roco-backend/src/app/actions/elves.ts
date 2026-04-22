@@ -47,7 +47,6 @@ export async function createElf(formData: FormData) {
       raceValue: raceValue || null,
       eggImageUrl: eggImageUrl || null,
       isHot,
-      hotOrder,
       hp,
       attack,
       defense,

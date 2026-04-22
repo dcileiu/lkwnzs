@@ -16,6 +16,21 @@ bun dev
 
 Open [http://localhost:3090](http://localhost:3090) with your browser to see the result.
 
+## Database Bootstrap
+
+If the SQLite database is empty or has been replaced, initialize the schema and seed the basic content with:
+
+```bash
+npm run db:push
+npm run db:bootstrap
+```
+
+`db:bootstrap` will:
+
+- sync `data/jingling.json` into the `Elf` table
+- rebuild each elf's image gallery records
+- create a sample starter guide article in the `Article` table
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

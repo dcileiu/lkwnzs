@@ -6,7 +6,12 @@
     "dev": "next dev -p 3090",
     "build": "next build",
     "start": "next start -p 3090",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:bootstrap": "node scripts/bootstrap-db.mjs",
+    "db:init": "npm run db:push && npm run db:bootstrap",
+    "assets:eggs": "node scripts/download-egg-assets.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",

@@ -23,8 +23,10 @@ type RuleWithElf = {
   }
 }
 
+type ElfWithImages = RuleWithElf["elf"]
+
 type PredictionEntry = {
-  elf: RuleWithElf["elf"]
+  elf: ElfWithImages
   probability: number
 }
 
@@ -80,7 +82,7 @@ function matchesRuleRange(rule: RuleWithElf, height: number, weight: number) {
   )
 }
 
-function matchesElfRange(elf: RuleWithElf["elf"], height: number, weight: number) {
+function matchesElfRange(elf: ElfWithImages, height: number, weight: number) {
   const parsedHeight = parseRangeValue(elf.height, "height")
   const parsedWeight = parseRangeValue(elf.weight, "weight")
 
@@ -109,7 +111,7 @@ function mergePredictionEntries(entries: PredictionEntry[]) {
   return Array.from(merged.values())
 }
 
-function normalizePrediction(elf: RuleWithElf["elf"], probability: number) {
+function normalizePrediction(elf: ElfWithImages, probability: number) {
   const elfImages = sortImageRecords(
     elf.images as StoredImageRecord[]
   ).map((image: StoredImageRecord) => ({
@@ -148,8 +150,30 @@ export async function POST(request: Request) {
       )
     }
 
+    if (!eggId) {
+      const elves = await prisma.elf.findMany({
+        include: {
+          images: {
+            orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+          },
+        },
+        orderBy: [{ createdAt: "asc" }],
+      }) as unknown as ElfWithImages[]
+
+      const matchedElves = elves.filter((elf) => matchesElfRange(elf, numericHeight, numericWeight))
+      const globalProbability = matchedElves.length > 0
+        ? Number((100 / matchedElves.length).toFixed(2))
+        : 0
+
+      return NextResponse.json({
+        code: 200,
+        message: "success",
+        data: matchedElves.map((elf) => normalizePrediction(elf, globalProbability)),
+      })
+    }
+
     const rules = await prisma.hatchRule.findMany({
-      where: eggId ? { eggId } : undefined,
+      where: { eggId },
       include: {
         elf: {
           include: {
@@ -159,9 +183,7 @@ export async function POST(request: Request) {
           },
         },
       },
-      orderBy: eggId
-        ? [{ probability: "desc" }, { createdAt: "asc" }]
-        : [{ createdAt: "asc" }],
+      orderBy: [{ probability: "desc" }, { createdAt: "asc" }],
     }) as unknown as RuleWithElf[]
 
     const matchedByRuleEntries = mergePredictionEntries(
@@ -190,34 +212,14 @@ export async function POST(request: Request) {
         }))
     )
 
-    if (eggId) {
-      const fallbackProbability = matchedByElfRangeEntries.length > 0
-        ? Number((100 / matchedByElfRangeEntries.length).toFixed(2))
-        : 0
-
-      return NextResponse.json({
-        code: 200,
-        message: "success",
-        data: matchedByElfRangeEntries.map((entry) => normalizePrediction(entry.elf, fallbackProbability)),
-      })
-    }
-
-    const mergedGlobalEntries = mergePredictionEntries([
-      ...matchedByRuleEntries.map((entry) => ({
-        elf: entry.elf,
-        probability: 0,
-      })),
-      ...matchedByElfRangeEntries,
-    ])
-
-    const globalProbability = mergedGlobalEntries.length > 0
-      ? Number((100 / mergedGlobalEntries.length).toFixed(2))
+    const fallbackProbability = matchedByElfRangeEntries.length > 0
+      ? Number((100 / matchedByElfRangeEntries.length).toFixed(2))
       : 0
 
     return NextResponse.json({
       code: 200,
       message: "success",
-      data: mergedGlobalEntries.map((entry) => normalizePrediction(entry.elf, globalProbability)),
+      data: matchedByElfRangeEntries.map((entry) => normalizePrediction(entry.elf, fallbackProbability)),
     })
   } catch (error) {
     console.error("Predict Hatching Error:", error)
