@@ -8,10 +8,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { ELEMENT_NAMES, readCategoriesData } from "@/lib/game-data"
 
-const ELEMENT_OPTIONS = ["火", "水", "草", "光", "暗", "电", "冰", "普通"]
+const ELEMENT_OPTIONS = [...ELEMENT_NAMES]
 
-export default function NewElfPage() {
+export default async function NewElfPage() {
+  const categories = (await readCategoriesData()).filter((category) => category.target === "elf")
+
   return (
     <div className="flex max-w-4xl flex-col gap-4 p-4 lg:p-8">
       <div className="flex items-center justify-between">
@@ -39,6 +42,38 @@ export default function NewElfPage() {
               <div className="space-y-2">
                 <Label htmlFor="name">名称</Label>
                 <Input id="name" name="name" required placeholder="例如：迷你乌极夜的样子" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="group">组别</Label>
+                <Input id="group" name="group" placeholder="例如：迪莫家族 / 新手御三家" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="category">分类</Label>
+                <select
+                  id="category"
+                  name="category"
+                  defaultValue=""
+                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+                >
+                  <option value="">未分类</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="height">身高</Label>
+                <Input id="height" name="height" placeholder="例如：0.65~0.92M" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="weight">体重</Label>
+                <Input id="weight" name="weight" placeholder="例如：14.2~15.6KG" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="raceValue">种族值（字符串）</Label>
+                <Input id="raceValue" name="raceValue" placeholder="例如：460 / 430~520" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="rarity">稀有度</Label>
@@ -78,10 +113,10 @@ export default function NewElfPage() {
               <Checkbox id="isHot" name="isHot" />
               <div className="space-y-1 leading-none">
                 <Label htmlFor="isHot" className="font-medium">
-                  标记为热门精灵
+                  标记为热门精灵（备用）
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  勾选后会在小程序首页热门精灵区域优先展示。
+                  首页热门默认按详情查询次数自动排行，勾选仅用于后台手工兜底标记。
                 </p>
               </div>
             </div>
@@ -111,7 +146,7 @@ export default function NewElfPage() {
             </div>
 
             <div className="space-y-4 border-t pt-4">
-              <h3 className="text-lg font-medium">基础种族值</h3>
+              <h3 className="text-lg font-medium">基础种族值（数值计算）</h3>
               <div className="grid grid-cols-4 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="hp">HP</Label>

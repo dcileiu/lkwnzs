@@ -9,24 +9,30 @@ export async function GET(request: Request) {
   const element = searchParams.get("element")
   const keyword = searchParams.get("keyword")
   const isHot = searchParams.get("isHot")
+  const group = searchParams.get("group")
   const limit = searchParams.get("limit")
   const parsedLimit = limit ? parseInt(limit, 10) : NaN
   const shouldTake = Number.isFinite(parsedLimit) && parsedLimit > 0
+  const shouldUseHotRanking = isHot === "true"
 
   const whereCondition: {
-    isHot?: boolean
     name?: { contains: string }
+    group?: { equals: string }
   } = {}
 
   const shouldFilterElement =
     typeof element === "string" && !["all", "全部", "鍏ㄩ儴"].includes(element)
 
   if (keyword) whereCondition.name = { contains: keyword }
-  if (isHot === "true") whereCondition.isHot = true
+  if (group) whereCondition.group = { equals: group }
+
+  const orderBy = shouldUseHotRanking
+    ? [{ detailQueryCount: "desc" as const }, { updatedAt: "desc" as const }, { createdAt: "desc" as const }]
+    : [{ createdAt: "desc" as const }]
 
   const elves = await prisma.elf.findMany({
     where: whereCondition,
-    orderBy: { createdAt: "desc" },
+    orderBy,
     take: shouldTake ? parsedLimit : undefined,
     include: {
       images: {
@@ -59,6 +65,12 @@ export async function GET(request: Request) {
 
         return {
           ...elf,
+          group: elf.group ?? "",
+          category: elf.category ?? "",
+          height: elf.height ?? "",
+          weight: elf.weight ?? "",
+          raceValue: elf.raceValue ?? "",
+          detailQueryCount: elf.detailQueryCount ?? 0,
           element: serializeElementList(elements),
           elements,
           avatar: coverImage,

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "elf-core",
+    "name": "主线精灵",
+    "target": "elf"
+  },
+  {
+    "id": "item-battle",
+    "name": "战斗道具",
+    "target": "item"
+  }
+]

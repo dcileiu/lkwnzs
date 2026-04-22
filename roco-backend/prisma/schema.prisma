@@ -87,12 +87,18 @@ model Elf {
   avatar                String?
   element               String
   rarity                String
+  group                 String?
+  category              String?
+  height                String?
+  weight                String?
+  raceValue             String?
   totalStats            Int                 @default(0)
   hp                    Int                 @default(0)
   attack                Int                 @default(0)
   defense               Int                 @default(0)
   speed                 Int                 @default(0)
   isHot                 Boolean             @default(false)
+  detailQueryCount      Int                 @default(0)
   tags                  String?
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
