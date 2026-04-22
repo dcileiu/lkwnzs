@@ -1,39 +1,11 @@
 const api = require('../../utils/api.js')
 
-function buildEvolutionTree(nodes) {
-  const byParent = {}
-
-  ;(nodes || []).forEach((node) => {
-    const key = node.parentElfId || 'ROOT'
-    if (!byParent[key]) byParent[key] = []
-    byParent[key].push(node)
-  })
-
-  Object.keys(byParent).forEach((key) => {
-    byParent[key].sort((left, right) => {
-      if (left.stage !== right.stage) return left.stage - right.stage
-      if (left.sortOrder !== right.sortOrder) return left.sortOrder - right.sortOrder
-      return left.elf.name.localeCompare(right.elf.name, 'zh-CN')
-    })
-  })
-
-  function walk(parentId) {
-    const key = parentId || 'ROOT'
-    return (byParent[key] || []).map((node) => ({
-      ...node,
-      children: walk(node.childElfId)
-    }))
-  }
-
-  return walk(null)
-}
-
 Page({
   data: {
     elf: null,
     galleryImages: [],
     activeImage: '',
-    evolutionRoots: []
+    relatedElves: []
   },
 
   onLoad(options) {
@@ -54,7 +26,7 @@ Page({
         elf,
         galleryImages,
         activeImage: elf?.coverImage || galleryImages[0]?.url || '',
-        evolutionRoots: buildEvolutionTree(elf?.evolution?.nodes || [])
+        relatedElves: elf?.relatedElves || []
       })
     } catch (err) {
       console.error(err)
