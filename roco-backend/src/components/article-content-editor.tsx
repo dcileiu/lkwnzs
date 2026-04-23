@@ -40,7 +40,7 @@ function toMarkdownImage(fileName: string, url: string) {
 async function uploadImage(file: File) {
   const formData = new FormData()
   formData.set("file", file)
-  formData.set("folder", "articles")
+  formData.set("folder", "imgs/article")
 
   const response = await fetch("/api/qiniu/upload", {
     method: "POST",
