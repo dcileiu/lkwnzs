@@ -8,7 +8,7 @@
         <text class="nickname">{{profile.nickname || '洛克训练师'}}</text>
         <view class="nickname-actions">
           <text class="edit-btn" bindtap="editNickname">修改名称</text>
-          <text class="wx-btn" bindtap="useWechatNickname">微信昵称</text>
+          <text class="wx-btn" bindtap="useWechatNickname">同步微信名</text>
         </view>
       </view>
       <text class="desc">欢迎回来，看看你的文章互动数据</text>
