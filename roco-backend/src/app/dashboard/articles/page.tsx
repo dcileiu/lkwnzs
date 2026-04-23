@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { deleteArticle } from "@/app/actions/articles"
 
 export default async function ArticlesPage() {
   const articles = await prisma.article.findMany({
@@ -71,12 +72,16 @@ export default async function ArticlesPage() {
                     </TableCell>
                     <TableCell className="text-right">{article.views}</TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm" className="mr-2">
-                        编辑
-                      </Button>
-                      <Button variant="destructive" size="sm">
-                        删除
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" asChild>
+                          <Link href={`/dashboard/articles/${article.id}`}>编辑</Link>
+                        </Button>
+                        <form action={deleteArticle.bind(null, article.id)}>
+                          <Button variant="destructive" size="sm" type="submit">
+                            删除
+                          </Button>
+                        </form>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))

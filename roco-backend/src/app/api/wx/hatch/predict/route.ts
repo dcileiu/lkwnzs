@@ -4,8 +4,9 @@ import { normalizeElementList, serializeElementList } from "@/lib/elements"
 import { sortImageRecords, type StoredImageRecord } from "@/lib/media"
 import { prisma } from "@/lib/prisma"
 
-const MIN_HEIGHT_SPAN = 0.01
-const MIN_WEIGHT_SPAN = 0.01
+const MIN_HEIGHT_SPAN = 0.0001
+const MIN_WEIGHT_SPAN = 0.0001
+const MATCH_TOLERANCE = 0.1 // 10% tolerance for matching ranges
 
 type RuleWithElf = {
   id: string
@@ -73,11 +74,24 @@ function buildComparableValues(value: number, unit: "height" | "weight") {
     }
   }
 
+  if (unit === "weight" && value > 0) {
+    if (value < 500) {
+      candidates.add(value * 1000) // kg to g
+    } else {
+      candidates.add(value / 1000) // g to kg
+    }
+  }
+
   return Array.from(candidates)
 }
 
 function isWithinRange(value: number, min: number, max: number) {
-  return value >= min && value <= max
+  // Apply tolerance: expand range by 10%
+  const span = Math.abs(max - min)
+  const expandedMin = min - Math.max(span * MATCH_TOLERANCE, min * MATCH_TOLERANCE)
+  const expandedMax = max + Math.max(span * MATCH_TOLERANCE, max * MATCH_TOLERANCE)
+
+  return value >= expandedMin && value <= expandedMax
 }
 
 function findMatchingValue(range: { min: number; max: number }, value: number, unit: "height" | "weight") {

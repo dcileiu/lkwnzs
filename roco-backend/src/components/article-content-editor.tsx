@@ -56,7 +56,11 @@ async function uploadImage(file: File) {
   return payload.data.url
 }
 
-export function ArticleContentEditor() {
+interface ArticleContentEditorProps {
+  defaultValue?: string
+}
+
+export function ArticleContentEditor({ defaultValue }: ArticleContentEditorProps = {}) {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null)
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const [isUploading, setIsUploading] = React.useState(false)
@@ -161,6 +165,7 @@ export function ArticleContentEditor() {
         required
         className="min-h-[250px]"
         placeholder="在此输入攻略正文（支持 Markdown，也可以直接粘贴图片自动上传）..."
+        defaultValue={defaultValue}
         onPaste={handlePaste}
       />
       <p className="text-xs text-muted-foreground">{statusText}</p>

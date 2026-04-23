@@ -14,14 +14,14 @@
       <view class="icon-wrap bg-green">✨</view>
       <text>精灵图鉴</text>
     </view>
-    <view class="action-item" bindtap="navTo" data-url="/pages/collection/index">
+    <!-- <view class="action-item" bindtap="navTo" data-url="/pages/collection/index">
       <view class="icon-wrap bg-pink">🎁</view>
       <text>宠物蛋集</text>
     </view>
     <view class="action-item" bindtap="navTo" data-url="/pages/me/index">
       <view class="icon-wrap bg-blue">👤</view>
       <text>我的</text>
-    </view>
+    </view> -->
     <view class="action-item" bindtap="navTo" data-url="/pages/guide/index">
       <view class="icon-wrap bg-blue">📖</view>
       <text>新手攻略</text>
