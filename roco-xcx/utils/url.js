@@ -25,7 +25,6 @@ function normalizePath(pathname = '') {
 
       const decodedSegment = safeDecode(segment)
       const normalizedSegment = normalizeJinglingFilename(decodedSegment, segments, index)
-
       return encodeURIComponent(normalizedSegment)
     })
     .join('/')

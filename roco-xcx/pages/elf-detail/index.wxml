@@ -4,11 +4,19 @@
   <view wx:else class="detail-page">
     <view class="hero-card">
       <view class="hero-main">
-        <image
-          class="hero-image"
-          src="{{activeImage || elf.coverImage || elf.avatar || '/assets/default-elf.png'}}"
-          mode="aspectFit"
-        ></image>
+        <view class="hero-media">
+          <image
+            class="hero-image"
+            src="{{activeImage || '/assets/default-elf.png'}}"
+            mode="aspectFit"
+            binderror="onHeroImageError"
+          ></image>
+
+          <view wx:if="{{elf.eggImageUrl}}" class="hero-egg-panel">
+            <text class="hero-egg-label">精灵蛋</text>
+            <image class="hero-egg-image" src="{{elf.eggImageUrl}}" mode="aspectFit"></image>
+          </view>
+        </view>
 
         <view class="hero-body">
           <view class="hero-title-row">
@@ -25,27 +33,7 @@
             <text wx:if="{{elf.group}}" class="hero-tag group">组别：{{elf.group}}</text>
           </view>
 
-<view class="stats-grid">
-            <view class="stat-item">
-              <text class="stat-label">身高</text>
-              <text class="stat-value">{{elf.height || '-'}}</text>
-            </view>
-            <view class="stat-item">
-              <text class="stat-label">体重</text>
-              <text class="stat-value">{{elf.weight || '-'}}</text>
-            </view>
-            <view class="stat-item">
-              <text class="stat-label">种族值</text>
-              <text class="stat-value">{{elf.raceValue || '-'}}</text>
-            </view>
-            <view class="stat-item">
-              <text class="stat-label">身高</text>
-              <text class="stat-value">{{elf.height || '-'}}</text>
-            </view>
-            <view class="stat-item">
-              <text class="stat-label">体重</text>
-              <text class="stat-value">{{elf.weight || '-'}}</text>
-            </view>
+          <view class="stats-grid">
             <view class="stat-item">
               <text class="stat-label">身高</text>
               <text class="stat-value">{{elf.height || '-'}}</text>
@@ -97,14 +85,6 @@
       </scroll-view>
     </view>
 
-    <view wx:if="{{elf.eggImageUrl}}" class="section-card egg-card">
-      <view class="section-head">
-        <text class="section-title">精灵蛋形态</text>
-        <text class="section-sub">可用于孵蛋相关展示</text>
-      </view>
-      <image class="egg-image" src="{{elf.eggImageUrl}}" mode="aspectFit"></image>
-    </view>
-
     <view class="section-card">
       <view class="section-head">
         <text class="section-title">同组精灵</text>
@@ -134,7 +114,7 @@
         </block>
       </view>
 
-      <view wx:else class="empty-state">该精灵暂无同组成员</view>
+      <view wx:else class="empty-state">该精灵暂时没有同组成员</view>
     </view>
   </view>
 </view>

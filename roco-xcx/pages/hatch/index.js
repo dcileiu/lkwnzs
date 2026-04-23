@@ -6,8 +6,6 @@ Page({
     heightValue: '',
     weightValue: '',
     searched: false,
-    selectedResultIndex: -1,
-    selectedResult: null,
     topResult: null,
     results: []
   },
@@ -19,8 +17,6 @@ Page({
   getEmptyPredictionState() {
     return {
       searched: false,
-      selectedResultIndex: -1,
-      selectedResult: null,
       topResult: null,
       results: []
     }
@@ -37,18 +33,6 @@ Page({
     this.setData({
       weightValue: (e.detail.value || '').trim(),
       ...this.getEmptyPredictionState()
-    })
-  },
-
-  onSelectResult(e) {
-    const index = Number(e.currentTarget.dataset.index)
-    const { results } = this.data
-
-    if (!Number.isInteger(index) || index < 0 || index >= results.length) return
-
-    this.setData({
-      selectedResultIndex: index,
-      selectedResult: results[index]
     })
   },
 
@@ -75,14 +59,11 @@ Page({
       })
 
       const results = Array.isArray(res) ? res : []
-      const topResult = results.length ? results[0] : null
 
       this.setData({
         results,
         searched: true,
-        topResult,
-        selectedResultIndex: topResult ? 0 : -1,
-        selectedResult: topResult
+        topResult: results[0] || null
       })
     } catch (err) {
       console.error(err)
