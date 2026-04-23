@@ -23,6 +23,7 @@
 .page-sub {
   font-size: 24rpx;
   color: #666;
+  line-height: 1.6;
 }
 
 .card {
@@ -30,7 +31,7 @@
   border-radius: 20rpx;
   padding: 30rpx;
   margin-bottom: 30rpx;
-  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.02);
+  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.02);
   box-sizing: border-box;
 }
 
@@ -86,6 +87,10 @@
   min-height: 520rpx;
 }
 
+.preview-card-idle {
+  min-height: 320rpx;
+}
+
 .section-head {
   margin-bottom: 20rpx;
 }
@@ -102,6 +107,7 @@
   margin-top: 8rpx;
   font-size: 24rpx;
   color: #7b879d;
+  line-height: 1.6;
 }
 
 .preview-stage {
@@ -133,6 +139,11 @@
   box-sizing: border-box;
 }
 
+.preview-empty-idle {
+  min-height: 220rpx;
+  padding: 32rpx 40rpx;
+}
+
 .preview-empty-title {
   display: block;
   font-size: 30rpx;
@@ -151,10 +162,55 @@
 .results-header {
   display: flex;
   align-items: center;
-  gap: 10rpx;
-  font-size: 26rpx;
-  color: #666;
+  justify-content: space-between;
+  gap: 20rpx;
   margin-bottom: 20rpx;
+}
+
+.results-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.results-count {
+  font-size: 24rpx;
+  color: #7b879d;
+}
+
+.top-result-tip {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 16rpx 20rpx;
+  margin-bottom: 20rpx;
+  background: linear-gradient(135deg, #eef6ff 0%, #f6fbff 100%);
+  border-radius: 16rpx;
+}
+
+.top-result-label {
+  font-size: 20rpx;
+  color: #1890ff;
+  background: rgba(24, 144, 255, 0.12);
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+}
+
+.top-result-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-result-prob {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #1890ff;
 }
 
 .results-list {
@@ -185,6 +241,8 @@
   border-radius: 50%;
   padding: 10rpx;
   margin-right: 20rpx;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .elf-avatar-small {
@@ -207,7 +265,6 @@
   text-overflow: ellipsis;
 }
 
-
 .elf-range {
   margin-top: 6rpx;
   display: block;
@@ -219,7 +276,15 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10rpx;
-  margin-top: 8rpx;
+  margin-top: 10rpx;
+}
+
+.tag-top {
+  font-size: 20rpx;
+  color: #ff8a00;
+  background: rgba(255, 138, 0, 0.12);
+  padding: 2rpx 10rpx;
+  border-radius: 999rpx;
 }
 
 .tag-rarity {

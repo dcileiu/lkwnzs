@@ -2,6 +2,21 @@ const api = require('../../utils/api.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
 const { normalizeImageUrl } = require('../../utils/url.js')
 
+function buildElfCard(item = {}) {
+  const coverImage = normalizeImageUrl(item.coverImage)
+  const avatar = normalizeImageUrl(item.avatar)
+  const eggImageUrl = normalizeImageUrl(item.eggImageUrl)
+
+  return {
+    ...item,
+    coverImage,
+    avatar,
+    eggImageUrl,
+    displayImage: coverImage || avatar || '',
+    avatarText: item.name ? String(item.name).charAt(0) : '灵'
+  }
+}
+
 Page({
   data: {
     elements: ['全部', '火', '水', '草', '光', '暗', '电', '冰', '普通'],
@@ -25,19 +40,19 @@ Page({
     setTabBarSelected(this, 3)
   },
 
+  onReachBottom() {
+    this.loadMoreElves()
+  },
+
   async fetchPokedex() {
     try {
-      wx.showLoading({ title: '加载中' })
+      wx.showLoading({ title: '加载中...' })
       const res = await api.getElves({
         element: this.data.currentElement,
         keyword: this.data.keyword
       })
 
-      const allElves = (res?.items || []).map((item) => ({
-        ...item,
-        coverImage: normalizeImageUrl(item.coverImage),
-        avatar: normalizeImageUrl(item.avatar)
-      }))
+      const allElves = (res?.items || []).map((item) => buildElfCard(item))
 
       this.setData(
         {
@@ -93,6 +108,33 @@ Page({
 
   onSearch() {
     this.fetchPokedex()
+  },
+
+  onElfImageError(e) {
+    const { id } = e.currentTarget.dataset
+    if (!id) return
+
+    const patchElfList = (list = []) =>
+      list.map((item) => {
+        if (item.id !== id) return item
+
+        if (item.displayImage && item.displayImage !== item.eggImageUrl && item.eggImageUrl) {
+          return {
+            ...item,
+            displayImage: item.eggImageUrl
+          }
+        }
+
+        return {
+          ...item,
+          displayImage: ''
+        }
+      })
+
+    this.setData({
+      elves: patchElfList(this.data.elves),
+      allElves: patchElfList(this.data.allElves)
+    })
   },
 
   goToDetail(e) {

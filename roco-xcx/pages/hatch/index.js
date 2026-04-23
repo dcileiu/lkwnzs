@@ -8,6 +8,7 @@ Page({
     searched: false,
     selectedResultIndex: -1,
     selectedResult: null,
+    topResult: null,
     results: []
   },
 
@@ -15,23 +16,27 @@ Page({
     setTabBarSelected(this, 2)
   },
 
+  getEmptyPredictionState() {
+    return {
+      searched: false,
+      selectedResultIndex: -1,
+      selectedResult: null,
+      topResult: null,
+      results: []
+    }
+  },
+
   onHeightInput(e) {
     this.setData({
       heightValue: (e.detail.value || '').trim(),
-      results: [],
-      searched: false,
-      selectedResultIndex: -1,
-      selectedResult: null
+      ...this.getEmptyPredictionState()
     })
   },
 
   onWeightInput(e) {
     this.setData({
       weightValue: (e.detail.value || '').trim(),
-      results: [],
-      searched: false,
-      selectedResultIndex: -1,
-      selectedResult: null
+      ...this.getEmptyPredictionState()
     })
   },
 
@@ -70,12 +75,14 @@ Page({
       })
 
       const results = Array.isArray(res) ? res : []
+      const topResult = results.length ? results[0] : null
 
       this.setData({
         results,
         searched: true,
-        selectedResultIndex: results.length ? 0 : -1,
-        selectedResult: results.length ? results[0] : null
+        topResult,
+        selectedResultIndex: topResult ? 0 : -1,
+        selectedResult: topResult
       })
     } catch (err) {
       console.error(err)

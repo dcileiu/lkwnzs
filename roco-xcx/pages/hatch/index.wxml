@@ -1,7 +1,7 @@
 <view class="page-container">
   <view class="page-header">
     <text class="page-title">孵蛋预测</text>
-    <text class="page-sub">输入固定的身高和体重值，系统会自动匹配可能的精灵</text>
+    <text class="page-sub">输入身高和体重后，只要同时落在对应范围内的精灵都会纳入结果，并按概率排序。</text>
   </view>
 
   <view class="card form-card">
@@ -34,12 +34,13 @@
     </view>
   </view>
 
-  <view class="card preview-card">
+  <view class="card preview-card {{!searched && !selectedResult ? 'preview-card-idle' : ''}}">
     <view class="section-head">
       <text class="section-title">精灵蛋预览</text>
-      <text class="section-sub">
-        {{selectedResult ? selectedResult.elfName : '匹配成功后会在这里展示精灵蛋'}}
+      <text class="section-sub" wx:if="{{topResult}}">
+        概率最高：{{topResult.elfName}}（{{topResult.probability}}%）
       </text>
+      <text class="section-sub" wx:else>匹配成功后会在这里展示精灵蛋</text>
     </view>
 
     <view wx:if="{{selectedResult && selectedResult.eggImageUrl}}" class="preview-stage">
@@ -52,41 +53,54 @@
 
     <view wx:elif="{{selectedResult}}" class="preview-empty">
       <text class="preview-empty-title">暂无精灵蛋图片</text>
-      <text class="preview-empty-sub">这个精灵还没有配置蛋图地址</text>
+      <text class="preview-empty-sub">这个精灵暂时还没有配置蛋图地址</text>
     </view>
 
     <view wx:elif="{{searched}}" class="preview-empty">
       <text class="preview-empty-title">没有匹配到精灵</text>
-      <text class="preview-empty-sub">可以换一个更精确的身高或体重值再试试</text>
+      <text class="preview-empty-sub">可以换一个身高或体重值再试试</text>
     </view>
 
-    <view wx:else class="preview-empty">
+    <view wx:else class="preview-empty preview-empty-idle">
       <text class="preview-empty-title">等待预测结果</text>
-      <text class="preview-empty-sub">输入身高和体重后，会自动显示对应精灵的蛋图</text>
+      <text class="preview-empty-sub">输入身高和体重后，这里会自动展示对应精灵的蛋图</text>
     </view>
   </view>
 
   <view wx:if="{{results.length}}" class="card">
     <view class="results-header">
-      <text>匹配结果</text>
-      <text>共 {{results.length}} 种可能</text>
+      <text class="results-title">匹配结果</text>
+      <text class="results-count">共 {{results.length}} 种可能</text>
+    </view>
+
+    <view wx:if="{{topResult}}" class="top-result-tip">
+      <text class="top-result-label">概率最高</text>
+      <text class="top-result-name">{{topResult.elfName}}</text>
+      <text class="top-result-prob">{{topResult.probability}}%</text>
     </view>
 
     <view class="results-list">
       <block wx:for="{{results}}" wx:key="elfId" wx:for-index="index">
-        <view class="result-item {{selectedResultIndex === index ? 'active' : ''}}" bindtap="onSelectResult" data-index="{{index}}">
+        <view
+          class="result-item {{selectedResultIndex === index ? 'active' : ''}}"
+          bindtap="onSelectResult"
+          data-index="{{index}}"
+        >
           <view class="elf-avatar-bg">
             <image
               class="elf-avatar-small"
-              src="{{item.elfCoverImage || '/assets/default-elf.png'}}"
+              src="{{item.elfCoverImage || item.eggImageUrl}}"
               mode="aspectFit"
             ></image>
           </view>
 
           <view class="elf-info">
             <text class="elf-name">{{item.elfName}}</text>
-            <text class="elf-range" wx:if="{{item.elfHeight || item.elfWeight}}">身高 {{item.elfHeight || "-"}} / 体重 {{item.elfWeight || "-"}}</text>
+            <text class="elf-range" wx:if="{{item.elfHeight || item.elfWeight}}">
+              身高 {{item.elfHeight || '-'}} / 体重 {{item.elfWeight || '-'}}
+            </text>
             <view class="elf-meta">
+              <text class="tag-top" wx:if="{{index === 0}}">最高概率</text>
               <block wx:for="{{item.elfElements}}" wx:key="*this">
                 <text class="tag-element">{{item}}系</text>
               </block>
@@ -96,7 +110,7 @@
 
           <view class="result-side">
             <text class="result-prob">{{item.probability}}%</text>
-            <text class="result-prob-label">匹配度</text>
+            <text class="result-prob-label">概率</text>
             <text class="result-detail-link" catchtap="goElfDetail" data-id="{{item.elfId}}">详情</text>
           </view>
         </view>

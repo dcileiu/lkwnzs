@@ -4,6 +4,9 @@ import { normalizeElementList, serializeElementList } from "@/lib/elements"
 import { sortImageRecords, type StoredImageRecord } from "@/lib/media"
 import { prisma } from "@/lib/prisma"
 
+const MIN_HEIGHT_SPAN = 0.01
+const MIN_WEIGHT_SPAN = 0.01
+
 type RuleWithElf = {
   id: string
   minHeight: number
@@ -29,7 +32,7 @@ type ElfWithImages = RuleWithElf["elf"]
 
 type PredictionEntry = {
   elf: ElfWithImages
-  probability: number
+  score: number
 }
 
 function parseRangeValue(raw: string | null | undefined, unit: "height" | "weight") {
@@ -40,20 +43,23 @@ function parseRangeValue(raw: string | null | undefined, unit: "height" | "weigh
 
   if (!numberMatches || numberMatches.length === 0) return null
 
-  let values = numberMatches.map((value) => parseFloat(value)).filter((value) => Number.isFinite(value))
+  let values = numberMatches
+    .map((value) => parseFloat(value))
+    .filter((value) => Number.isFinite(value))
 
   if (values.length === 0) return null
 
-  const containsMeterUnit = unit === "height" && /(m|米)/.test(normalized) && !/(cm|厘米)/.test(normalized)
+  const containsCentimeterUnit = unit === "height" && /cm|\u5398\u7c73/.test(normalized)
+  const containsMeterUnit = unit === "height" && (/m|\u7c73/.test(normalized) && !containsCentimeterUnit)
 
   if (containsMeterUnit) {
     values = values.map((value) => value * 100)
   }
 
-  const min = Math.min(...values)
-  const max = Math.max(...values)
-
-  return { min, max }
+  return {
+    min: Math.min(...values),
+    max: Math.max(...values),
+  }
 }
 
 function buildComparableValues(value: number, unit: "height" | "weight") {
@@ -74,13 +80,15 @@ function isWithinRange(value: number, min: number, max: number) {
   return value >= min && value <= max
 }
 
-function matchesRuleRange(rule: RuleWithElf, height: number, weight: number) {
-  const heightCandidates = buildComparableValues(height, "height")
-  const weightCandidates = buildComparableValues(weight, "weight")
+function findMatchingValue(range: { min: number; max: number }, value: number, unit: "height" | "weight") {
+  const candidates = buildComparableValues(value, unit)
+  return candidates.find((candidate) => isWithinRange(candidate, range.min, range.max)) ?? null
+}
 
+function matchesRuleRange(rule: RuleWithElf, height: number, weight: number) {
   return (
-    heightCandidates.some((value) => isWithinRange(value, rule.minHeight, rule.maxHeight)) &&
-    weightCandidates.some((value) => isWithinRange(value, rule.minWeight, rule.maxWeight))
+    findMatchingValue({ min: rule.minHeight, max: rule.maxHeight }, height, "height") !== null &&
+    findMatchingValue({ min: rule.minWeight, max: rule.maxWeight }, weight, "weight") !== null
   )
 }
 
@@ -90,12 +98,32 @@ function matchesElfRange(elf: ElfWithImages, height: number, weight: number) {
 
   if (!parsedHeight || !parsedWeight) return false
 
-  const heightCandidates = buildComparableValues(height, "height")
-  const weightCandidates = buildComparableValues(weight, "weight")
+  return (
+    findMatchingValue(parsedHeight, height, "height") !== null &&
+    findMatchingValue(parsedWeight, weight, "weight") !== null
+  )
+}
+
+function calculateRangeScore(min: number, max: number, minimumSpan: number) {
+  const span = Math.abs(max - min)
+  return 1 / Math.max(span, minimumSpan)
+}
+
+function calculateElfMatchScore(elf: ElfWithImages, height: number, weight: number) {
+  if (!matchesElfRange(elf, height, weight)) {
+    return null
+  }
+
+  const parsedHeight = parseRangeValue(elf.height, "height")
+  const parsedWeight = parseRangeValue(elf.weight, "weight")
+
+  if (!parsedHeight || !parsedWeight) {
+    return null
+  }
 
   return (
-    heightCandidates.some((value) => isWithinRange(value, parsedHeight.min, parsedHeight.max)) &&
-    weightCandidates.some((value) => isWithinRange(value, parsedWeight.min, parsedWeight.max))
+    calculateRangeScore(parsedHeight.min, parsedHeight.max, MIN_HEIGHT_SPAN) *
+    calculateRangeScore(parsedWeight.min, parsedWeight.max, MIN_WEIGHT_SPAN)
   )
 }
 
@@ -105,12 +133,95 @@ function mergePredictionEntries(entries: PredictionEntry[]) {
   for (const entry of entries) {
     const existing = merged.get(entry.elf.id)
 
-    if (!existing || entry.probability > existing.probability) {
-      merged.set(entry.elf.id, entry)
+    if (existing) {
+      existing.score += entry.score
+      continue
     }
+
+    merged.set(entry.elf.id, { ...entry })
   }
 
   return Array.from(merged.values())
+}
+
+function comparePredictionEntries(a: PredictionEntry, b: PredictionEntry) {
+  if (b.score !== a.score) {
+    return b.score - a.score
+  }
+
+  return a.elf.name.localeCompare(b.elf.name, "zh-Hans-CN")
+}
+
+function normalizeEntryProbabilities(entries: PredictionEntry[]) {
+  const sortedEntries = [...entries].sort(comparePredictionEntries)
+
+  if (sortedEntries.length === 0) {
+    return []
+  }
+
+  const totalScore = sortedEntries.reduce((sum, entry) => sum + Math.max(entry.score, 0), 0)
+
+  if (totalScore <= 0) {
+    const evenProbability = Math.floor((100 / sortedEntries.length) * 100) / 100
+    const evenEntries = sortedEntries.map((entry) => ({
+      ...entry,
+      probability: evenProbability,
+    }))
+
+    const assignedTotal = evenEntries.reduce((sum, entry) => sum + entry.probability, 0)
+    evenEntries[evenEntries.length - 1].probability = Number(
+      (evenEntries[evenEntries.length - 1].probability + (100 - assignedTotal)).toFixed(2)
+    )
+
+    return evenEntries
+  }
+
+  const baseEntries = sortedEntries.map((entry) => {
+    const rawProbability = (Math.max(entry.score, 0) / totalScore) * 100
+    const roundedDown = Math.floor(rawProbability * 100) / 100
+
+    return {
+      ...entry,
+      probability: roundedDown,
+      remainder: rawProbability - roundedDown,
+    }
+  })
+
+  let remainderInCents = Math.round(
+    (100 - baseEntries.reduce((sum, entry) => sum + entry.probability, 0)) * 100
+  )
+
+  const distributionOrder = [...baseEntries].sort((a, b) => {
+    if (b.remainder !== a.remainder) {
+      return b.remainder - a.remainder
+    }
+
+    if (b.score !== a.score) {
+      return b.score - a.score
+    }
+
+    return a.elf.name.localeCompare(b.elf.name, "zh-Hans-CN")
+  })
+
+  for (let index = 0; remainderInCents > 0; index += 1) {
+    const entry = distributionOrder[index % distributionOrder.length]
+    entry.probability = Number((entry.probability + 0.01).toFixed(2))
+    remainderInCents -= 1
+  }
+
+  return baseEntries
+    .sort((a, b) => {
+      if (b.probability !== a.probability) {
+        return b.probability - a.probability
+      }
+
+      if (b.remainder !== a.remainder) {
+        return b.remainder - a.remainder
+      }
+
+      return a.elf.name.localeCompare(b.elf.name, "zh-Hans-CN")
+    })
+    .map(({ remainder, ...entry }) => entry)
 }
 
 function normalizePrediction(elf: ElfWithImages, probability: number) {
@@ -164,15 +275,19 @@ export async function POST(request: Request) {
         orderBy: [{ createdAt: "asc" }],
       }) as unknown as ElfWithImages[]
 
-      const matchedElves = elves.filter((elf) => matchesElfRange(elf, numericHeight, numericWeight))
-      const globalProbability = matchedElves.length > 0
-        ? Number((100 / matchedElves.length).toFixed(2))
-        : 0
+      const matchedElfEntries = normalizeEntryProbabilities(
+        mergePredictionEntries(
+          elves.flatMap((elf) => {
+            const score = calculateElfMatchScore(elf, numericHeight, numericWeight)
+            return score === null ? [] : [{ elf, score }]
+          })
+        )
+      )
 
       return NextResponse.json({
         code: 200,
         message: "success",
-        data: matchedElves.map((elf) => normalizePrediction(elf, globalProbability)),
+        data: matchedElfEntries.map((entry) => normalizePrediction(entry.elf, entry.probability)),
       })
     }
 
@@ -190,16 +305,18 @@ export async function POST(request: Request) {
       orderBy: [{ probability: "desc" }, { createdAt: "asc" }],
     }) as unknown as RuleWithElf[]
 
-    const matchedByRuleEntries = mergePredictionEntries(
-      rules
-        .filter((rule) => matchesRuleRange(rule, numericHeight, numericWeight))
-        .map((rule) => ({
-          elf: rule.elf,
-          probability: rule.probability,
-        }))
+    const matchedByRuleEntries = normalizeEntryProbabilities(
+      mergePredictionEntries(
+        rules
+          .filter((rule) => matchesRuleRange(rule, numericHeight, numericWeight))
+          .map((rule) => ({
+            elf: rule.elf,
+            score: rule.probability,
+          }))
+      )
     )
 
-    if (eggId && matchedByRuleEntries.length > 0) {
+    if (matchedByRuleEntries.length > 0) {
       return NextResponse.json({
         code: 200,
         message: "success",
@@ -207,23 +324,19 @@ export async function POST(request: Request) {
       })
     }
 
-    const matchedByElfRangeEntries = mergePredictionEntries(
-      rules
-        .filter((rule) => matchesElfRange(rule.elf, numericHeight, numericWeight))
-        .map((rule) => ({
-          elf: rule.elf,
-          probability: 0,
-        }))
+    const matchedByElfRangeEntries = normalizeEntryProbabilities(
+      mergePredictionEntries(
+        rules.flatMap((rule) => {
+          const score = calculateElfMatchScore(rule.elf, numericHeight, numericWeight)
+          return score === null ? [] : [{ elf: rule.elf, score }]
+        })
+      )
     )
-
-    const fallbackProbability = matchedByElfRangeEntries.length > 0
-      ? Number((100 / matchedByElfRangeEntries.length).toFixed(2))
-      : 0
 
     return NextResponse.json({
       code: 200,
       message: "success",
-      data: matchedByElfRangeEntries.map((entry) => normalizePrediction(entry.elf, fallbackProbability)),
+      data: matchedByElfRangeEntries.map((entry) => normalizePrediction(entry.elf, entry.probability)),
     })
   } catch (error) {
     console.error("Predict Hatching Error:", error)
