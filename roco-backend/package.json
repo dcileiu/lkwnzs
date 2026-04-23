@@ -10,6 +10,7 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:bootstrap": "node scripts/bootstrap-db.mjs",
+    "db:fix-wepb-urls": "node scripts/fix-wepb-urls.mjs",
     "db:sync-egg-media": "node scripts/sync-egg-media-to-db.mjs",
     "db:init": "npm run db:push && npm run db:bootstrap && npm run db:sync-egg-media",
     "assets:eggs": "node scripts/download-egg-assets.mjs",
