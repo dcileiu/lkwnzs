@@ -120,33 +120,10 @@
 
 .article-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  gap: 20rpx;
+  gap: 12rpx;
   margin-top: 15rpx;
-}
-
-.author {
-  display: flex;
-  align-items: center;
-  gap: 8rpx;
-  min-width: 0;
-  flex: 1;
-}
-
-.author-avatar {
-  width: 32rpx;
-  height: 32rpx;
-  border-radius: 50%;
-  background: #ccc;
-}
-
-.author-name {
-  font-size: 22rpx;
-  color: #999;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .stats {
