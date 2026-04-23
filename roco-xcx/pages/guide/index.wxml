@@ -28,10 +28,6 @@
           <text class="article-title line-clamp-2">{{item.title}}</text>
           <text class="article-summary line-clamp-2">{{item.summary || '暂无简介...'}}</text>
           <view class="article-footer">
-            <view class="author">
-              <image class="author-avatar" src="{{item.author.avatar || '/assets/default-avatar.png'}}"></image>
-              <text class="author-name">{{item.author.name}}</text>
-            </view>
             <view class="stats">
               <text>👁 {{item.views}}</text>
               <text>♡ {{item.likes}}</text>

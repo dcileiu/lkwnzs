@@ -1,4 +1,5 @@
 const api = require('../../utils/api.js')
+const { normalizeImageUrl } = require('../../utils/url.js')
 
 Page({
   data: {
@@ -20,13 +21,22 @@ Page({
     try {
       wx.showLoading({ title: '加载中' })
       const elf = await api.getElfDetail(id)
-      const galleryImages = elf?.images || []
+      const galleryImages = (elf?.images || []).map((img) => ({ ...img, url: normalizeImageUrl(img.url) }))
 
       this.setData({
-        elf,
+        elf: {
+          ...elf,
+          coverImage: normalizeImageUrl(elf?.coverImage),
+          avatar: normalizeImageUrl(elf?.avatar),
+          eggImageUrl: normalizeImageUrl(elf?.eggImageUrl)
+        },
         galleryImages,
-        activeImage: elf?.coverImage || galleryImages[0]?.url || '',
-        relatedElves: elf?.relatedElves || []
+        activeImage: normalizeImageUrl(elf?.coverImage) || galleryImages[0]?.url || '',
+        relatedElves: (elf?.relatedElves || []).map((item) => ({
+          ...item,
+          coverImage: normalizeImageUrl(item.coverImage),
+          avatar: normalizeImageUrl(item.avatar)
+        }))
       })
     } catch (err) {
       console.error(err)
@@ -38,7 +48,7 @@ Page({
   selectImage(e) {
     const { url } = e.currentTarget.dataset
     if (!url) return
-    this.setData({ activeImage: url })
+    this.setData({ activeImage: normalizeImageUrl(url) })
   },
 
   openElf(e) {

@@ -15,10 +15,33 @@
   box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.04);
 }
 
+.avatar-btn {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  line-height: 1;
+}
+
+.avatar-btn::after {
+  border: none;
+}
+
 .avatar {
   width: 100rpx;
   height: 100rpx;
   border-radius: 50%;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.nickname-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
 }
 
 .nickname {
@@ -26,6 +49,21 @@
   font-size: 32rpx;
   font-weight: 700;
   color: #1f2937;
+}
+
+.nickname-actions {
+  display: flex;
+  gap: 12rpx;
+  flex-shrink: 0;
+}
+
+.edit-btn,
+.wx-btn {
+  font-size: 22rpx;
+  color: #4f74ff;
+  background: #eef3ff;
+  padding: 8rpx 14rpx;
+  border-radius: 16rpx;
 }
 
 .desc {
