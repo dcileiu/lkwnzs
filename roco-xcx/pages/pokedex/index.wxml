@@ -36,7 +36,7 @@
     </view>
   </scroll-view>
 
-  <scroll-view class="elf-grid-scroll" scroll-y>
+  <scroll-view class="elf-grid-scroll" scroll-y bindscrolltolower="loadMoreElves" lower-threshold="120">
     <view wx:if="{{elves.length}}" class="elf-grid">
       <block wx:for="{{elves}}" wx:key="id">
         <view class="elf-card" bindtap="goToDetail" data-id="{{item.id}}">
@@ -59,5 +59,6 @@
     </view>
 
     <view wx:else class="empty-state">暂时没有符合条件的精灵</view>
+    <view wx:if="{{elves.length}}" class="load-more-tip">{{hasMore ? (isLoadingMore ? "加载中..." : "上拉加载更多") : "没有更多精灵了"}}</view>
   </scroll-view>
 </view>

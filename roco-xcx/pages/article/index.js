@@ -6,7 +6,8 @@ Page({
     article: null,
     isLiked: false,
     isFavorited: false,
-    commentInput: ''
+    commentInput: '',
+    isActionBarSticky: false
   },
 
   onLoad(options) {
@@ -89,6 +90,14 @@ Page({
     })
 
     wx.showToast({ title: '评论成功', icon: 'success' })
+  },
+
+
+  onPageScroll(e) {
+    const shouldSticky = e.scrollTop > 200
+    if (shouldSticky !== this.data.isActionBarSticky) {
+      this.setData({ isActionBarSticky: shouldSticky })
+    }
   },
 
   onShareAppMessage() {
