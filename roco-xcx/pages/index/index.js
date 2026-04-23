@@ -1,5 +1,7 @@
 const api = require('../../utils/api.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
+const auth = require('../../utils/auth.js')
+const { normalizeImageUrl } = require('../../utils/url.js')
 
 Page({
   data: {
@@ -11,8 +13,10 @@ Page({
     this.fetchData()
   },
 
-  onShow() {
+  async onShow() {
     setTabBarSelected(this, 0)
+    const user = await auth.ensureLogin()
+    getApp().globalData.userInfo = user
   },
 
   async fetchData() {
@@ -25,7 +29,11 @@ Page({
       
       this.setData({
         hotArticles: articles || [],
-        hotElves: elvesData?.items || []
+        hotElves: (elvesData?.items || []).map((item) => ({
+          ...item,
+          coverImage: normalizeImageUrl(item.coverImage),
+          avatar: normalizeImageUrl(item.avatar)
+        }))
       })
     } catch (err) {
       console.error(err)

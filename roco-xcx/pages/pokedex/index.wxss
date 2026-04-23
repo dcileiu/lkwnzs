@@ -183,3 +183,10 @@
   color: #999;
   font-size: 28rpx;
 }
+
+.load-more-tip {
+  text-align: center;
+  color: #9aa3b2;
+  font-size: 24rpx;
+  padding: 20rpx 0 30rpx;
+}
