@@ -11,7 +11,7 @@
           <text class="wx-btn" bindtap="useWechatNickname">同步微信名</text>
         </view>
       </view>
-      <text class="desc">欢迎回来，看看你的文章互动数据</text>
+      <text class="desc">欢迎小洛克回来，看看你的文章互动数据</text>
     </view>
   </view>
 

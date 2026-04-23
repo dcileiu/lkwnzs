@@ -6,7 +6,7 @@
 
   <view class="card form-card">
     <view class="input-item">
-      <view class="picker-label">身高</view>
+      <view class="picker-label">📏身高</view>
       <input
         class="input-field"
         type="digit"
@@ -18,7 +18,7 @@
     </view>
 
     <view class="input-item border-none">
-      <view class="picker-label">体重</view>
+      <view class="picker-label">👜体重</view>
       <input
         class="input-field"
         type="digit"

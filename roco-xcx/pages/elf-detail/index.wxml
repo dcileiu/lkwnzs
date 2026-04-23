@@ -70,7 +70,7 @@
         </view>
       </view>
 
-      <scroll-view wx:if="{{galleryImages.length}}" class="gallery-strip" scroll-x>
+      <!-- <scroll-view wx:if="{{galleryImages.length}}" class="gallery-strip" scroll-x>
         <view class="gallery-track">
           <block wx:for="{{galleryImages}}" wx:key="id">
             <view
@@ -82,13 +82,13 @@
             </view>
           </block>
         </view>
-      </scroll-view>
+      </scroll-view> -->
     </view>
 
     <view class="section-card">
       <view class="section-head">
-        <text class="section-title">同组精灵</text>
-        <text class="section-sub">按精灵组字段自动关联展示</text>
+        <text class="section-title">精灵相关形态（同组）</text>
+        <text class="section-sub">精灵的其他阶段形态</text>
       </view>
 
       <view wx:if="{{relatedElves.length}}" class="group-list">
