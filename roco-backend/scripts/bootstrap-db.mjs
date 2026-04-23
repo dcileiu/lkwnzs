@@ -32,10 +32,15 @@ function uniqueImageUrls(...urls) {
   return Array.from(
     new Set(
       urls
-        .map((url) => (typeof url === "string" ? url.trim() : ""))
+        .map((url) => normalizeImageUrl(url))
         .filter(Boolean)
     )
   )
+}
+
+function normalizeImageUrl(url) {
+  if (typeof url !== "string") return ""
+  return url.trim().replace(/\.wepb(\?|#|$)/gi, ".webp$1")
 }
 
 function extractArticleThumbnail(content) {
@@ -57,7 +62,7 @@ function extractArticleSummary(content, limit = 140) {
 
 function buildSampleArticleContent() {
   return [
-    "![迪莫](https://roco.cdn.itianci.cn/imgs/jingling/%E8%BF%AA%E8%8E%AB.wepb)",
+    "![迪莫](https://roco.cdn.itianci.cn/imgs/jingling/%E8%BF%AA%E8%8E%AB.webp)",
     "",
     "# 新手开荒指南：前 30 分钟先做这 5 件事",
     "",
@@ -170,8 +175,8 @@ async function syncElves() {
       height: typeof record.height === "string" && record.height.trim() ? record.height.trim() : null,
       weight: typeof record.weight === "string" && record.weight.trim() ? record.weight.trim() : null,
       raceValue: null,
-      eggImageUrl: typeof record.eggImageUrl === "string" && record.eggImageUrl.trim() ? record.eggImageUrl.trim() : null,
-      fruitImageUrl: typeof record.fruitImageUrl === "string" && record.fruitImageUrl.trim() ? record.fruitImageUrl.trim() : null,
+      eggImageUrl: normalizeImageUrl(record.eggImageUrl) || null,
+      fruitImageUrl: normalizeImageUrl(record.fruitImageUrl) || null,
       tags: JSON.stringify({
         no: record.no ?? "",
         type: record.type ?? "",
