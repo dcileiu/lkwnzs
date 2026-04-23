@@ -37,7 +37,7 @@ async function ensureLogin() {
       id: autoId,
       openId,
       nickname: `小洛克${autoId}`,
-      avatar: '/assets/default-avatar.png',
+      avatar: 'https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg',
       createdAt: Date.now()
     }
     users.push(user)

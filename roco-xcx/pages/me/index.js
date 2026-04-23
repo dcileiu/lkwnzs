@@ -4,7 +4,7 @@ const auth = require('../../utils/auth.js')
 
 const DEFAULT_PROFILE = {
   nickname: '洛克训练师',
-  avatar: '/assets/default-avatar.png'
+  avatar: 'https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg'
 }
 
 Page({

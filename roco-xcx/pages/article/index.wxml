@@ -37,7 +37,7 @@
       <text class="section-title">💬 评论 ({{article.comments ? article.comments.length : 0}})</text>
 
       <view class="comment-input-row">
-        <image class="my-avatar" src="/assets/default-avatar.png"></image>
+        <image class="my-avatar" src="https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg"></image>
         <input
           class="comment-input"
           placeholder="写下你的评论..."
@@ -51,7 +51,7 @@
 
       <block wx:for="{{article.comments}}" wx:key="id">
         <view class="comment-item">
-          <image class="comment-avatar" src="{{item.user.avatar || '/assets/default-avatar.png'}}"></image>
+          <image class="comment-avatar" src="{{item.user.avatar || 'https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg'}}"></image>
           <view class="comment-body">
             <text class="comment-name">{{item.user.nickname}}</text>
             <text class="comment-text">{{item.content}}</text>
