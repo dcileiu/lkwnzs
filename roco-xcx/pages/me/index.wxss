@@ -16,6 +16,8 @@
 }
 
 .avatar-btn {
+  width: 104rpx !important;
+  height: 104rpx;
   margin: 0;
   padding: 0;
   border: none;
