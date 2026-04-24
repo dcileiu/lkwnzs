@@ -1,7 +1,14 @@
 <scroll-view class="page-container" scroll-y>
   <!-- Search Bar -->
   <view class="search-wrap">
-    <input class="search-input" placeholder="搜索精灵、攻略、蛋..." bindtap="goToSearch" disabled="{{true}}" />
+    <input
+      class="search-input"
+      placeholder="搜索精灵、攻略..."
+      confirm-type="search"
+      value="{{searchKeyword}}"
+      bindinput="onSearchInput"
+      bindconfirm="onSearchConfirm"
+    />
   </view>
 
   <!-- Quick Actions -->

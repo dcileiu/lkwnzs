@@ -6,12 +6,20 @@ const DEFAULT_ARTICLE_COVER = "https://roco.cdn.itianci.cn/imgs/avatar/default-a
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const category = searchParams.get("category")
+  const keyword = (searchParams.get("keyword") || "").trim()
   const isHot = searchParams.get("isHot")
   const limit = parseInt(searchParams.get("limit") || "10")
 
   const whereCondition: any = {}
   if (category && category !== "全部") whereCondition.category = category
   if (isHot === "true") whereCondition.isHot = true
+  if (keyword) {
+    whereCondition.OR = [
+      { title: { contains: keyword } },
+      { summary: { contains: keyword } },
+      { content: { contains: keyword } },
+    ]
+  }
 
   const articles = await prisma.article.findMany({
     where: whereCondition,

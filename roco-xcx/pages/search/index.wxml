@@ -1,0 +1,49 @@
+<view class="page-container">
+  <view class="search-box">
+    <icon type="search" size="14" color="#999"></icon>
+    <input
+      class="search-input"
+      placeholder="搜索攻略或精灵"
+      confirm-type="search"
+      value="{{keyword}}"
+      bindinput="onKeywordInput"
+      bindconfirm="onConfirmSearch"
+    />
+    <view class="search-btn" bindtap="onConfirmSearch">搜索</view>
+  </view>
+
+  <view class="tab-bar">
+    <view class="tab-item {{activeTab === 'all' ? 'active' : ''}}" data-tab="all" bindtap="switchTab">全部</view>
+    <view class="tab-item {{activeTab === 'guide' ? 'active' : ''}}" data-tab="guide" bindtap="switchTab">攻略</view>
+    <view class="tab-item {{activeTab === 'elf' ? 'active' : ''}}" data-tab="elf" bindtap="switchTab">精灵</view>
+  </view>
+
+  <scroll-view class="result-scroll" scroll-y>
+    <view wx:if="{{loading}}" class="empty-state">搜索中...</view>
+
+    <block wx:if="{{!loading && (activeTab === 'all' || activeTab === 'guide')}}">
+      <view class="section-title">攻略结果 ({{articles.length}})</view>
+      <block wx:for="{{articles}}" wx:key="id">
+        <view class="card" bindtap="goArticleDetail" data-id="{{item.id}}">
+          <view class="card-title">{{item.title}}</view>
+          <view class="card-meta">{{item.authorName || '匿名'}} · {{item.views || 0}}阅读</view>
+        </view>
+      </block>
+      <view wx:if="{{articles.length === 0}}" class="empty-state">没有匹配到攻略</view>
+    </block>
+
+    <block wx:if="{{!loading && (activeTab === 'all' || activeTab === 'elf')}}">
+      <view class="section-title">精灵结果 ({{elves.length}})</view>
+      <block wx:for="{{elves}}" wx:key="id">
+        <view class="card elf-card" bindtap="goElfDetail" data-id="{{item.id}}">
+          <image class="elf-avatar" src="{{item.coverImage || item.avatar || '/assets/default-elf.png'}}"></image>
+          <view class="elf-info">
+            <view class="card-title">{{item.name}}</view>
+            <view class="card-meta">{{item.rarity || '未知'}} · {{item.elements && item.elements.length ? item.elements.join(' / ') : '无属性'}}</view>
+          </view>
+        </view>
+      </block>
+      <view wx:if="{{elves.length === 0}}" class="empty-state">没有匹配到精灵</view>
+    </block>
+  </scroll-view>
+</view>

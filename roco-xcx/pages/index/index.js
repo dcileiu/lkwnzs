@@ -6,7 +6,8 @@ const { normalizeImageUrl } = require('../../utils/url.js')
 Page({
   data: {
     hotArticles: [],
-    hotElves: []
+    hotElves: [],
+    searchKeyword: ''
   },
 
   onLoad() {
@@ -53,7 +54,17 @@ Page({
   },
 
   goToSearch() {
-    wx.navigateTo({ url: '/pages/search/index' })
+    const keyword = (this.data.searchKeyword || '').trim()
+    const suffix = keyword ? `?keyword=${encodeURIComponent(keyword)}` : ''
+    wx.navigateTo({ url: `/pages/search/index${suffix}` })
+  },
+
+  onSearchInput(e) {
+    this.setData({ searchKeyword: e.detail.value || '' })
+  },
+
+  onSearchConfirm() {
+    this.goToSearch()
   },
 
   goElfDetail(e) {
