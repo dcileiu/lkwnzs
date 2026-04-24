@@ -69,6 +69,15 @@ export default function NewArticlePage() {
               </div>
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="cover">封面链接（可不填）</Label>
+              <Input
+                id="cover"
+                name="cover"
+                placeholder="https://example.com/cover.jpg（留空则使用默认封面）"
+              />
+            </div>
+
             <ArticleContentEditor />
 
             <div className="flex items-center space-x-2 rounded-md border p-4">

@@ -27,13 +27,14 @@
 
       <scroll-view class="element-tabs" scroll-x enable-flex show-scrollbar="false">
         <view class="tabs-wrap">
-          <block wx:for="{{elements}}" wx:key="*this">
+          <block wx:for="{{elements}}" wx:key="name">
             <view
-              class="tab-item {{currentElement === item ? 'active' : ''}}"
-              data-element="{{item}}"
+              class="tab-item {{currentElement === item.name ? 'active' : ''}}"
+              data-element="{{item.name}}"
               bindtap="switchElement"
             >
-              {{item}}
+              <image wx:if="{{item.iconUrl}}" class="tab-icon" src="{{item.iconUrl}}" mode="aspectFit"></image>
+              <text>{{item.name}}</text>
             </view>
           </block>
         </view>

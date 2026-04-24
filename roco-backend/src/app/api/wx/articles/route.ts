@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
+const DEFAULT_ARTICLE_COVER = "https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg"
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const category = searchParams.get("category")
@@ -25,10 +27,15 @@ export async function GET(request: Request) {
     orderBy: { createdAt: "desc" },
   })
 
+  const normalizedArticles = articles.map((article) => ({
+    ...article,
+    thumbnail: article.thumbnail || DEFAULT_ARTICLE_COVER,
+  }))
+
   // Format the response for WeChat Mini Program
   return NextResponse.json({
     code: 200,
     message: "success",
-    data: articles
+    data: normalizedArticles
   })
 }

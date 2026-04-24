@@ -4,9 +4,11 @@ import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
-function extractArticleThumbnail(content: string) {
-  const match = content.match(/!\[[^\]]*]\((https?:\/\/[^)\s]+)\)/i)
-  return match?.[1] || null
+const DEFAULT_ARTICLE_COVER = "https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg"
+
+function normalizeArticleCover(rawCover: FormDataEntryValue | null) {
+  const value = typeof rawCover === "string" ? rawCover.trim() : ""
+  return value || DEFAULT_ARTICLE_COVER
 }
 
 function extractArticleSummary(content: string, limit = 140) {
@@ -28,6 +30,7 @@ export async function createArticle(formData: FormData) {
   const title = formData.get("title") as string
   const category = formData.get("category") as string
   const content = formData.get("content") as string
+  const cover = normalizeArticleCover(formData.get("cover"))
   const authorName = formData.get("authorName") as string || "管理员"
   const isHot = formData.get("isHot") === "on"
 
@@ -51,7 +54,7 @@ export async function createArticle(formData: FormData) {
       title,
       category,
       content,
-      thumbnail: extractArticleThumbnail(content),
+      thumbnail: cover,
       summary: extractArticleSummary(content),
       isHot,
       authorId: author.id,
@@ -68,6 +71,7 @@ export async function updateArticle(formData: FormData) {
   const title = formData.get("title") as string
   const category = formData.get("category") as string
   const content = formData.get("content") as string
+  const cover = normalizeArticleCover(formData.get("cover"))
   const authorName = formData.get("authorName") as string || "管理员"
   const isHot = formData.get("isHot") === "on"
 
@@ -92,7 +96,7 @@ export async function updateArticle(formData: FormData) {
       title,
       category,
       content,
-      thumbnail: extractArticleThumbnail(content),
+      thumbnail: cover,
       summary: extractArticleSummary(content),
       isHot,
       authorId: author.id,

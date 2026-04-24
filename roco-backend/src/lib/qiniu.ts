@@ -18,7 +18,13 @@ type UploadTokenResult = {
 
 const DEFAULT_UPLOAD_URL = "https://upload.qiniup.com"
 const DEFAULT_DOMAIN = "https://roco.cdn.itianci.cn"
-const MAX_IMAGE_SIZE = 10 * 1024 * 1024
+const MAX_IMAGE_SIZE = 15 * 1024 * 1024
+
+type UploadableImage = Blob & {
+  name?: string
+  type: string
+  size: number
+}
 
 function getRequiredEnv(name: string) {
   const value = process.env[name]?.trim()
@@ -95,7 +101,7 @@ export function buildQiniuKey(options?: {
   const date = new Date().toISOString().slice(0, 10).replace(/-/g, "/")
 
   return `${folder}/${date}/${crypto.randomUUID()}.${ext}`
-}
+} 
 
 export function createUploadToken(options?: {
   key?: string
@@ -132,25 +138,30 @@ export function buildQiniuPublicUrl(domain: string, key: string) {
   return `${normalizeDomain(domain)}/${key.replace(/^\/+/, "")}`
 }
 
-export async function uploadImageToQiniu(file: File, options?: { folder?: string }) {
+export async function uploadImageToQiniu(
+  file: UploadableImage,
+  options?: { folder?: string; fileName?: string }
+) {
   if (!file.type.startsWith("image/")) {
     throw new Error("Only image uploads are supported")
   }
 
   if (file.size > MAX_IMAGE_SIZE) {
-    throw new Error("Image size must be 10MB or less")
+    throw new Error("Image size must be 15MB or less")
   }
+
+  const resolvedFileName = options?.fileName || file.name || `clipboard-${Date.now()}.png`
 
   const { key, token, domain, uploadUrl } = createUploadToken({
     folder: options?.folder || "articles",
-    fileName: file.name,
+    fileName: resolvedFileName,
     mimeType: file.type,
   })
 
   const payload = new FormData()
   payload.set("token", token)
   payload.set("key", key)
-  payload.set("file", file, file.name)
+  payload.set("file", file, resolvedFileName)
 
   const response = await fetch(uploadUrl, {
     method: "POST",

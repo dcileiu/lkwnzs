@@ -83,6 +83,8 @@
 }
 
 .tab-item {
+  display: inline-flex;
+  align-items: center;
   padding: 10rpx 30rpx;
   font-size: 26rpx;
   color: #666;
@@ -91,6 +93,12 @@
   margin-right: 16rpx;
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.02);
   box-sizing: border-box;
+}
+
+.tab-icon {
+  width: 30rpx;
+  height: 30rpx;
+  margin-right: 10rpx;
 }
 
 .tab-item.active {

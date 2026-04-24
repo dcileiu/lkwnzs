@@ -89,6 +89,16 @@ export default async function EditArticlePage({ params }: EditArticlePageProps) 
               </div>
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="cover">封面链接（可不填）</Label>
+              <Input
+                id="cover"
+                name="cover"
+                defaultValue={article.thumbnail || ""}
+                placeholder="https://example.com/cover.jpg（留空则使用默认封面）"
+              />
+            </div>
+
             <ArticleContentEditor defaultValue={article.content} />
 
             <div className="flex items-center space-x-2 rounded-md border p-4">

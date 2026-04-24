@@ -46,6 +46,9 @@ const api = {
   getElves(params) {
     return request('/elves', 'GET', params);
   },
+  getElements() {
+    return request('/elements', 'GET');
+  },
   getElfDetail(id) {
     return request(`/elves/${id}`, 'GET');
   },

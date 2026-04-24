@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
+const DEFAULT_ARTICLE_COVER = "https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg"
+
 export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const article = await prisma.article.findUnique({
@@ -37,9 +39,14 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
     data: { views: { increment: 1 } }
   }).catch(console.error)
 
+  const normalizedArticle = {
+    ...article,
+    thumbnail: article.thumbnail || DEFAULT_ARTICLE_COVER,
+  }
+
   return NextResponse.json({
     code: 200,
     message: "success",
-    data: article
+    data: normalizedArticle
   })
 }
