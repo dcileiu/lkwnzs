@@ -1,13 +1,14 @@
 <view class="tabbar-wrapper">
-  <view class="button-wrap">
-    <view class="glass-button">
+  <view class="tabbar-shell">
+    <image class="menu-bg" src="/assets/menu.webp" mode="aspectFill"></image>
+    <view class="tab-list">
       <block wx:for="{{list}}" wx:key="pagePath">
-        <view class="tab-span {{selected === index ? 'active' : ''}}" 
-              data-index="{{index}}" 
-              bindtap="switchTab">
-          {{item.text}}
+        <view class="tab-item {{selected === index ? 'active' : ''}}" data-index="{{index}}" bindtap="switchTab">
+          <image wx:if="{{selected === index}}" class="active-bg" src="/assets/active.webp" mode="scaleToFill"></image>
+          <text class="tab-text">{{item.text}}</text>
+          <view wx:if="{{index < list.length - 1}}" class="divider"></view>
         </view>
       </block>
     </view>
   </view>
-</view> 
+</view>

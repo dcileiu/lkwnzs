@@ -1,80 +1,104 @@
-<scroll-view class="page-container" scroll-y>
-  <!-- Search Bar -->
-  <view class="search-wrap">
-    <input
-      class="search-input"
-      placeholder="搜索精灵、攻略..."
-      confirm-type="search"
-      value="{{searchKeyword}}"
-      bindinput="onSearchInput"
-      bindconfirm="onSearchConfirm"
-    />
-  </view>
-
-  <!-- Quick Actions -->
-  <view class="quick-actions">
-    <view class="action-item" bindtap="navTo" data-url="/pages/hatch/index">
-      <view class="icon-wrap">🥚</view>
-      <text>孵蛋预测</text>
-    </view>
-    <view class="action-item" bindtap="navTo" data-url="/pages/pokedex/index">
-      <view class="icon-wrap bg-green">✨</view>
-      <text>精灵图鉴</text>
-    </view>
-    <!-- <view class="action-item" bindtap="navTo" data-url="/pages/collection/index">
-      <view class="icon-wrap bg-pink">🎁</view>
-      <text>宠物蛋集</text>
-    </view>
-    <view class="action-item" bindtap="navTo" data-url="/pages/me/index">
-      <view class="icon-wrap bg-blue">👤</view>
-      <text>我的</text>
-    </view> -->
-    <view class="action-item" bindtap="navTo" data-url="/pages/guide/index">
-      <view class="icon-wrap bg-blue">📖</view>
-      <text>新手攻略</text>
+<scroll-view class="page-container" scroll-y enable-flex>
+  <view class="hero">
+    <image class="hero-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/home.webp" mode="widthFix"></image>
+    <view class="hero-overlay"></view>
+    <view class="hero-content">
+      <view class="search-wrap">
+        <icon type="search" size="16" color="#f8e8b1"></icon>
+        <input
+          class="search-input"
+          placeholder="搜索精灵、攻略..."
+          placeholder-style="color: rgba(255, 241, 214, 0.72);"
+          confirm-type="search"
+          value="{{searchKeyword}}"
+          bindinput="onSearchInput"
+          bindconfirm="onSearchConfirm"
+        />
+      </view>
     </view>
   </view>
 
-  <!-- Popular Guides -->
-  <view class="section">
-    <view class="section-header">
-      <text class="title">📈 热门攻略</text>
-      <text class="more" bindtap="navTo" data-url="/pages/guide/index">查看更多 ></text>
-    </view>
-    <view class="guide-list">
-      <block wx:for="{{hotArticles}}" wx:key="id">
-        <view class="guide-item" bindtap="navTo" data-url="/pages/article/index?id={{item.id}}">
-          <view class="guide-rank">{{index + 1}}</view>
-          <view class="guide-info">
-            <view class="guide-title">{{item.title}} <text class="tag-hot">HOT</text></view>
-            <view class="guide-meta">{{item.authorName}} · {{item.views}}阅读</view>
+  <view class="home-main">
+    <view class="quick-actions">
+      <block wx:for="{{quickCards}}" wx:key="text">
+        <view class="quick-card" bindtap="navTo" data-url="{{item.url}}">
+          <image class="quick-bg" src="{{item.bg}}" mode="scaleToFill"></image>
+          <view class="quick-mask"></view>
+          <view class="quick-body">
+            <text class="quick-title">{{item.text}}</text>
+            <text class="quick-sub">{{item.subText}}</text>
           </view>
         </view>
       </block>
     </view>
-  </view>
 
-  <!-- Popular Elves -->
-  <view class="section">
-    <view class="section-header">
-      <text class="title">⭐ 热门精灵</text>
-      <text class="more" bindtap="navTo" data-url="/pages/pokedex/index">全部图鉴 ></text>
+    <view class="section guide-section">
+      <view class="section-header">
+        <text class="title">🔥热门攻略</text>
+        <text class="more" bindtap="navTo" data-url="/pages/guide/index">查看全部 ></text>
+      </view>
+      <swiper
+        class="guide-swiper"
+        circular
+        autoplay
+        interval="3500"
+        duration="350"
+        current="{{guideCurrent}}"
+        bindchange="onGuideChange"
+        indicator-dots="{{false}}"
+      >
+        <block wx:for="{{hotArticles}}" wx:key="id">
+          <swiper-item>
+            <view class="guide-card" bindtap="navTo" data-url="/pages/article/index?id={{item.id}}">
+              <image class="guide-cover" src="{{item.thumbnail || '/assets/articles.webp'}}" mode="aspectFill"></image>
+              <view class="guide-info">
+                <view class="guide-title">{{item.title}}</view>
+                <view class="guide-meta">
+                <text>{{item.views || 0}}阅读</text>
+                <text wx:if="{{item.isHot}}" class="tag-hot">HOT</text>
+              </view>
+              </view>
+            </view>
+          </swiper-item>
+        </block>
+      </swiper>
+      <view class="dots" wx:if="{{hotArticles.length > 1}}">
+        <block wx:for="{{hotArticles}}" wx:key="id">
+          <view class="dot {{guideCurrent === index ? 'active' : ''}}"></view>
+        </block>
+      </view>
     </view>
-    <scroll-view class="elf-scroll" scroll-x>
-      <block wx:for="{{hotElves}}" wx:key="id">
-        <view class="elf-card" bindtap="goElfDetail" data-id="{{item.id}}">
-          <view class="elf-avatar-bg">
-            <image src="{{item.coverImage || item.avatar || '/assets/default-elf.png'}}" class="elf-avatar"></image>
+
+    <view class="section">
+      <view class="section-header">
+        <text class="title">✨热门精灵</text>
+        <text class="more" bindtap="navTo" data-url="/pages/pokedex/index">全部图鉴 ></text>
+      </view>
+      <scroll-view class="elf-scroll" scroll-x show-scrollbar="{{false}}">
+        <block wx:for="{{hotElves}}" wx:key="id">
+          <view class="elf-card" bindtap="goElfDetail" data-id="{{item.id}}">
+            <image class="elf-card-bg" src="/assets/elf-card.webp" mode="scaleToFill"></image>
+            <view class="elf-card-body">
+              <view class="elf-avatar-bg">
+                <image src="{{item.coverImage || item.avatar || '/assets/default-elf.png'}}" class="elf-avatar" mode="aspectFit"></image>
+              </view>
+              <text class="elf-name">{{item.name}}</text>
+              <view class="elf-type">
+                <image
+                  wx:if="{{item.elements && item.elements.length}}"
+                  class="elf-type-icon"
+                  src="{{'https://roco.cdn.itianci.cn/imgs/shuxing/' + item.elements[0] + '.webp'}}"
+                  mode="aspectFit"
+                />
+                <text>{{item.elements && item.elements.length ? item.elements[0] : '未知'}}</text>
+              </view>
+              <view class="elf-stage">
+                <text class="elf-stage-text">{{item.category || item.rarity || '未知形态'}}</text>
+              </view>
+            </view>
           </view>
-          <text class="elf-name">{{item.name}}</text>
-          <view class="elf-tags">
-            <block wx:for="{{item.elements}}" wx:key="*this">
-              <text class="tag-element">{{item}}系</text>
-            </block>
-            <text class="tag-rarity">{{item.rarity}}</text>
-          </view>
-        </view>
-      </block>
-    </scroll-view>
+        </block>
+      </scroll-view>
+    </view>
   </view>
 </scroll-view>

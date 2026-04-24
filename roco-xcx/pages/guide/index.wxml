@@ -1,42 +1,114 @@
-<view class="page-container">
-  <!-- Search -->
-  <view class="search-box">
-    <icon type="search" size="14" color="#999"></icon>
-    <input class="search-input" placeholder="搜索攻略..." bindinput="onSearchInput" bindconfirm="onSearch" />
-    <view class="filter-icon">🔍</view>
+<scroll-view class="page-container" scroll-y enable-flex>
+  <view class="hero">
+    <image class="hero-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/strategy.webp" mode="widthFix"></image>
+    <view class="hero-overlay"></view>
+    <view class="hero-content">
+      <view class="search-wrap">
+        <icon type="search" size="16" color="#f8e8b1"></icon>
+        <input
+          class="search-input"
+          placeholder="搜索攻略、技巧、玩法..."
+          placeholder-style="color: rgba(255, 241, 214, 0.72);"
+          value="{{keyword}}"
+          bindinput="onSearchInput"
+          bindconfirm="onSearch"
+          confirm-type="search"
+        />
+      </view>
+    </view>
   </view>
 
-  <!-- Tabs -->
-  <scroll-view class="tabs-scroll" scroll-x>
-    <view class="tabs">
-      <block wx:for="{{tabs}}" wx:key="*this">
-        <view class="tab-item {{currentTab === item ? 'active' : ''}}" data-tab="{{item}}" bindtap="switchTab">
-          {{item}}
-        </view>
-      </block>
-    </view>
-  </scroll-view>
+  <view class="guide-main">
+    <scroll-view class="tabs-scroll" scroll-x show-scrollbar="{{false}}">
+      <view class="tabs">
+        <block wx:for="{{tabs}}" wx:key="*this">
+          <view
+            class="tab-item {{currentTab === item ? 'active' : ''}}"
+            data-tab="{{item}}"
+            bindtap="switchTab"
+          >
+            <image
+              wx:if="{{currentTab === item}}"
+              class="tab-active-bg"
+              src="https://roco.cdn.itianci.cn/imgs/miniapp/btn.webp"
+              mode="scaleToFill"
+            />
+            <text class="tab-label">{{item}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
 
-  <!-- Article List -->
-  <scroll-view class="article-list" scroll-y bindscrolltolower="loadMore">
-    <block wx:for="{{articles}}" wx:key="id">
-      <view class="article-card" data-id="{{item.id}}" bindtap="goToDetail">
-        <view class="article-thumb-wrapper">
-          <image class="article-thumb" mode="aspectFill" src="{{item.thumbnail || '/assets/default-article.png'}}"></image>
-        </view>
-        <view class="article-content">
-          <text class="article-title line-clamp-2">{{item.title}}</text>
-          <text class="article-summary line-clamp-2">{{item.summary || '暂无简介...'}}</text>
-          <view class="article-footer">
-            <view class="stats">
-              <text>👁 {{item.views}}</text>
-              <text>♡ {{item.likes}}</text>
-              <text>💬 {{item.comments ? item.comments.length : 0}}</text>
+    <view class="featured-wrap" wx:if="{{featuredArticles.length}}">
+      <swiper
+        class="featured-swiper"
+        circular
+        autoplay
+        interval="3500"
+        duration="350"
+        current="{{guideCurrent}}"
+        bindchange="onGuideChange"
+        indicator-dots="{{false}}"
+      >
+        <block wx:for="{{featuredArticles}}" wx:key="id">
+          <swiper-item>
+            <view class="featured-card" data-id="{{item.id}}" bindtap="goToDetail">
+              <image class="featured-card-bg" src="/assets/articles.webp" mode="scaleToFill"></image>
+              <view class="featured-mask"></view>
+              <view class="featured-head">
+                <view class="featured-category">{{currentTab === '全部' ? '精选推荐' : currentTab}}</view>
+                <view class="featured-hot" wx:if="{{item.isHot}}">HOT</view>
+              </view>
+              <view class="featured-body">
+                <view class="featured-title line-clamp-2">{{item.title}}</view>
+                <view class="featured-summary line-clamp-2">{{item.summary}}</view>
+                <view class="featured-meta">
+                  <view class="featured-author">{{item.authorName}}</view>
+                  <view class="featured-stats">
+                    <text>{{item.views}} 阅读</text>
+                    <text>{{item.likes}} 收藏</text>
+                    <text>{{item.commentCount}} 评论</text>
+                  </view>
+                </view>
+              </view>
             </view>
+          </swiper-item>
+        </block>
+      </swiper>
+      <view class="featured-dots" wx:if="{{featuredArticles.length > 1}}">
+        <block wx:for="{{featuredArticles}}" wx:key="id">
+          <view class="featured-dot {{guideCurrent === index ? 'active' : ''}}"></view>
+        </block>
+      </view>
+    </view>
+
+    <view class="section-header">
+      <view class="section-title-wrap">
+        <text class="section-icon">🔥</text>
+        <text class="section-title">热门攻略</text>
+      </view>
+      <text class="section-more">查看更多 ></text>
+    </view>
+
+    <block wx:for="{{hotArticles}}" wx:key="id">
+      <view class="hot-card" data-id="{{item.id}}" bindtap="goToDetail">
+        <view class="hot-rank">{{index + 2}}</view>
+        <image class="hot-thumb" src="{{item.thumbnail}}" mode="aspectFill"></image>
+        <view class="hot-info">
+          <view class="hot-title line-clamp-2">{{item.title}}</view>
+          <view class="hot-summary line-clamp-1">{{item.summary}}</view>
+          <view class="hot-stats">
+            <text>👁 {{item.views}}</text>
+            <text>♡ {{item.likes}}</text>
+            <text>💬 {{item.commentCount}}</text>
           </view>
         </view>
+        <view class="hot-arrow">›</view>
       </view>
     </block>
-    <view wx:if="{{articles.length === 0}}" class="empty-state">没有找到相关攻略~</view>
-  </scroll-view>
-</view>
+
+    <view wx:if="{{!featuredArticles.length && !hotArticles.length}}" class="empty-state">
+      没有找到相关攻略~
+    </view>
+  </view>
+</scroll-view>

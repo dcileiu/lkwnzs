@@ -7,7 +7,13 @@ Page({
   data: {
     hotArticles: [],
     hotElves: [],
-    searchKeyword: ''
+    searchKeyword: '',
+    guideCurrent: 0,
+    quickCards: [
+      { text: '孵蛋预测', subText: '预测精灵和孵化', bg: '/assets/zi-card.webp', url: '/pages/hatch/index' },
+      { text: '精灵图鉴', subText: '查看精灵详情', bg: '/assets/lan-card.webp', url: '/pages/pokedex/index' },
+      { text: '新手攻略', subText: '快速入门指南', bg: '/assets/lv-card.webp', url: '/pages/guide/index' }
+    ]
   },
 
   onLoad() {
@@ -27,9 +33,9 @@ Page({
         api.getArticles({ isHot: 'true', limit: 3 }),
         api.getElves({ isHot: 'true', limit: 4 })
       ])
-      
+
       this.setData({
-        hotArticles: articles || [],
+        hotArticles: (articles || []).slice(0, 3),
         hotElves: (elvesData?.items || []).map((item) => ({
           ...item,
           coverImage: normalizeImageUrl(item.coverImage),
@@ -65,6 +71,10 @@ Page({
 
   onSearchConfirm() {
     this.goToSearch()
+  },
+
+  onGuideChange(e) {
+    this.setData({ guideCurrent: e.detail.current || 0 })
   },
 
   goElfDetail(e) {
