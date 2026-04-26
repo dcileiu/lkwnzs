@@ -108,6 +108,16 @@ export function ArticleCoverUploader({
     }
   }
 
+  function handlePaste(event: React.ClipboardEvent<HTMLDivElement>) {
+    const items = Array.from(event.clipboardData?.items || [])
+    const imageItem = items.find((item) => item.kind === "file" && item.type.startsWith("image/"))
+    if (!imageItem) return
+    const file = imageItem.getAsFile()
+    if (!file) return
+    event.preventDefault()
+    uploadFile(file)
+  }
+
   function openFilePicker() {
     fileInputRef.current?.click()
   }
@@ -147,10 +157,12 @@ export function ArticleCoverUploader({
       />
 
       <div
+        tabIndex={0}
+        onPaste={handlePaste}
         onDragOver={(event) => event.preventDefault()}
         onDrop={handleDrop}
         className={cn(
-          "relative overflow-hidden rounded-2xl border border-dashed bg-muted/30 transition-colors",
+          "relative overflow-hidden rounded-2xl border border-dashed bg-muted/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30",
           hasCover ? "border-border" : "border-muted-foreground/30 hover:border-primary/50",
         )}
       >
@@ -202,10 +214,10 @@ export function ArticleCoverUploader({
               )}
             </span>
             <span className="text-sm font-medium">
-              {isUploading ? "正在上传封面..." : "点击上传封面，或拖拽图片到这里"}
+              {isUploading ? "正在上传封面..." : "点击上传封面，拖拽图片，或 Ctrl+V 粘贴图片"}
             </span>
             <span className="text-xs text-muted-foreground">
-              支持 JPG、PNG、WebP、GIF，上传后可随时更换。
+              支持 JPG、PNG、WebP、GIF。点击此区域后可直接粘贴截图。
             </span>
           </button>
         )}

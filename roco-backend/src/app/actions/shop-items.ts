@@ -27,6 +27,13 @@ function readOptionalInt(formData: FormData, key: string) {
   return Number.isFinite(parsed) ? parsed : null
 }
 
+function readOptionalRoundSlot(formData: FormData, key: string) {
+  const value = readOptionalInt(formData, key)
+  if (!value) return null
+  if (value >= 1 && value <= 4) return value
+  return null
+}
+
 function readBoolean(formData: FormData, key: string) {
   const value = formData.get(key)
   if (typeof value !== "string") return false
@@ -67,6 +74,10 @@ export async function createShopItem(formData: FormData) {
     throw new Error("该道具已经在远行商人里上架，请直接编辑现有商品")
   }
 
+  const roundSlot = readOptionalRoundSlot(formData, "roundSlot")
+  const manualStartAt = readDate(formData, "startAt")
+  const manualEndAt = readDate(formData, "endAt")
+
   await prisma.shopItem.create({
     data: {
       itemId,
@@ -74,9 +85,10 @@ export async function createShopItem(formData: FormData) {
       currency: normalizeCurrency(readString(formData, "currency") || "gold"),
       stock: readOptionalInt(formData, "stock"),
       enabled: readBoolean(formData, "enabled"),
+      roundSlot,
       sortOrder: readInt(formData, "sortOrder", 0),
-      startAt: readDate(formData, "startAt"),
-      endAt: readDate(formData, "endAt"),
+      startAt: roundSlot ? null : manualStartAt,
+      endAt: roundSlot ? null : manualEndAt,
       note: readString(formData, "note") || null,
     },
   })
@@ -90,6 +102,10 @@ export async function updateShopItem(formData: FormData) {
     throw new Error("缺少远行商人商品 ID")
   }
 
+  const roundSlot = readOptionalRoundSlot(formData, "roundSlot")
+  const manualStartAt = readDate(formData, "startAt")
+  const manualEndAt = readDate(formData, "endAt")
+
   await prisma.shopItem.update({
     where: { id },
     data: {
@@ -97,9 +113,10 @@ export async function updateShopItem(formData: FormData) {
       currency: normalizeCurrency(readString(formData, "currency") || "gold"),
       stock: readOptionalInt(formData, "stock"),
       enabled: readBoolean(formData, "enabled"),
+      roundSlot,
       sortOrder: readInt(formData, "sortOrder", 0),
-      startAt: readDate(formData, "startAt"),
-      endAt: readDate(formData, "endAt"),
+      startAt: roundSlot ? null : manualStartAt,
+      endAt: roundSlot ? null : manualEndAt,
       note: readString(formData, "note") || null,
     },
   })

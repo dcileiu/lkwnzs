@@ -4,7 +4,7 @@
     <view class="hero-overlay"></view>
     <view class="top-nav" style="padding-top: {{navTopPadding}}px;">
       <view class="nav-btn nav-back" bindtap="onBackTap">‹</view>
-      <text class="nav-title">✦ 蛋组查询 ✦</text>
+      <text class="nav-title">✦ 蛋组配对 ✦</text>
     </view>
     <view class="hero-content">
       <view class="hero-title">宠物蛋组对照表</view>

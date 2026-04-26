@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { resolveImageUrl } from "@/lib/media";
 
@@ -11,7 +12,7 @@ export async function GET(request: Request) {
   const isHot = searchParams.get("isHot");
   const limit = parseInt(searchParams.get("limit") || "10");
 
-  const whereCondition: any = {};
+  const whereCondition: Prisma.ArticleWhereInput = {};
   if (category && category !== "全部") whereCondition.category = category;
   if (isHot === "true") whereCondition.isHot = true;
   if (keyword) {

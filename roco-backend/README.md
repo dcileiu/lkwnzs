@@ -32,6 +32,13 @@ npm run db:sync-egg-media
 - rebuild each elf's image gallery records
 - create a sample starter guide article in the `Article` table
 
+By default, `db:bootstrap` runs in safe mode: it only inserts missing records and does not overwrite existing data.
+If you need to force overwrite existing seeded records, run:
+
+```bash
+npm run db:bootstrap -- --force
+```
+
 `db:sync-egg-media` will:
 
 - read `data/eggs.json`

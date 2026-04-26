@@ -277,7 +277,11 @@ function normalizeEntryProbabilities(entries: PredictionEntry[]) {
 
       return a.elf.name.localeCompare(b.elf.name, "zh-Hans-CN");
     })
-    .map(({ remainder, ...entry }) => entry);
+    .map((entry) => ({
+      elf: entry.elf,
+      score: entry.score,
+      probability: entry.probability,
+    }));
 }
 
 function normalizePrediction(elf: ElfWithImages, probability: number) {

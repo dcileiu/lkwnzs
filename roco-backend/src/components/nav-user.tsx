@@ -32,6 +32,11 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const handleLogout = async () => {
+    await fetch("/logout", { method: "POST" })
+    window.location.href = "/login"
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -94,7 +99,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOutIcon
               />
               退出登录

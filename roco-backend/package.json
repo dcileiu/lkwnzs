@@ -13,6 +13,7 @@
     "db:push": "prisma db push",
     "db:bootstrap": "node scripts/bootstrap-db.mjs",
     "db:fix-wepb-urls": "node scripts/fix-wepb-urls.mjs",
+    "db:fix-user-avatar": "node scripts/fix-user-default-avatar.mjs",
     "db:normalize-image-paths": "node scripts/normalize-image-paths.mjs",
     "db:sync-egg-media": "node scripts/sync-egg-media-to-db.mjs",
     "db:import-daoju": "node scripts/import-daoju-to-db.mjs",

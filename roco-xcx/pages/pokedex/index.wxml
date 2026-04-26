@@ -33,7 +33,7 @@
         </view>
         <view class="stat-divider"></view>
         <view class="stat-item">
-          <text class="stat-num">{{collectedCount}}</text>
+          <text class="stat-num">{{totalCount}}</text>
           <text class="stat-label">已收录</text>
         </view>
       </view>

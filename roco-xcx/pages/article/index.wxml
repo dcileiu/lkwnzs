@@ -1,4 +1,4 @@
-﻿<view class="page-container">
+<view class="page-container">
   <view class="hero" wx:if="{{article}}">
     <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp" mode="aspectFill"></image>
     <view class="hero-overlay"></view>
@@ -65,7 +65,7 @@
     <view class="comments-section" wx:if="{{article.comments && article.comments.length}}">
       <block wx:for="{{article.comments}}" wx:key="id">
         <view class="comment-item">
-          <image class="comment-avatar" src="{{(item.user && item.user.avatar) || 'https://wallpaper.cdn.itianci.cn/imgs/avatar/default-avatar.jpg'}}"></image>
+          <image class="comment-avatar" src="{{(item.user && item.user.avatar) || 'https://wallpaper.cdn.itianci.cn/imgs/avatar/default-avatar.webp'}}"></image>
           <view class="comment-body">
             <text class="comment-name">{{(item.user && item.user.nickname) || '洛克玩家'}}</text>
             <text class="comment-text">{{item.content}}</text>

@@ -1,8 +1,10 @@
 import Link from "next/link"
+import { deleteElf } from "@/app/actions/elves"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
   DASHBOARD_PAGE_SIZE,
@@ -122,12 +124,18 @@ export default async function ElvesPage({ searchParams }: ElvesPageProps) {
                     <TableCell className="text-right">{elf.detailQueryCount}</TableCell>
                     <TableCell className="text-right">{elf._count.images}</TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm" className="mr-2">
+                      <Button variant="outline" size="sm" className="mr-2" disabled>
                         编辑
                       </Button>
-                      <Button variant="destructive" size="sm">
-                        删除
-                      </Button>
+                      <form action={deleteElf.bind(null, elf.id)} className="inline">
+                        <ConfirmSubmitButton
+                          variant="destructive"
+                          size="sm"
+                          confirmMessage={`确认删除精灵「${elf.name}」吗？`}
+                        >
+                          删除
+                        </ConfirmSubmitButton>
+                      </form>
                     </TableCell>
                   </TableRow>
                   )

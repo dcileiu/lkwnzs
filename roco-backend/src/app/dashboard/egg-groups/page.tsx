@@ -1,6 +1,19 @@
+import {
+  createEggGroup,
+  createEggGroupElf,
+  deleteEggGroup,
+  deleteEggGroupElf,
+  updateEggGroup,
+  updateEggGroupElf,
+} from "@/app/actions/egg-groups"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Textarea } from "@/components/ui/textarea"
 import {
   DASHBOARD_PAGE_SIZE,
   DashboardPagination,
@@ -31,7 +44,7 @@ export default async function EggGroupsPage({ searchParams }: EggGroupsPageProps
   const page = parsePageParam(resolvedSearchParams.page)
   const pageSize = DASHBOARD_PAGE_SIZE
 
-  const [totalGroups, totalElves, totalMissing, missingImageElves, groups] = await Promise.all([
+  const [totalGroups, totalElves, totalMissing, missingImageElves, groups, groupOptions] = await Promise.all([
     prisma.eggGroup.count(),
     prisma.eggGroupElf.count(),
     prisma.eggGroupElf.count({ where: { OR: [{ image: null }, { image: "" }] } }),
@@ -53,6 +66,10 @@ export default async function EggGroupsPage({ searchParams }: EggGroupsPageProps
       },
       skip: (page - 1) * pageSize,
       take: pageSize,
+    }),
+    prisma.eggGroup.findMany({
+      select: { id: true, name: true },
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     }),
   ])
 
@@ -95,6 +112,91 @@ export default async function EggGroupsPage({ searchParams }: EggGroupsPageProps
         </Card>
       </div>
 
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>新增蛋组</CardTitle>
+            <CardDescription>手动新增组别，后续可持续扩展新蛋组。</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form action={createEggGroup} className="grid gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="new-group-id">蛋组 ID</Label>
+                <Input id="new-group-id" name="id" required placeholder="例如：ancient_beast_group" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-group-name">蛋组名称</Label>
+                <Input id="new-group-name" name="name" required placeholder="例如：远古兽组" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-group-sort">排序</Label>
+                <Input id="new-group-sort" name="sortOrder" type="number" defaultValue={0} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-group-desc">描述</Label>
+                <Textarea id="new-group-desc" name="description" rows={2} placeholder="可选" />
+              </div>
+              <Button type="submit" className="w-fit">
+                新增蛋组
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>新增组内精灵</CardTitle>
+            <CardDescription>为已有蛋组添加精灵成员，可持续维护。</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form action={createEggGroupElf} className="grid gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-group">所属蛋组</Label>
+                <select
+                  id="new-elf-group"
+                  name="groupId"
+                  required
+                  defaultValue=""
+                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+                >
+                  <option value="" disabled>
+                    -- 选择蛋组 --
+                  </option>
+                  {groupOptions.map((group) => (
+                    <option key={group.id} value={group.id}>
+                      {group.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-name">精灵名称</Label>
+                <Input id="new-elf-name" name="name" required placeholder="例如：迪莫" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-image">图片路径</Label>
+                <Input id="new-elf-image" name="image" placeholder="/imgs/jingling/迪莫.webp（可选）" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-attr">属性标签</Label>
+                <Input id="new-elf-attr" name="attrNames" placeholder="火, 恶魔（逗号分隔，可选）" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-attributes">属性文本</Label>
+                <Input id="new-elf-attributes" name="attributes" placeholder="可选，原始属性文案" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-sort">排序</Label>
+                <Input id="new-elf-sort" name="sortOrder" type="number" defaultValue={0} />
+              </div>
+              <Button type="submit" className="w-fit">
+                添加精灵
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+
       {totalGroups === 0 ? (
         <Card>
           <CardHeader>
@@ -122,39 +224,107 @@ export default async function EggGroupsPage({ searchParams }: EggGroupsPageProps
                         <CardTitle>{group.name}</CardTitle>
                         <CardDescription>{group.description || "洛克王国世界宠物蛋组对照"}</CardDescription>
                       </div>
-                      <Badge variant="secondary">{group.elves.length} 只精灵</Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary">{group.elves.length} 只精灵</Badge>
+                        <form action={deleteEggGroup}>
+                          <input type="hidden" name="id" value={group.id} />
+                          <ConfirmSubmitButton
+                            type="submit"
+                            size="sm"
+                            variant="destructive"
+                            confirmMessage={`确认删除蛋组「${group.name}」吗？此操作会同时删除组内精灵。`}
+                          >
+                            删除蛋组
+                          </ConfirmSubmitButton>
+                        </form>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent>
+                    <form action={updateEggGroup} className="mb-4 grid gap-3 rounded-lg border p-3 md:grid-cols-4">
+                      <input type="hidden" name="id" value={group.id} />
+                      <div className="space-y-2">
+                        <Label htmlFor={`group-name-${group.id}`}>蛋组名称</Label>
+                        <Input id={`group-name-${group.id}`} name="name" defaultValue={group.name} required />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor={`group-sort-${group.id}`}>排序</Label>
+                        <Input
+                          id={`group-sort-${group.id}`}
+                          name="sortOrder"
+                          type="number"
+                          defaultValue={group.sortOrder}
+                        />
+                      </div>
+                      <div className="space-y-2 md:col-span-2">
+                        <Label htmlFor={`group-desc-${group.id}`}>描述</Label>
+                        <Input
+                          id={`group-desc-${group.id}`}
+                          name="description"
+                          defaultValue={group.description ?? ""}
+                          placeholder="可选"
+                        />
+                      </div>
+                      <div className="md:col-span-4">
+                        <Button type="submit" size="sm">
+                          保存蛋组
+                        </Button>
+                      </div>
+                    </form>
                     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                       {group.elves.map((elf) => {
                         const imageUrl = resolveImageUrl(elf.image)
                         const attrNames = parseJsonArray(elf.attrNames)
 
                         return (
-                          <div key={elf.id} className="flex items-center gap-3 rounded-lg border p-3">
-                            {imageUrl ? (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img src={imageUrl} alt={elf.name} className="h-12 w-12 rounded-lg object-contain" loading="lazy" decoding="async" />
-                            ) : (
-                              <div className="flex h-12 w-12 items-center justify-center rounded-lg border text-xs text-muted-foreground">
-                                无图
-                              </div>
-                            )}
-                            <div className="min-w-0">
-                              <p className="truncate font-medium">{elf.name}</p>
-                              <div className="mt-1 flex flex-wrap gap-1">
-                                {attrNames.length ? (
-                                  attrNames.map((attr) => (
-                                    <Badge key={attr} variant="outline" className="text-xs">
-                                      {attr}
-                                    </Badge>
-                                  ))
-                                ) : (
-                                  <span className="text-xs text-muted-foreground">暂无属性</span>
-                                )}
+                          <div key={elf.id} className="rounded-lg border p-3">
+                            <div className="mb-3 flex items-center gap-3">
+                              {imageUrl ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={imageUrl} alt={elf.name} className="h-12 w-12 rounded-lg object-contain" loading="lazy" decoding="async" />
+                              ) : (
+                                <div className="flex h-12 w-12 items-center justify-center rounded-lg border text-xs text-muted-foreground">
+                                  无图
+                                </div>
+                              )}
+                              <div className="min-w-0">
+                                <p className="truncate font-medium">{elf.name}</p>
+                                <div className="mt-1 flex flex-wrap gap-1">
+                                  {attrNames.length ? (
+                                    attrNames.map((attr) => (
+                                      <Badge key={attr} variant="outline" className="text-xs">
+                                        {attr}
+                                      </Badge>
+                                    ))
+                                  ) : (
+                                    <span className="text-xs text-muted-foreground">暂无属性</span>
+                                  )}
+                                </div>
                               </div>
                             </div>
+                            <form action={updateEggGroupElf} className="grid gap-2">
+                              <input type="hidden" name="id" value={elf.id} />
+                              <input type="hidden" name="groupId" value={group.id} />
+                              <Input name="name" defaultValue={elf.name} required />
+                              <Input name="image" defaultValue={elf.image ?? ""} placeholder="图片路径" />
+                              <Input name="attrNames" defaultValue={attrNames.join(", ")} placeholder="属性标签" />
+                              <Input name="attributes" defaultValue={elf.attributes ?? ""} placeholder="属性文本" />
+                              <Input name="sortOrder" type="number" defaultValue={elf.sortOrder} />
+                              <Button type="submit" size="sm" variant="outline">
+                                保存
+                              </Button>
+                            </form>
+                            <form action={deleteEggGroupElf} className="mt-2">
+                              <input type="hidden" name="id" value={elf.id} />
+                              <ConfirmSubmitButton
+                                type="submit"
+                                size="sm"
+                                variant="destructive"
+                                confirmMessage={`确认移除精灵「${elf.name}」吗？`}
+                              >
+                                移除
+                              </ConfirmSubmitButton>
+                            </form>
                           </div>
                         )
                       })}

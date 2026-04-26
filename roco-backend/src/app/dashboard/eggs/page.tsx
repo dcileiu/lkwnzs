@@ -1,7 +1,9 @@
 import Link from "next/link"
+import { deleteEgg } from "@/app/actions/eggs"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
   DASHBOARD_PAGE_SIZE,
@@ -104,12 +106,19 @@ export default async function EggsPage({ searchParams }: EggsPageProps) {
                       <TableCell className="text-right">{egg._count.images}</TableCell>
                       <TableCell className="text-right">{egg._count.rules}</TableCell>
                       <TableCell>
-                        <Button variant="outline" size="sm" className="mr-2">
+                        <Button variant="outline" size="sm" className="mr-2" disabled>
                           管理规则
                         </Button>
-                        <Button variant="destructive" size="sm">
-                          删除
-                        </Button>
+                        <form action={deleteEgg.bind(null, egg.id)} className="inline">
+                          <ConfirmSubmitButton
+                            variant="destructive"
+                            size="sm"
+                            type="submit"
+                            confirmMessage={`确认删除宠物蛋「${egg.name}」吗？`}
+                          >
+                            删除
+                          </ConfirmSubmitButton>
+                        </form>
                       </TableCell>
                     </TableRow>
                   )

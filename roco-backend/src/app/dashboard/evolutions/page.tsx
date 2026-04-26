@@ -3,6 +3,7 @@ import { createEvolutionChain, addEvolutionLink, deleteEvolutionBranch } from "@
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
 import {
   DASHBOARD_PAGE_SIZE,
   DashboardPagination,
@@ -113,9 +114,14 @@ function TreeBranch({ node }: { node: EvolutionTreeNode }) {
           </div>
           <form action={deleteEvolutionBranch}>
             <input type="hidden" name="linkId" value={node.id} />
-            <Button variant="destructive" size="sm" type="submit">
+            <ConfirmSubmitButton
+              variant="destructive"
+              size="sm"
+              type="submit"
+              confirmMessage={`确认删除进化分支「${node.childElf.name}」吗？`}
+            >
               删除分支
-            </Button>
+            </ConfirmSubmitButton>
           </form>
         </div>
       </div>

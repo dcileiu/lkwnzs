@@ -108,9 +108,10 @@
 .shop-stats {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 14rpx;
-  height: 74rpx;
-  padding: 0 32rpx;
+  min-height: 74rpx;
+  padding: 10rpx 24rpx;
   border-radius: 40rpx;
   background: rgba(13, 28, 56, 0.55);
   border: 1rpx solid rgba(255, 255, 255, 0.18);
@@ -124,23 +125,35 @@
 }
 
 .stat-item {
-  min-width: 58rpx;
+  min-width: 110rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .stat-num {
   font-size: 30rpx;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.2;
   color: #fff;
+  text-align: center;
 }
 
 .stat-label {
   margin-top: 2rpx;
   font-size: 18rpx;
+  line-height: 1.2;
   color: rgba(255, 255, 255, 0.72);
+}
+
+.stat-item-round {
+  border-left: 1rpx solid rgba(255, 255, 255, 0.22);
+  padding-left: 14rpx;
+}
+
+.stat-round {
+  font-size: 24rpx;
 }
 
 .shop-main {
@@ -151,18 +164,51 @@
   box-sizing: border-box;
 }
 
+.round-section + .round-section {
+  margin-top: 14rpx;
+}
+
+.round-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4rpx 2rpx 10rpx;
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  background: rgba(12, 27, 54, 0.45);
+  border: 1rpx solid rgba(255, 255, 255, 0.16);
+}
+
+.round-title {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #fff3d4;
+}
+
+.round-time {
+  font-size: 18rpx;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.round-empty {
+  text-align: center;
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.62);
+  padding: 24rpx 0 14rpx;
+}
+
 .shop-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18rpx;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12rpx;
   padding-top: 6rpx;
 }
 
 .shop-card {
   position: relative;
-  min-height: 360rpx;
-  padding: 26rpx 18rpx 22rpx;
-  border-radius: 18rpx;
+  min-height: 250rpx;
+  padding: 14rpx 8rpx 12rpx;
+  border-radius: 14rpx;
   background-image: url("https://wallpaper.cdn.itianci.cn/imgs/miniapp/elf-card.webp");
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -174,17 +220,17 @@
 }
 
 .shop-image-wrap {
-  width: 140rpx;
-  height: 140rpx;
-  margin: 6rpx auto 12rpx;
+  width: 86rpx;
+  height: 86rpx;
+  margin: 4rpx auto 8rpx;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .shop-image {
-  width: 140rpx;
-  height: 140rpx;
+  width: 86rpx;
+  height: 86rpx;
 }
 
 .shop-image-fallback {
@@ -203,30 +249,30 @@
   display: block;
   width: 100%;
   text-align: center;
-  font-size: 28rpx;
+  font-size: 20rpx;
   font-weight: 700;
   color: #2c2236;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0 6rpx;
+  padding: 0 2rpx;
   box-sizing: border-box;
 }
 
 .shop-tags {
-  margin-top: 8rpx;
+  margin-top: 6rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8rpx;
+  gap: 6rpx;
 }
 
 .shop-category,
 .shop-rarity {
-  max-width: 110rpx;
-  padding: 4rpx 10rpx;
+  max-width: 92rpx;
+  padding: 3rpx 8rpx;
   border-radius: 999rpx;
-  font-size: 18rpx;
+  font-size: 14rpx;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -247,33 +293,37 @@
 }
 
 .shop-price-row {
-  margin-top: 14rpx;
+  margin-top: 10rpx;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
-  gap: 8rpx;
+  gap: 6rpx;
 }
 
 .shop-price {
-  font-size: 38rpx;
+  font-size: 28rpx;
   font-weight: 800;
   color: #c44b1a;
-  line-height: 1;
+  line-height: 1.1;
   text-shadow: 0 2rpx 0 rgba(255, 240, 200, 0.6);
 }
 
 .shop-currency {
-  font-size: 20rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14rpx;
   font-weight: 600;
   color: #6c5333;
-  padding: 4rpx 10rpx;
+  line-height: 1;
+  padding: 4rpx 8rpx;
   border-radius: 999rpx;
   background: rgba(255, 217, 142, 0.65);
   border: 1rpx solid rgba(196, 75, 26, 0.3);
 }
 
 .shop-meta {
-  margin-top: 8rpx;
+  margin-top: 6rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -281,24 +331,24 @@
 }
 
 .shop-stock {
-  font-size: 20rpx;
+  font-size: 14rpx;
   color: rgba(44, 34, 54, 0.7);
 }
 
 .shop-period {
-  margin-top: 10rpx;
-  font-size: 18rpx;
+  margin-top: 6rpx;
+  font-size: 14rpx;
   color: #5b4a82;
   background: rgba(91, 74, 130, 0.08);
-  padding: 4rpx 10rpx;
+  padding: 3rpx 8rpx;
   border-radius: 8rpx;
   text-align: center;
   line-height: 1.3;
 }
 
 .shop-note {
-  margin-top: 8rpx;
-  font-size: 18rpx;
+  margin-top: 6rpx;
+  font-size: 14rpx;
   color: rgba(44, 34, 54, 0.7);
   text-align: center;
   line-height: 1.3;

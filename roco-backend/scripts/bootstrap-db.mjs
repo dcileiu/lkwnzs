@@ -7,6 +7,7 @@ dotenv.config({ path: path.join(process.cwd(), ".env") })
 dotenv.config({ path: path.join(process.cwd(), ".env.local"), override: true })
 
 const prisma = new PrismaClient()
+const FORCE_BOOTSTRAP = process.argv.includes("--force")
 
 const SAMPLE_AUTHOR_NAME = "洛克助手运营组"
 const SAMPLE_ARTICLE_TITLE = "新手开荒指南：前 30 分钟先做这 5 件事"
@@ -171,6 +172,7 @@ async function syncElves() {
 
   const existingByName = new Map(existingElves.map((elf) => [elf.name, elf]))
   let createdCount = 0
+  let skippedCount = 0
   let updatedCount = 0
 
   for (const record of records) {
@@ -208,6 +210,11 @@ async function syncElves() {
     const existing = existingByName.get(name)
 
     if (existing) {
+      if (!FORCE_BOOTSTRAP) {
+        skippedCount += 1
+        continue
+      }
+
       await prisma.elf.update({
         where: { id: existing.id },
         data: {
@@ -233,7 +240,7 @@ async function syncElves() {
     createdCount += 1
   }
 
-  return { createdCount, updatedCount, totalSourceCount: records.length }
+  return { createdCount, updatedCount, skippedCount, totalSourceCount: records.length }
 }
 
 async function ensureSampleArticle() {
@@ -255,8 +262,16 @@ async function ensureSampleArticle() {
     select: { id: true },
   })
 
-  if (existing) {
+  if (existing && !FORCE_BOOTSTRAP) {
     return { created: false, updated: false }
+  }
+
+  if (existing) {
+    await prisma.article.update({
+      where: { id: existing.id },
+      data,
+    })
+    return { created: false, updated: true }
   }
 
   await prisma.article.create({ data })
@@ -268,8 +283,9 @@ async function main() {
   const articleResult = await ensureSampleArticle()
 
   console.log("数据库初始化完成。")
+  console.log(`模式：${FORCE_BOOTSTRAP ? "强制覆盖（--force）" : "安全模式（仅新增缺失数据）"}。`)
   console.log(
-    `精灵同步：源数据 ${elfResult.totalSourceCount} 条，新增 ${elfResult.createdCount} 条，更新 ${elfResult.updatedCount} 条。`
+    `精灵同步：源数据 ${elfResult.totalSourceCount} 条，新增 ${elfResult.createdCount} 条，更新 ${elfResult.updatedCount} 条，跳过 ${elfResult.skippedCount} 条。`
   )
   console.log(
     `示例文章：${articleResult.created ? "已创建" : articleResult.updated ? "已更新" : "已存在，未覆盖"}。`

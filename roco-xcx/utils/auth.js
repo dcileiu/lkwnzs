@@ -1,4 +1,4 @@
-﻿const USERS_KEY = 'wx_users'
+const USERS_KEY = 'wx_users'
 const CURRENT_USER_KEY = 'wx_current_user'
 const OPEN_ID_KEY = 'wx_local_openid'
 const AUTO_ID_KEY = 'wx_user_auto_id'
@@ -37,7 +37,7 @@ async function ensureLogin() {
       id: autoId,
       openId,
       nickname: `小洛克${autoId}`,
-      avatar: 'https://wallpaper.cdn.itianci.cn/imgs/avatar/default-avatar.jpg',
+      avatar: 'https://wallpaper.cdn.itianci.cn/imgs/avatar/default-avatar.webp',
       createdAt: Date.now()
     }
     users.push(user)

@@ -1,4 +1,4 @@
-﻿<scroll-view class="page-container" scroll-y enable-flex>
+<scroll-view class="page-container" scroll-y enable-flex>
   <view class="hero">
     <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/me.webp" mode="widthFix"></image>
     <view class="hero-overlay"></view>
@@ -7,7 +7,7 @@
   <view class="me-main">
     <view class="profile-card">
       <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-        <image class="avatar" src="{{profile.avatar || 'https://wallpaper.cdn.itianci.cn/imgs/avatar/default-avatar.jpg'}}" mode="aspectFill"></image>
+        <image class="avatar" src="{{profile.avatar || 'https://wallpaper.cdn.itianci.cn/imgs/avatar/default-avatar.webp'}}" mode="aspectFill"></image>
       </button>
       <view class="profile-info">
         <view class="nickname-row">

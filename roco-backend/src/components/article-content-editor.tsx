@@ -40,15 +40,32 @@ function normalizeEditorMarkdown(markdown: string) {
   )
 }
 
+function normalizeStrongSpacing(markdown: string) {
+  if (!markdown) return markdown
+  // Fix patterns like "** text **" to standard markdown "**text**".
+  return markdown.replace(/\*\*\s+([^\n]+?)\s+\*\*/g, "**$1**")
+}
+
 export function ArticleContentEditor({ defaultValue }: ArticleContentEditorProps = {}) {
-  const initialMarkdown = normalizeEditorMarkdown(defaultValue || "")
+  const initialMarkdown = normalizeStrongSpacing(normalizeEditorMarkdown(defaultValue || ""))
   const [markdown, setMarkdown] = React.useState(initialMarkdown)
   const [html, setHtml] = React.useState(() => toHtml(initialMarkdown))
   const [uploadError, setUploadError] = React.useState("")
 
   const handleChange = React.useCallback((value: string) => {
-    setMarkdown(value)
-    setHtml(toHtml(value))
+    const normalized = normalizeStrongSpacing(value)
+    setMarkdown(normalized)
+    setHtml(toHtml(normalized))
+  }, [])
+
+  const appendImagesToTail = React.useCallback((urls: string[]) => {
+    if (!urls.length) return
+    setMarkdown((prev) => {
+      const imageBlock = urls.map((url) => `![](${url})`).join("\n")
+      const next = prev ? `${prev}\n\n${imageBlock}\n` : `${imageBlock}\n`
+      setHtml(toHtml(next))
+      return next
+    })
   }, [])
 
   const handleUploadImg = React.useCallback<UploadImgEvent>((files, callback) => {
@@ -81,12 +98,20 @@ export function ArticleContentEditor({ defaultValue }: ArticleContentEditorProps
       }),
     )
       .then((urls) => {
-        callback(urls)
+        try {
+          callback(urls)
+        } catch (error) {
+          // md-editor occasionally loses selection during async paste upload.
+          // Fall back to appending uploaded images to the end.
+          appendImagesToTail(urls)
+          setUploadError("编辑器光标位置失效，已自动将图片插入到文末。")
+          console.error(error)
+        }
       })
       .catch((error) => {
         setUploadError(error instanceof Error ? error.message : "图片上传失败")
       })
-  }, [])
+  }, [appendImagesToTail])
 
   return (
     <div className="space-y-2">

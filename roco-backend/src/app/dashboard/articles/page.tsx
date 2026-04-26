@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
   DASHBOARD_PAGE_SIZE,
@@ -99,9 +100,14 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
                           <Link href={`/dashboard/articles/${article.id}`}>编辑</Link>
                         </Button>
                         <form action={deleteArticle.bind(null, article.id)}>
-                          <Button variant="destructive" size="sm" type="submit">
+                          <ConfirmSubmitButton
+                            variant="destructive"
+                            size="sm"
+                            type="submit"
+                            confirmMessage={`确认删除文章「${article.title}」吗？`}
+                          >
                             删除
-                          </Button>
+                          </ConfirmSubmitButton>
                         </form>
                       </div>
                     </TableCell>

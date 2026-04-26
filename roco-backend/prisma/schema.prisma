@@ -264,6 +264,7 @@ model ShopItem {
   currency  String    @default("gold")
   stock     Int?
   enabled   Boolean   @default(true)
+  roundSlot Int?
   sortOrder Int       @default(0)
   startAt   DateTime?
   endAt     DateTime?

@@ -33,7 +33,7 @@ const data = {
   user: {
     name: "管理员",
     email: "admin@roco.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "/imgs/avatar/default-avatar.webp",
   },
   navMain: [
     {

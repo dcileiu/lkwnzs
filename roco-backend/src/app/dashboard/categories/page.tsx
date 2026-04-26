@@ -1,6 +1,7 @@
 import { createCategory, deleteCategory } from "@/app/actions/categories"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { readCategoriesData } from "@/lib/game-data"
@@ -97,7 +98,14 @@ export default async function CategoriesPage() {
                   </div>
                   <input type="hidden" name="id" value={category.id} />
                   <input type="hidden" name="target" value={category.target} />
-                  <Button type="submit" variant="destructive" size="sm">删除</Button>
+                  <ConfirmSubmitButton
+                    type="submit"
+                    variant="destructive"
+                    size="sm"
+                    confirmMessage={`确认删除分类「${category.name}」吗？`}
+                  >
+                    删除
+                  </ConfirmSubmitButton>
                 </form>
               ))
             )}
@@ -134,7 +142,14 @@ export default async function CategoriesPage() {
                   </div>
                   <input type="hidden" name="id" value={category.id} />
                   <input type="hidden" name="target" value="item" />
-                  <Button type="submit" variant="destructive" size="sm">删除</Button>
+                  <ConfirmSubmitButton
+                    type="submit"
+                    variant="destructive"
+                    size="sm"
+                    confirmMessage={`确认删除分类「${category.name}」吗？`}
+                  >
+                    删除
+                  </ConfirmSubmitButton>
                 </form>
               ))
             )}

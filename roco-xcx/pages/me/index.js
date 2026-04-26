@@ -1,10 +1,10 @@
-﻿const userActions = require('../../utils/user-actions.js')
+const userActions = require('../../utils/user-actions.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
 const auth = require('../../utils/auth.js')
 
 const DEFAULT_PROFILE = {
   nickname: '洛克训练师',
-  avatar: 'https://wallpaper.cdn.itianci.cn/imgs/avatar/default-avatar.jpg'
+  avatar: 'https://wallpaper.cdn.itianci.cn/imgs/avatar/default-avatar.webp'
 }
 
 Page({
@@ -17,7 +17,7 @@ Page({
       { key: 'like', title: '文章点赞', desc: '查看我点赞的文章' },
       { key: 'favorite', title: '文章收藏', desc: '查看我收藏的文章' },
       { key: 'history', title: '浏览历史', desc: '查看记录' },
-      { key: 'feedback', title: '意见反馈', desc: '帮助我们改进' },
+      { key: 'feedback', title: '意见反馈', desc: '企鹅交流群:1098894412' },
       { key: 'settings', title: '设置中心', desc: '账号与偏好' },
       { key: 'privacy', title: '隐私政策', desc: '保护你的隐私' },
     ],
