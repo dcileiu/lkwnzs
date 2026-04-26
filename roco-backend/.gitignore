@@ -43,3 +43,13 @@ package-lock.json
 
 /src/generated/prisma
 /prisma/backups/
+/prisma/prisma/
+
+# SQLite 数据库文件（绝对不要提交，里面是生产数据）
+/prisma/*.db
+/prisma/*.db-journal
+/prisma/*.db-wal
+/prisma/*.db-shm
+
+# 防止根目录误放 schema.prisma 干扰 prisma CLI（schema 应只在 prisma/ 目录里）
+/schema.prisma

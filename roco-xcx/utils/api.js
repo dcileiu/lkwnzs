@@ -56,12 +56,19 @@ const api = {
   getItems(params) {
     return request('/items', 'GET', params);
   },
+  // Traveling Merchant Shop Data
+  getShopItems(params) {
+    return request('/shop', 'GET', params);
+  },
   // Egg Collection Data
   getEggCollection() {
     return request('/eggs', 'GET');
   },
   getEggDetail(id) {
     return request(`/eggs/${id}`, 'GET');
+  },
+  getEggGroups() {
+    return request('/egg-groups', 'GET');
   },
   // Egg Prediction Data
   predictHatch(params) {

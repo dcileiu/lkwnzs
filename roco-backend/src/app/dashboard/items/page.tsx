@@ -3,22 +3,34 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  DASHBOARD_PAGE_SIZE,
+  DashboardPagination,
+  parsePageParam,
+} from "@/components/dashboard-pagination"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { resolveImageUrl } from "@/lib/media"
 import { prisma } from "@/lib/prisma"
+import type { Prisma } from "@prisma/client"
 
 interface ItemsPageProps {
   searchParams: Promise<{
     category?: string
     keyword?: string
+    page?: string
   }>
 }
 
-async function getItemDashboardData(filters: { categoryId: string; keyword: string }) {
+async function getItemDashboardData(filters: {
+  categoryId: string
+  keyword: string
+  page: number
+  pageSize: number
+}) {
   try {
-    const where = {
+    const where: Prisma.ItemWhereInput = {
       ...(filters.categoryId ? { categoryId: filters.categoryId } : {}),
       ...(filters.keyword
         ? {
@@ -33,7 +45,7 @@ async function getItemDashboardData(filters: { categoryId: string; keyword: stri
         : {}),
     }
 
-    const [categories, items] = await Promise.all([
+    const [categories, totalItems, items, totalLearnableRelations] = await Promise.all([
       prisma.itemCategory.findMany({
         include: {
           _count: {
@@ -45,6 +57,7 @@ async function getItemDashboardData(filters: { categoryId: string; keyword: stri
         },
         orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
       }),
+      prisma.item.count({ where }),
       prisma.item.findMany({
         where,
         include: {
@@ -55,13 +68,22 @@ async function getItemDashboardData(filters: { categoryId: string; keyword: stri
             },
           },
         },
-        orderBy: [{ category: { sortOrder: "asc" } }, { sortOrder: "asc" }, { name: "asc" }],
+        orderBy: [
+          { category: { sortOrder: "asc" } },
+          { sortOrder: "asc" },
+          { name: "asc" },
+        ],
+        skip: (filters.page - 1) * filters.pageSize,
+        take: filters.pageSize,
       }),
+      prisma.skillStoneLearnableElf.count(),
     ])
 
     return {
       categories,
       items,
+      totalItems,
+      totalLearnableRelations,
       error: null as string | null,
     }
   } catch (error) {
@@ -70,6 +92,8 @@ async function getItemDashboardData(filters: { categoryId: string; keyword: stri
     return {
       categories: [],
       items: [],
+      totalItems: 0,
+      totalLearnableRelations: 0,
       error: message,
     }
   }
@@ -80,10 +104,13 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
   const filters = {
     categoryId: (resolvedSearchParams.category || "").trim(),
     keyword: (resolvedSearchParams.keyword || "").trim(),
+    page: parsePageParam(resolvedSearchParams.page),
+    pageSize: DASHBOARD_PAGE_SIZE,
   }
-  const { categories, items, error } = await getItemDashboardData(filters)
-  const totalLearnableRelations = items.reduce(
-    (total, item) => total + item._count.learnableElves,
+  const { categories, items, totalItems, totalLearnableRelations, error } =
+    await getItemDashboardData(filters)
+  const totalCategoryItems = categories.reduce(
+    (total, category) => total + category._count.items,
     0,
   )
   const hasFilters = Boolean(filters.categoryId || filters.keyword)
@@ -145,7 +172,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
           {hasFilters ? (
             <p className="mt-3 text-sm text-muted-foreground">
               当前筛选：{selectedCategoryName}
-              {filters.keyword ? ` · 关键词「${filters.keyword}」` : ""}，共 {items.length} 条。
+              {filters.keyword ? ` · 关键词「${filters.keyword}」` : ""}，共 {totalItems} 条。
             </p>
           ) : null}
         </CardContent>
@@ -180,10 +207,10 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
         <Card>
           <CardHeader>
             <CardTitle>道具数</CardTitle>
-            <CardDescription>已导入数据库的道具</CardDescription>
+            <CardDescription>{hasFilters ? "符合当前筛选的道具" : "已导入数据库的道具"}</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{items.length}</p>
+            <p className="text-3xl font-bold">{hasFilters ? totalItems : totalCategoryItems}</p>
           </CardContent>
         </Card>
         <Card>
@@ -230,12 +257,16 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
       <Card>
         <CardHeader>
           <CardTitle>道具数据</CardTitle>
-          <CardDescription>数据来自数据库 Item / ItemCategory / SkillStoneLearnableElf。</CardDescription>
+          <CardDescription>
+            数据来自数据库 Item / ItemCategory / SkillStoneLearnableElf。每页 {filters.pageSize} 条。
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {items.length === 0 ? (
             <p className="rounded-lg border p-6 text-sm text-muted-foreground">
-              暂无可展示的道具数据。请先执行导入脚本把 data/daoju.json 写入数据库。
+              {totalItems === 0
+                ? "暂无可展示的道具数据。请先执行导入脚本把 data/daoju.json 写入数据库。"
+                : "当前页没有数据，请尝试切换其他页码。"}
             </p>
           ) : (
             <Table>
@@ -263,7 +294,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                       <TableCell>
                         {imageUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={imageUrl} alt={item.name} className="h-10 w-10 rounded border object-cover" />
+                          <img src={imageUrl} alt={item.name} className="h-10 w-10 rounded border object-cover" loading="lazy" decoding="async" />
                         ) : (
                           <span className="text-xs text-muted-foreground">无图标</span>
                         )}
@@ -282,6 +313,17 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
               </TableBody>
             </Table>
           )}
+
+          <DashboardPagination
+            page={filters.page}
+            pageSize={filters.pageSize}
+            total={totalItems}
+            basePath="/dashboard/items"
+            query={{
+              category: filters.categoryId,
+              keyword: filters.keyword,
+            }}
+          />
         </CardContent>
       </Card>
     </div>

@@ -11,9 +11,9 @@ Page({
     guideCurrent: 0,
     quickCards: [
       { text: '精灵图鉴', subText: '查看精灵详情', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/jinglingtuji.webp', url: '/pages/pokedex/index' },
-      { text: '蛋组查询', subText: '查看精灵蛋组', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/danzupeidui.webp', status: 'coming' },
+      { text: '蛋组查询', subText: '查看精灵蛋组', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/danzupeidui.webp', url: '/pages/egg-groups/index' },
       { text: '全部道具', subText: '浏览道具图鉴', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/quanbudaoju.webp', url: '/pages/items/index' },
-      { text: '远行商人', subText: '商店物品查询', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/yuanxingshangren.webp', status: 'coming' }
+      { text: '远行商人', subText: '商店物品查询', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/yuanxingshangren.webp', url: '/pages/shop/index' }
     ]
   },
 

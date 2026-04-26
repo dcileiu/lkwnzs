@@ -19,11 +19,13 @@ import {
   FileTextIcon,
   GhostIcon,
   FolderTreeIcon,
+  GitBranchIcon,
   PackageIcon,
   LayoutDashboardIcon,
   SearchIcon,
   Settings2Icon,
   ShieldIcon,
+  StoreIcon,
   UsersIcon,
 } from "lucide-react"
 
@@ -63,6 +65,16 @@ const data = {
       title: "宠物蛋",
       url: "/dashboard/eggs",
       icon: <BookHeartIcon />,
+    },
+    {
+      title: "蛋组管理",
+      url: "/dashboard/egg-groups",
+      icon: <GitBranchIcon />,
+    },
+    {
+      title: "远行商人",
+      url: "/dashboard/shop",
+      icon: <StoreIcon />,
     },
     {
       title: "用户管理",

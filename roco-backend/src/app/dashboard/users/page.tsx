@@ -3,12 +3,28 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import {
+  DASHBOARD_PAGE_SIZE,
+  DashboardPagination,
+  parsePageParam,
+} from "@/components/dashboard-pagination"
 
-export default async function UsersPage() {
-  const [users, totalCount] = await Promise.all([
+interface UsersPageProps {
+  searchParams: Promise<{
+    page?: string
+  }>
+}
+
+export default async function UsersPage({ searchParams }: UsersPageProps) {
+  const resolvedSearchParams = await searchParams
+  const page = parsePageParam(resolvedSearchParams.page)
+  const pageSize = DASHBOARD_PAGE_SIZE
+
+  const [users, totalCount, totalComments, totalInteractions] = await Promise.all([
     prisma.user.findMany({
       orderBy: { createdAt: "desc" },
-      take: 50,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
       include: {
         _count: {
           select: {
@@ -19,7 +35,9 @@ export default async function UsersPage() {
         }
       }
     }),
-    prisma.user.count()
+    prisma.user.count(),
+    prisma.comment.count(),
+    prisma.userInteraction.count()
   ])
 
   return (
@@ -47,17 +65,13 @@ export default async function UsersPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>累计评论数</CardDescription>
-            <CardTitle className="text-3xl">
-              {users.reduce((acc, u) => acc + u._count.comments, 0)}
-            </CardTitle>
+            <CardTitle className="text-3xl">{totalComments}</CardTitle>
           </CardHeader>
         </Card>
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>累计点赞收藏</CardDescription>
-            <CardTitle className="text-3xl">
-              {users.reduce((acc, u) => acc + u._count.interactions, 0)}
-            </CardTitle>
+            <CardTitle className="text-3xl">{totalInteractions}</CardTitle>
           </CardHeader>
         </Card>
       </div>
@@ -65,7 +79,7 @@ export default async function UsersPage() {
       <Card>
         <CardHeader>
           <CardTitle>用户列表</CardTitle>
-          <CardDescription>展示最近注册的 50 位用户</CardDescription>
+          <CardDescription>每页 {pageSize} 位用户，按注册时间倒序展示</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -84,7 +98,7 @@ export default async function UsersPage() {
               {users.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                    暂无用户数据
+                    {totalCount === 0 ? "暂无用户数据" : "当前页没有数据，请尝试切换其他页码。"}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -110,6 +124,13 @@ export default async function UsersPage() {
               )}
             </TableBody>
           </Table>
+
+          <DashboardPagination
+            page={page}
+            pageSize={pageSize}
+            total={totalCount}
+            basePath="/dashboard/users"
+          />
         </CardContent>
       </Card>
     </div>

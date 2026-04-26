@@ -1,4 +1,4 @@
-﻿<scroll-view class="page-container" scroll-y enable-flex>
+<scroll-view class="page-container" scroll-y enable-flex>
   <view class="hero">
     <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/strategy.webp" mode="widthFix"></image>
     <view class="hero-overlay"></view>
@@ -92,7 +92,7 @@
 
     <block wx:for="{{hotArticles}}" wx:key="id">
       <view class="hot-card" data-id="{{item.id}}" bindtap="goToDetail">
-        <image class="hot-thumb" src="{{item.thumbnail}}" mode="aspectFill"></image>
+        <image class="hot-thumb" src="{{item.thumbnail}}" mode="aspectFill" lazy-load></image>
         <view class="hot-info">
           <view class="hot-title line-clamp-2">{{item.title}}</view>
           <view class="hot-summary line-clamp-1">{{item.summary}}</view>

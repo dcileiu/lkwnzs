@@ -1,0 +1,89 @@
+<scroll-view class="page-container" scroll-y enable-flex>
+  <view class="hero">
+    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp" mode="aspectFill"></image>
+    <view class="hero-overlay"></view>
+    <view class="top-nav" style="padding-top: {{navTopPadding}}px;">
+      <view class="nav-btn nav-back" bindtap="onBackTap">‹</view>
+      <text class="nav-title">✦ 蛋组查询 ✦</text>
+    </view>
+    <view class="hero-content">
+      <view class="hero-title">宠物蛋组对照表</view>
+      <view class="hero-sub">按蛋组查看可配对精灵，数据可在后台维护</view>
+      <view class="egg-stats">
+        <view class="stat-item">
+          <text class="stat-num">{{totalGroups}}</text>
+          <text class="stat-label">蛋组</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-num">{{totalElves}}</text>
+          <text class="stat-label">收录</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="groups-main">
+    <scroll-view class="tabs-scroll" scroll-x show-scrollbar="{{false}}">
+      <view class="tabs">
+        <block wx:for="{{groups}}" wx:key="id">
+          <view
+            class="tab-item {{currentGroupId === item.id ? 'active' : ''}}"
+            data-id="{{item.id}}"
+            bindtap="switchGroup"
+          >
+            <image
+              wx:if="{{currentGroupId === item.id}}"
+              class="tab-active-bg"
+              src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/btn.webp"
+              mode="scaleToFill"
+            />
+            <text class="tab-label">{{item.name}}</text>
+            <text class="tab-count">{{item.count || 0}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+
+    <view wx:if="{{currentGroup}}" class="group-panel">
+      <view class="group-header">
+        <view>
+          <text class="group-title">{{currentGroup.name}}</text>
+          <text class="group-desc">{{currentGroup.description || '洛克王国世界宠物蛋组对照'}}</text>
+        </view>
+        <text class="group-count">{{currentGroup.count}} 只</text>
+      </view>
+
+      <view class="elf-grid">
+        <block wx:for="{{currentGroup.elves}}" wx:key="id">
+          <view class="elf-card">
+            <view class="elf-avatar-wrap">
+              <image
+                wx:if="{{item.imageUrl}}"
+                class="elf-avatar"
+                src="{{item.imageUrl}}"
+                mode="aspectFit"
+                lazy-load
+                binderror="onElfImageError"
+                data-id="{{item.id}}"
+              ></image>
+              <text wx:else class="elf-avatar-fallback">{{item.fallbackText}}</text>
+            </view>
+            <text class="elf-name">{{item.name}}</text>
+            <view wx:if="{{item.attrNames && item.attrNames.length}}" class="elf-type">
+              <image
+                class="elf-type-icon"
+                src="{{'https://wallpaper.cdn.itianci.cn/imgs/shuxing/' + item.attrNames[0] + '.webp'}}"
+                mode="aspectFit"
+                lazy-load
+              />
+              <text>{{item.attrNames[0]}}</text>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view wx:else class="empty-state">暂无蛋组数据</view>
+  </view>
+</scroll-view>

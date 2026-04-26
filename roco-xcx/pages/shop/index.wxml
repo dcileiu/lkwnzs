@@ -1,0 +1,63 @@
+<scroll-view class="page-container" scroll-y enable-flex>
+  <view class="hero">
+    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp" mode="aspectFill"></image>
+    <view class="hero-overlay"></view>
+    <view class="top-nav" style="padding-top: {{navTopPadding}}px;">
+      <view class="nav-btn nav-back" bindtap="onBackTap">‹</view>
+      <text class="nav-title">✦ 远行商人 ✦</text>
+    </view>
+    <view class="hero-content">
+      <view class="hero-tagline">本周精选好物，限时上架</view>
+      <view class="shop-stats">
+        <view class="stat-item">
+          <text class="stat-num">{{totalCount}}</text>
+          <text class="stat-label">在售商品</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="shop-main">
+    <view wx:if="{{items.length}}" class="shop-grid">
+      <block wx:for="{{items}}" wx:key="id">
+        <view class="shop-card" bindtap="showItemDetail" data-index="{{index}}">
+          <view class="shop-image-wrap">
+            <image
+              wx:if="{{item.imageUrl}}"
+              class="shop-image"
+              src="{{item.imageUrl}}"
+              mode="aspectFit"
+              lazy-load
+              binderror="onItemImageError"
+              data-id="{{item.id}}"
+            ></image>
+            <text wx:else class="shop-image-fallback">{{item.fallbackText}}</text>
+          </view>
+
+          <text class="shop-name">{{item.name}}</text>
+          <view class="shop-tags">
+            <text class="shop-category">{{item.categoryName}}</text>
+            <text wx:if="{{item.rarityLabel}}" class="shop-rarity">{{item.rarityLabel}}</text>
+          </view>
+
+          <view class="shop-price-row">
+            <text class="shop-price">{{item.priceLabel}}</text>
+            <text class="shop-currency">{{item.currencyLabel}}</text>
+          </view>
+
+          <view class="shop-meta">
+            <text class="shop-stock">库存 {{item.stockLabel}}</text>
+          </view>
+
+          <view wx:if="{{item.periodLabel}}" class="shop-period">⏰ {{item.periodLabel}}</view>
+          <view wx:if="{{item.note}}" class="shop-note">{{item.note}}</view>
+        </view>
+      </block>
+    </view>
+
+    <view wx:elif="{{!isLoading}}" class="empty-state">
+      <text>当前暂无在售商品</text>
+      <text class="empty-sub">下次远行商人来访请期待</text>
+    </view>
+  </view>
+</scroll-view>

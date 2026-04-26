@@ -66,6 +66,7 @@
               class="item-image"
               src="{{item.imageUrl}}"
               mode="aspectFit"
+              lazy-load
               binderror="onItemImageError"
               data-id="{{item.id}}"
             ></image>

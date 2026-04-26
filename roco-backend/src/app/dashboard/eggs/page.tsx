@@ -3,20 +3,41 @@ import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import {
+  DASHBOARD_PAGE_SIZE,
+  DashboardPagination,
+  parsePageParam,
+} from "@/components/dashboard-pagination"
+import { resolveImageUrl } from "@/lib/media"
 import { PlusIcon } from "lucide-react"
 
-export default async function EggsPage() {
-  const eggs = await prisma.egg.findMany({
-    orderBy: { createdAt: "desc" },
-    include: {
-      _count: {
-        select: {
-          rules: true,
-          images: true,
+interface EggsPageProps {
+  searchParams: Promise<{
+    page?: string
+  }>
+}
+
+export default async function EggsPage({ searchParams }: EggsPageProps) {
+  const resolvedSearchParams = await searchParams
+  const page = parsePageParam(resolvedSearchParams.page)
+  const pageSize = DASHBOARD_PAGE_SIZE
+
+  const [total, eggs] = await Promise.all([
+    prisma.egg.count(),
+    prisma.egg.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        _count: {
+          select: {
+            rules: true,
+            images: true,
+          },
         },
       },
-    },
-  })
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+  ])
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-8">
@@ -38,7 +59,7 @@ export default async function EggsPage() {
       <Card>
         <CardHeader>
           <CardTitle>全部宠物蛋</CardTitle>
-          <CardDescription>{eggs.length} 种宠物蛋在册</CardDescription>
+          <CardDescription>{total} 种宠物蛋在册，每页 {pageSize} 条</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -55,42 +76,54 @@ export default async function EggsPage() {
               {eggs.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
-                    暂无宠物蛋，请先新增。
+                    {total === 0 ? "暂无宠物蛋，请先新增。" : "当前页没有数据，请尝试切换其他页码。"}
                   </TableCell>
                 </TableRow>
               ) : (
-                eggs.map((egg) => (
-                  <TableRow key={egg.id}>
-                    <TableCell>
-                      {egg.avatar ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={egg.avatar}
-                          alt={egg.name}
-                          className="h-12 w-12 rounded-lg border object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-lg border text-xs text-muted-foreground">
-                          无图
-                        </div>
-                      )}
-                    </TableCell>
-                    <TableCell className="font-medium">{egg.name}</TableCell>
-                    <TableCell className="text-right">{egg._count.images}</TableCell>
-                    <TableCell className="text-right">{egg._count.rules}</TableCell>
-                    <TableCell>
-                      <Button variant="outline" size="sm" className="mr-2">
-                        管理规则
-                      </Button>
-                      <Button variant="destructive" size="sm">
-                        删除
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
+                eggs.map((egg) => {
+                  const avatarUrl = resolveImageUrl(egg.avatar)
+                  return (
+                    <TableRow key={egg.id}>
+                      <TableCell>
+                        {avatarUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={avatarUrl}
+                            alt={egg.name}
+                            className="h-12 w-12 rounded-lg border object-cover"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        ) : (
+                          <div className="flex h-12 w-12 items-center justify-center rounded-lg border text-xs text-muted-foreground">
+                            无图
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="font-medium">{egg.name}</TableCell>
+                      <TableCell className="text-right">{egg._count.images}</TableCell>
+                      <TableCell className="text-right">{egg._count.rules}</TableCell>
+                      <TableCell>
+                        <Button variant="outline" size="sm" className="mr-2">
+                          管理规则
+                        </Button>
+                        <Button variant="destructive" size="sm">
+                          删除
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })
               )}
             </TableBody>
           </Table>
+
+          <DashboardPagination
+            page={page}
+            pageSize={pageSize}
+            total={total}
+            basePath="/dashboard/eggs"
+          />
         </CardContent>
       </Card>
     </div>

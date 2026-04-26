@@ -3,10 +3,22 @@ import { createEvolutionChain, addEvolutionLink, deleteEvolutionBranch } from "@
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  DASHBOARD_PAGE_SIZE,
+  DashboardPagination,
+  parsePageParam,
+} from "@/components/dashboard-pagination"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { resolveImageUrl } from "@/lib/media"
 import { PlusIcon } from "lucide-react"
+
+interface EvolutionsPageProps {
+  searchParams: Promise<{
+    page?: string
+  }>
+}
 
 type EvolutionLink = {
   id: string
@@ -56,6 +68,7 @@ function buildEvolutionTree(links: EvolutionLink[]) {
 }
 
 function TreeBranch({ node }: { node: EvolutionTreeNode }) {
+  const avatarUrl = resolveImageUrl(node.childElf.avatar)
   return (
     <li className="relative list-none pl-6">
       <div className="absolute left-2 top-0 h-full w-px bg-border" />
@@ -63,12 +76,14 @@ function TreeBranch({ node }: { node: EvolutionTreeNode }) {
       <div className="rounded-xl border bg-card p-4 shadow-sm">
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
-            {node.childElf.avatar ? (
+            {avatarUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={node.childElf.avatar}
+                src={avatarUrl}
                 alt={node.childElf.name}
                 className="h-12 w-12 rounded-lg border object-cover"
+                loading="lazy"
+                decoding="async"
               />
             ) : (
               <div className="flex h-12 w-12 items-center justify-center rounded-lg border text-xs text-muted-foreground">
@@ -116,8 +131,13 @@ function TreeBranch({ node }: { node: EvolutionTreeNode }) {
   )
 }
 
-export default async function EvolutionsPage() {
-  const [chains, elves] = await Promise.all([
+export default async function EvolutionsPage({ searchParams }: EvolutionsPageProps) {
+  const resolvedSearchParams = await searchParams
+  const page = parsePageParam(resolvedSearchParams.page)
+  const pageSize = DASHBOARD_PAGE_SIZE
+
+  const [totalChains, chains, elves] = await Promise.all([
+    prisma.evolutionChain.count(),
     prisma.evolutionChain.findMany({
       orderBy: { createdAt: "desc" },
       include: {
@@ -136,6 +156,8 @@ export default async function EvolutionsPage() {
           },
         },
       },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
     }),
     prisma.elf.findMany({
       orderBy: { name: "asc" },
@@ -152,7 +174,7 @@ export default async function EvolutionsPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">进化路线管理</h1>
           <p className="mt-1 text-muted-foreground">
-            后台按多级菜单树来维护进化链，小程序详情页会按进化树渲染。
+            后台按多级菜单树来维护进化链，小程序详情页会按进化树渲染。共 {totalChains} 条进化链，每页 {pageSize} 条。
           </p>
         </div>
         <Button asChild variant="outline">
@@ -211,10 +233,16 @@ export default async function EvolutionsPage() {
         </Card>
 
         <div className="space-y-6">
-          {chains.length === 0 ? (
+          {totalChains === 0 ? (
             <Card>
               <CardContent className="py-12 text-center text-muted-foreground">
                 还没有进化链，先在左侧创建第一条吧。
+              </CardContent>
+            </Card>
+          ) : chains.length === 0 ? (
+            <Card>
+              <CardContent className="py-12 text-center text-muted-foreground">
+                当前页没有数据，请尝试切换其他页码。
               </CardContent>
             </Card>
           ) : (
@@ -311,6 +339,13 @@ export default async function EvolutionsPage() {
               )
             })
           )}
+
+          <DashboardPagination
+            page={page}
+            pageSize={pageSize}
+            total={totalChains}
+            basePath="/dashboard/evolutions"
+          />
         </div>
       </div>
     </div>

@@ -13,8 +13,16 @@ export type StoredImageRecord = {
 };
 
 const DEFAULT_CDN_DOMAIN = "https://wallpaper.cdn.itianci.cn";
-const CDN_HOSTS = new Set(["wallpaper.cdn.itianci.cn"]);
-const CDN_HOST_SUFFIX = ".cdn.itianci.cn";
+// 项目自己拥有的域名族：所有 *.itianci.cn 子域（包括历史域名 roco.itianci.cn、
+// 当前 CDN wallpaper.cdn.itianci.cn 等）都视为站内资源，统一剥离 host 改用相对路径，
+// 这样 resolveImageUrl 可以用最新的 QINIU_DOMAIN 重新拼接。
+const PROJECT_HOST_EXACT = "itianci.cn";
+const PROJECT_HOST_SUFFIX = ".itianci.cn";
+
+function isProjectOwnedHost(host: string) {
+  const lower = host.toLowerCase();
+  return lower === PROJECT_HOST_EXACT || lower.endsWith(PROJECT_HOST_SUFFIX);
+}
 
 function normalizeDomain(domain: string) {
   const trimmed = domain.trim().replace(/\/+$/, "");
@@ -58,8 +66,8 @@ export function normalizeImagePathForStorage(value: string | null | undefined) {
     const parsed = new URL(normalized);
     const host = parsed.host.toLowerCase();
 
-    // Only strip project CDN domains; keep unrelated external links intact.
-    if (!CDN_HOSTS.has(host) && !host.endsWith(CDN_HOST_SUFFIX)) {
+    // Only strip project-owned domains; keep unrelated external links intact.
+    if (!isProjectOwnedHost(host)) {
       return normalized;
     }
 

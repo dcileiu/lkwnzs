@@ -1,4 +1,4 @@
-﻿<wxs module="ec">
+<wxs module="ec">
   function padNo(n) {
     if (n < 10) return '00' + n;
     if (n < 100) return '0' + n;
@@ -74,6 +74,7 @@
               src="{{item.displayImage}}"
               class="elf-avatar"
               mode="aspectFit"
+              lazy-load
               binderror="onElfImageError"
               data-id="{{item.id}}"
             ></image>
@@ -86,6 +87,7 @@
               class="elf-type-icon"
               src="{{'https://wallpaper.cdn.itianci.cn/imgs/shuxing/' + item.elements[0] + '.webp'}}"
               mode="aspectFit"
+              lazy-load
             />
             <text>{{item.elements[0]}}</text>
           </view>

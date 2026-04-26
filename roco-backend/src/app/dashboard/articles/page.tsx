@@ -6,13 +6,33 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import {
+  DASHBOARD_PAGE_SIZE,
+  DashboardPagination,
+  parsePageParam,
+} from "@/components/dashboard-pagination"
 import { deleteArticle } from "@/app/actions/articles"
 
-export default async function ArticlesPage() {
-  const articles = await prisma.article.findMany({
-    orderBy: { createdAt: "desc" },
-    include: { author: true },
-  })
+interface ArticlesPageProps {
+  searchParams: Promise<{
+    page?: string
+  }>
+}
+
+export default async function ArticlesPage({ searchParams }: ArticlesPageProps) {
+  const resolvedSearchParams = await searchParams
+  const page = parsePageParam(resolvedSearchParams.page)
+  const pageSize = DASHBOARD_PAGE_SIZE
+
+  const [total, articles] = await Promise.all([
+    prisma.article.count(),
+    prisma.article.findMany({
+      orderBy: { createdAt: "desc" },
+      include: { author: true },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+  ])
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-8">
@@ -34,7 +54,9 @@ export default async function ArticlesPage() {
       <Card>
         <CardHeader>
           <CardTitle>全部文章</CardTitle>
-          <CardDescription>当前共有 {articles.length} 篇攻略文章。</CardDescription>
+          <CardDescription>
+            当前共有 {total} 篇攻略文章，每页 {pageSize} 条。
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -52,7 +74,7 @@ export default async function ArticlesPage() {
               {articles.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
-                    暂无文章，点击右上角“发布新攻略”开始创建。
+                    {total === 0 ? "暂无文章，点击右上角“发布新攻略”开始创建。" : "当前页没有数据，请尝试切换其他页码。"}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -88,6 +110,13 @@ export default async function ArticlesPage() {
               )}
             </TableBody>
           </Table>
+
+          <DashboardPagination
+            page={page}
+            pageSize={pageSize}
+            total={total}
+            basePath="/dashboard/articles"
+          />
         </CardContent>
       </Card>
     </div>

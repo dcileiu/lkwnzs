@@ -1,4 +1,4 @@
-﻿<view class="page-container">
+<view class="page-container">
   <view class="page-header">
     <text class="page-title">宠物蛋图鉴</text>
     <text class="page-sub">点击任意宠物蛋，查看可孵化精灵与概率区间</text>
@@ -12,6 +12,7 @@
             class="egg-img"
             src="{{item.coverImage || item.avatar || item.image || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/default-egg.png'}}"
             mode="aspectFit"
+            lazy-load
           ></image>
         </view>
         <text class="egg-name">{{item.name}}</text>
@@ -41,7 +42,7 @@
       <view class="detail-gallery-track">
         <block wx:for="{{selectedEgg.images}}" wx:key="id">
           <view class="detail-gallery-item">
-            <image class="detail-gallery-img" src="{{item.url}}" mode="aspectFill"></image>
+            <image class="detail-gallery-img" src="{{item.url}}" mode="aspectFill" lazy-load></image>
           </view>
         </block>
       </view>
@@ -58,6 +59,7 @@
               class="hatch-elf-img"
               src="{{item.elf.coverImage || item.elf.avatar || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"
               mode="aspectFit"
+              lazy-load
             ></image>
           </view>
 

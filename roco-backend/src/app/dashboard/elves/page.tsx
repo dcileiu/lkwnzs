@@ -4,19 +4,40 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import {
+  DASHBOARD_PAGE_SIZE,
+  DashboardPagination,
+  parsePageParam,
+} from "@/components/dashboard-pagination"
+import { resolveImageUrl } from "@/lib/media"
 import { PlusIcon } from "lucide-react"
 
-export default async function ElvesPage() {
-  const elves = await prisma.elf.findMany({
-    orderBy: [{ detailQueryCount: "desc" }, { createdAt: "desc" }],
-    include: {
-      _count: {
-        select: {
-          images: true,
+interface ElvesPageProps {
+  searchParams: Promise<{
+    page?: string
+  }>
+}
+
+export default async function ElvesPage({ searchParams }: ElvesPageProps) {
+  const resolvedSearchParams = await searchParams
+  const page = parsePageParam(resolvedSearchParams.page)
+  const pageSize = DASHBOARD_PAGE_SIZE
+
+  const [total, elves] = await Promise.all([
+    prisma.elf.count(),
+    prisma.elf.findMany({
+      orderBy: [{ detailQueryCount: "desc" }, { createdAt: "desc" }],
+      include: {
+        _count: {
+          select: {
+            images: true,
+          },
         },
       },
-    },
-  })
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+  ])
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-8">
@@ -40,7 +61,7 @@ export default async function ElvesPage() {
       <Card>
         <CardHeader>
           <CardTitle>全部精灵</CardTitle>
-          <CardDescription>{elves.length} 只精灵在册</CardDescription>
+          <CardDescription>{total} 只精灵在册，每页 {pageSize} 条</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -67,15 +88,19 @@ export default async function ElvesPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                elves.map((elf) => (
+                elves.map((elf) => {
+                  const avatarUrl = resolveImageUrl(elf.avatar)
+                  return (
                   <TableRow key={elf.id}>
                     <TableCell>
-                      {elf.avatar ? (
+                      {avatarUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                          src={elf.avatar}
+                          src={avatarUrl}
                           alt={elf.name}
                           className="h-12 w-12 rounded-lg border object-cover"
+                          loading="lazy"
+                          decoding="async"
                         />
                       ) : (
                         <div className="flex h-12 w-12 items-center justify-center rounded-lg border text-xs text-muted-foreground">
@@ -105,10 +130,18 @@ export default async function ElvesPage() {
                       </Button>
                     </TableCell>
                   </TableRow>
-                ))
+                  )
+                })
               )}
             </TableBody>
           </Table>
+
+          <DashboardPagination
+            page={page}
+            pageSize={pageSize}
+            total={total}
+            basePath="/dashboard/elves"
+          />
         </CardContent>
       </Card>
     </div>

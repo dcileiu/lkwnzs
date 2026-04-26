@@ -26,7 +26,7 @@ export default function AttrsPage() {
                   <div className="mb-2 flex items-center justify-between">
                     <Badge variant="outline">{element}</Badge>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={iconUrl} alt={`${element}属性图标`} className="h-6 w-6 rounded" />
+                    <img src={iconUrl} alt={`${element}属性图标`} className="h-6 w-6 rounded" loading="lazy" decoding="async" />
                   </div>
                   <p className="break-all text-xs text-muted-foreground">{iconUrl}</p>
                 </div>

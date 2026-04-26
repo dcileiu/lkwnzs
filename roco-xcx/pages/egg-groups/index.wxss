@@ -1,0 +1,346 @@
+.page-container {
+  width: 100%;
+  padding: 0;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 160rpx);
+  background-image:
+    linear-gradient(rgba(30, 58, 100, 0.8), rgba(30, 58, 100, 0.8)),
+    url("https://wallpaper.cdn.itianci.cn/imgs/miniapp/bgi.webp");
+  background-size: cover, cover;
+  background-repeat: no-repeat, no-repeat;
+  background-position:
+    center top,
+    center top;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.hero {
+  position: relative;
+  height: 460rpx;
+  border-radius: 0 0 22rpx 22rpx;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(25, 51, 93, 0.08) 0%,
+    rgba(25, 51, 93, 0.2) 45%,
+    rgba(25, 51, 93, 0.78) 86%,
+    #19335d 100%
+  );
+}
+
+.top-nav {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 200rpx 0 20rpx;
+}
+
+.nav-btn {
+  width: 58rpx;
+  height: 58rpx;
+  border-radius: 50%;
+  background: rgba(20, 43, 82, 0.5);
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 34rpx;
+  line-height: 56rpx;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.nav-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 320rpx;
+  font-size: 34rpx;
+  line-height: 1.3;
+  color: #f9eec4;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 4rpx 14rpx rgba(8, 16, 36, 0.45);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: absolute;
+  left: 24rpx;
+  right: 24rpx;
+  bottom: 46rpx;
+  z-index: 2;
+  color: #fff3d4;
+}
+
+.hero-title {
+  font-size: 42rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+  text-shadow: 0 4rpx 14rpx rgba(8, 16, 36, 0.45);
+}
+
+.hero-sub {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: rgba(255, 243, 212, 0.86);
+}
+
+.egg-stats {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  height: 74rpx;
+  padding: 0 22rpx;
+  border-radius: 40rpx;
+  background: rgba(13, 28, 56, 0.55);
+  border: 1rpx solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.stat-item {
+  min-width: 50rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-num {
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.stat-label {
+  margin-top: 2rpx;
+  font-size: 18rpx;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.stat-divider {
+  width: 1rpx;
+  height: 36rpx;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.groups-main {
+  position: relative;
+  z-index: 3;
+  margin-top: -40rpx;
+  padding: 0 18rpx 20rpx;
+  box-sizing: border-box;
+}
+
+.tabs-scroll {
+  width: 100%;
+  white-space: nowrap;
+  margin-bottom: 16rpx;
+  padding: 4rpx 0 8rpx;
+}
+
+.tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 14rpx;
+  padding-right: 20rpx;
+}
+
+.tab-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  min-width: 124rpx;
+  height: 64rpx;
+  padding: 0 20rpx;
+  border-radius: 188rpx;
+  background: rgba(34, 61, 113, 0.6);
+  box-shadow: inset 0 0 0 1rpx rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.tab-item.active {
+  background: rgba(34, 61, 113, 0.82);
+  box-shadow: 0 8rpx 18rpx rgba(16, 22, 62, 0.28);
+}
+
+.tab-active-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tab-label,
+.tab-count {
+  position: relative;
+  z-index: 1;
+}
+
+.tab-label {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: rgba(240, 246, 255, 0.92);
+  line-height: 1;
+}
+
+.tab-count {
+  min-width: 28rpx;
+  padding: 3rpx 8rpx;
+  border-radius: 999rpx;
+  font-size: 18rpx;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.14);
+  box-sizing: border-box;
+}
+
+.tab-item.active .tab-label {
+  color: #fff3d4;
+  font-weight: 700;
+  text-shadow: 0 2rpx 4rpx rgba(20, 30, 80, 0.5);
+}
+
+.group-panel {
+  padding: 22rpx 18rpx 24rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(180deg, rgba(247, 230, 203, 0.96) 0%, rgba(241, 218, 184, 0.94) 100%);
+  border: 2rpx solid rgba(255, 234, 196, 0.85);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.65),
+    0 14rpx 28rpx rgba(8, 24, 54, 0.28);
+}
+
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18rpx;
+  margin-bottom: 18rpx;
+}
+
+.group-title {
+  display: block;
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #4d3216;
+}
+
+.group-desc {
+  display: block;
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: #8a6a3b;
+}
+
+.group-count {
+  flex-shrink: 0;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #6a4ad6;
+  background: rgba(138, 108, 255, 0.12);
+  border: 1rpx solid rgba(138, 108, 255, 0.32);
+}
+
+.elf-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14rpx;
+}
+
+.elf-card {
+  position: relative;
+  min-height: 246rpx;
+  padding: 20rpx 8rpx 14rpx;
+  border-radius: 16rpx;
+  background-image: url("https://wallpaper.cdn.itianci.cn/imgs/miniapp/elf-card.webp");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.elf-avatar-wrap {
+  width: 104rpx;
+  height: 104rpx;
+  margin: 8rpx auto 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.elf-avatar {
+  width: 104rpx;
+  height: 104rpx;
+}
+
+.elf-avatar-fallback {
+  font-size: 38rpx;
+  font-weight: bold;
+  color: #b08a4d;
+}
+
+.elf-name {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #2c2236;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.elf-type {
+  margin: 8rpx auto 0;
+  max-width: 116rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  font-size: 18rpx;
+  color: #333333;
+  background: #f7dcb3;
+  border-radius: 999rpx;
+  padding: 4rpx 10rpx;
+  box-sizing: border-box;
+}
+
+.elf-type-icon {
+  width: 22rpx;
+  height: 22rpx;
+  flex-shrink: 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 120rpx 0 80rpx;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 28rpx;
+}
