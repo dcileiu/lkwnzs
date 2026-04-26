@@ -1,92 +1,107 @@
-<view class="page-container">
-  <view class="page-header">
-    <text class="page-title">孵蛋预测</text>
-    <text class="page-sub">输入身高和体重后，系统会匹配同时落在对应范围内的精灵，并按概率排序。</text>
+<scroll-view class="page-container" scroll-y enable-flex>
+  <view class="hero">
+    <image class="hero-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/eggs.webp" mode="widthFix"></image>
+    <view class="hero-overlay"></view>
   </view>
 
-  <view class="card form-card">
-    <view class="input-item">
-      <view class="picker-label">📏身高</view>
-      <input
-        class="input-field"
-        type="digit"
-        placeholder="请输入固定身高值"
-        value="{{heightValue}}"
-        bindinput="onHeightInput"
-        confirm-type="next"
-      />
-    </view>
-
-    <view class="input-item border-none">
-      <view class="picker-label">👜体重</view>
-      <input
-        class="input-field"
-        type="digit"
-        placeholder="请输入固定体重值"
-        value="{{weightValue}}"
-        bindinput="onWeightInput"
-        confirm-type="done"
-      />
-    </view>
-
-    <view class="form-actions">
-      <button class="btn-predict" bindtap="predict">开始预测</button>
-    </view>
-  </view>
-
-  <view wx:if="{{results.length}}" class="card">
-    <view class="results-header">
-      <text class="results-title">匹配结果</text>
-      <text class="results-count">共 {{results.length}} 种可能</text>
-    </view>
-
-    <view wx:if="{{topResult}}" class="top-result-tip">
-      <text class="top-result-label">概率最高</text>
-      <text class="top-result-name">{{topResult.elfName}}</text>
-      <text class="top-result-prob">{{topResult.probability}}%</text>
-    </view>
-
-    <view class="results-list">
-      <block wx:for="{{results}}" wx:key="elfId" wx:for-index="index">
-        <view
-          class="result-item {{index === 0 ? 'active' : ''}}"
-          bindtap="goElfDetail"
-          data-id="{{item.elfId}}"
-        >
-          <view class="elf-avatar-bg">
-            <image
-              class="elf-avatar-small"
-              src="{{item.elfCoverImage || item.eggImageUrl || '/assets/default-elf.png'}}"
-              mode="aspectFit"
-            ></image>
+  <view class="hatch-main">
+    <view class="card form-card">
+      <view class="form-row">
+        <view class="form-cell">
+          <view class="form-label">
+            <text class="form-label-icon">📏</text>
+            <text class="form-label-text">身高</text>
+            <text class="form-unit">cm</text>
           </view>
+          <input
+            class="form-input"
+            type="digit"
+            placeholder="请输入身高"
+            placeholder-class="form-input-placeholder"
+            value="{{heightValue}}"
+            bindinput="onHeightInput"
+            confirm-type="next"
+          />
+        </view>
 
-          <view class="elf-info">
-            <text class="elf-name">{{item.elfName}}</text>
-            <text class="elf-range" wx:if="{{item.elfHeight || item.elfWeight}}">
-              身高 {{item.elfHeight || '-'}} / 体重 {{item.elfWeight || '-'}}
-            </text>
-            <view class="elf-meta">
-              <text class="tag-top" wx:if="{{index === 0}}">概率最高</text>
-              <block wx:for="{{item.elfElements}}" wx:key="*this">
-                <text class="tag-element">{{item}}系</text>
-              </block>
-              <text class="tag-rarity">{{item.elfRarity}}</text>
+        <view class="form-divider"></view>
+
+        <view class="form-cell">
+          <view class="form-label">
+            <text class="form-label-icon">👜</text>
+            <text class="form-label-text">体重</text>
+            <text class="form-unit">kg</text>
+          </view>
+          <input
+            class="form-input"
+            type="digit"
+            placeholder="请输入体重"
+            placeholder-class="form-input-placeholder"
+            value="{{weightValue}}"
+            bindinput="onWeightInput"
+            confirm-type="done"
+          />
+        </view>
+      </view>
+
+      <view class="predict-btn-wrap" bindtap="predict">
+        <view class="predict-btn-content">
+          <text class="predict-btn-text">开始预测</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{results.length}}" class="card results-card">
+      <view class="results-header">
+        <view class="results-title-wrap">
+          <text class="results-title-deco">✦</text>
+          <text class="results-title">匹配结果</text>
+          <text class="results-title-deco">✦</text>
+        </view>
+        <text class="results-count">共 {{results.length}} 种可能</text>
+      </view>
+
+      <view class="results-list">
+        <block wx:for="{{results}}" wx:key="elfId" wx:for-index="index">
+          <view
+            class="result-item {{index === 0 ? 'is-top' : ''}}"
+            bindtap="goElfDetail"
+            data-id="{{item.elfId}}"
+          >
+            <view class="result-avatar">
+              <image
+                class="result-avatar-img"
+                src="{{item.elfCoverImage || item.eggImageUrl || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"
+                mode="aspectFit"
+              ></image>
+            </view>
+
+            <view class="result-info">
+              <text class="result-name">{{item.elfName}}</text>
+              <text class="result-range" wx:if="{{item.elfHeight || item.elfWeight}}">
+                身高 {{item.elfHeight || '-'}} / 体重 {{item.elfWeight || '-'}}
+              </text>
+              <view class="result-tags">
+                <text wx:if="{{index === 0}}" class="tag-top">概率最高</text>
+                <block wx:for="{{item.elfElements}}" wx:for-item="el" wx:key="*this">
+                  <text class="tag-element" style="{{ec.tagStyle(el)}}">{{el}}系</text>
+                </block>
+                <text wx:if="{{item.elfRarity}}" class="tag-rarity">{{item.elfRarity}}</text>
+                <text class="result-detail-link">点击查看 ›</text>
+              </view>
+            </view>
+
+            <view class="result-side">
+              <text class="result-prob {{index === 0 ? 'is-top' : ''}}">{{item.probability}}%</text>
             </view>
           </view>
+        </block>
+      </view>
+    </view>
 
-          <view class="result-side">
-            <text class="result-prob">{{item.probability}}%</text>
-            <text class="result-prob-label">概率</text>
-            <text class="result-detail-link">点击查看</text>
-          </view>
-        </view>
-      </block>
+    <view wx:if="{{searched && !results.length}}" class="card empty-card">
+      <text class="empty-title">没有匹配到精灵</text>
+      <text class="empty-sub">可以换一个身高或体重值再试试</text>
     </view>
   </view>
-
-  <view wx:if="{{searched && !results.length}}" class="card empty-results-card">
-    <text class="empty-results-title">没有匹配到精灵</text>
-    <text class="empty-results-sub">可以换一个身高或体重值再试试</text>
-  </view>
-</view>
+</scroll-view>

@@ -1,7 +1,7 @@
 const api = require('../../utils/api.js')
 const { normalizeImageUrl } = require('../../utils/url.js')
 
-const DEFAULT_ELF_IMAGE = '/assets/default-elf.png'
+const DEFAULT_ELF_IMAGE = 'https://roco.cdn.itianci.cn/imgs/miniapp/default-elf.png'
 
 function normalizeGalleryImages(images = []) {
   return images
@@ -112,5 +112,15 @@ Page({
     if (!id || !this.data.elf || id === this.data.elf.id) return
 
     wx.redirectTo({ url: `/pages/elf-detail/index?id=${id}` })
+  },
+
+  goBack() {
+    const pages = getCurrentPages()
+    if (pages.length > 1) {
+      wx.navigateBack()
+      return
+    }
+
+    wx.switchTab({ url: '/pages/pokedex/index' })
   }
 })

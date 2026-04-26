@@ -10,7 +10,7 @@
         <view class="egg-img-wrap {{activeEggIndex === index ? 'active' : ''}}">
           <image
             class="egg-img"
-            src="{{item.coverImage || item.avatar || item.image || '/assets/default-egg.png'}}"
+            src="{{item.coverImage || item.avatar || item.image || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-egg.png'}}"
             mode="aspectFit"
           ></image>
         </view>
@@ -27,7 +27,7 @@
       <view class="detail-egg-icon">
         <image
           class="detail-egg-img"
-          src="{{selectedEgg.coverImage || selectedEgg.avatar || selectedEgg.image || '/assets/default-egg.png'}}"
+          src="{{selectedEgg.coverImage || selectedEgg.avatar || selectedEgg.image || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-egg.png'}}"
           mode="aspectFit"
         ></image>
       </view>
@@ -56,7 +56,7 @@
           <view class="hatch-elf-icon">
             <image
               class="hatch-elf-img"
-              src="{{item.elf.coverImage || item.elf.avatar || '/assets/default-elf.png'}}"
+              src="{{item.elf.coverImage || item.elf.avatar || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"
               mode="aspectFit"
             ></image>
           </view>

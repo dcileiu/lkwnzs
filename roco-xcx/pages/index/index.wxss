@@ -2,7 +2,14 @@
   width: 100%;
   padding: 0;
   padding-bottom: calc(env(safe-area-inset-bottom) + 160rpx);
-  background: #1f3b64;
+  background-image:
+    linear-gradient(rgba(30, 58, 100, 0.8), rgba(30, 58, 100, 0.8)),
+    url("https://roco.cdn.itianci.cn/imgs/miniapp/bgi.webp");
+  background-size: cover, cover;
+  background-repeat: no-repeat, no-repeat;
+  background-position:
+    center top,
+    center top;
   min-height: 100vh;
   box-sizing: border-box;
 }
@@ -23,12 +30,22 @@
 
 .hero-overlay {
   position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(25, 51, 93, 0) 0%,
+    rgba(25, 51, 93, 0) 45%,
+    rgba(25, 51, 93, 0.35) 65%,
+    rgba(25, 51, 93, 0.75) 85%,
+    #19335d 100%
+  );
 }
 
 .hero-content {
   position: absolute;
   inset: 0;
-  padding: 220rpx 20rpx 0;
+  padding: 240rpx 20rpx 0;
   z-index: 2;
   box-sizing: border-box;
 }
@@ -65,7 +82,7 @@
 
 .home-main {
   position: relative;
-  margin-top: -100rpx;
+  margin-top: -80rpx;
   z-index: 3;
 }
 
@@ -146,12 +163,12 @@
 .title {
   font-size: 36rpx;
   font-weight: 700;
-  color: #F9EEC4;
+  color: #f9eec4;
 }
 
 .more {
   font-size: 24rpx;
-  color: #F9EEC4;
+  color: #f9eec4;
 }
 
 .guide-section {
@@ -164,8 +181,8 @@
 
 .guide-card {
   position: relative;
-  background: #F7E3CF;
-  border: 2rpx solid #F7E3CF;
+  background: #f7e3cf;
+  border: 2rpx solid #f7e3cf;
   border-radius: 16rpx;
   height: 178rpx;
   padding: 14rpx;
@@ -192,7 +209,7 @@
 .guide-title {
   font-size: 30rpx;
   font-weight: 700;
-  color: #252C38;
+  color: #252c38;
   line-height: 1.5;
   max-height: 110rpx;
   overflow: hidden;
@@ -290,7 +307,7 @@
   gap: 6rpx;
   font-size: 22rpx;
   color: #333333;
-  background: #F7DCB3;
+  background: #f7dcb3;
   border-radius: 999rpx;
   padding: 4rpx 16rpx;
 }

@@ -11,7 +11,7 @@ function formatArticle(item = {}) {
 
   return {
     ...item,
-    thumbnail: normalizeImageUrl(item.thumbnail) || '/assets/articles.webp',
+    thumbnail: normalizeImageUrl(item.thumbnail) || 'https://roco.cdn.itianci.cn/imgs/miniapp/articles.webp',
     summary: item.summary || item.description || '零氪玩家也能快速上手，核心思路与阵容推荐一篇看懂。',
     authorName,
     views: item.views || 0,

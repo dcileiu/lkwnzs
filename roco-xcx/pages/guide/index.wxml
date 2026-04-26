@@ -53,7 +53,7 @@
         <block wx:for="{{featuredArticles}}" wx:key="id">
           <swiper-item>
             <view class="featured-card" data-id="{{item.id}}" bindtap="goToDetail">
-              <image class="featured-card-bg" src="/assets/articles.webp" mode="scaleToFill"></image>
+              <image class="featured-card-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/articles.webp" mode="scaleToFill"></image>
               <view class="featured-mask"></view>
               <view class="featured-head">
                 <view class="featured-category">{{currentTab === '全部' ? '精选推荐' : currentTab}}</view>

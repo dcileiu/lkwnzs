@@ -1,3 +1,4 @@
 {
-  "navigationBarTitleText": "洛克万能助手"
+  "navigationStyle": "custom",
+  "usingComponents": {}
 }

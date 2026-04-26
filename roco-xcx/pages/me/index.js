@@ -10,8 +10,17 @@ const DEFAULT_PROFILE = {
 Page({
   data: {
     profile: DEFAULT_PROFILE,
+    uid: '',
     likeCount: 0,
     favoriteCount: 0,
+    menus: [
+      { key: 'like', title: '文章点赞', desc: '查看我点赞的文章' },
+      { key: 'favorite', title: '文章收藏', desc: '查看我收藏的文章' },
+      { key: 'history', title: '浏览历史', desc: '查看记录' },
+      { key: 'feedback', title: '意见反馈', desc: '帮助我们改进' },
+      { key: 'settings', title: '设置中心', desc: '账号与偏好' },
+      { key: 'privacy', title: '隐私政策', desc: '保护你的隐私' },
+    ],
   },
 
   onLoad() {
@@ -31,6 +40,7 @@ Page({
         nickname: user?.nickname || DEFAULT_PROFILE.nickname,
         avatar: user?.avatar || DEFAULT_PROFILE.avatar
       },
+      uid: user?.id || user?.uid || '',
       likeCount: stats.likes,
       favoriteCount: stats.favorites,
     })
@@ -97,5 +107,40 @@ Page({
 
   openFavoriteArticles() {
     wx.navigateTo({ url: '/pages/me-articles/index?type=favorite' })
+  },
+
+  onMenuTap(e) {
+    const key = e.currentTarget.dataset.key
+    if (key === 'like') {
+      this.openLikedArticles()
+      return
+    }
+    if (key === 'favorite') {
+      this.openFavoriteArticles()
+      return
+    }
+    if (key === 'history') {
+      wx.showToast({ title: '浏览历史即将上线', icon: 'none' })
+      return
+    }
+    if (key === 'feedback') {
+      wx.showToast({ title: '意见反馈即将上线', icon: 'none' })
+      return
+    }
+    if (key === 'settings') {
+      wx.showToast({ title: '设置中心即将上线', icon: 'none' })
+      return
+    }
+    if (key === 'privacy') {
+      wx.showModal({
+        title: '隐私政策',
+        content: '我们重视并保护你的个人信息安全，详细条款将在后续版本开放。',
+        showCancel: false,
+      })
+    }
+  },
+
+  onAboutTap() {
+    wx.showToast({ title: '更多内容即将上线', icon: 'none' })
   },
 })

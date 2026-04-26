@@ -1,49 +1,73 @@
-<view class="page-container">
-  <view class="page-inner">
-    <view class="pokedex-stats">
-      <view class="stat-item">
-        <text class="stat-num">{{totalCount}}</text>
-        <text class="stat-label">图鉴总数</text>
-      </view>
-      <view class="stat-divider"></view>
-      <view class="stat-item">
-        <text class="stat-num">{{collectedCount}}</text>
-        <text class="stat-label">已收录</text>
-      </view>
-    </view>
+<wxs module="ec">
+  function padNo(n) {
+    if (n < 10) return '00' + n;
+    if (n < 100) return '0' + n;
+    return '' + n;
+  }
+  module.exports = {
+    padNo: padNo
+  };
+</wxs>
 
-    <view class="sticky-filter-bar">
-      <view class="search-box">
-        <icon type="search" size="14" color="#999"></icon>
+<scroll-view class="page-container" scroll-y enable-flex bindscrolltolower="loadMoreElves">
+  <view class="hero">
+    <image class="hero-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/pokedex.webp" mode="widthFix"></image>
+    <view class="hero-overlay"></view>
+    <view class="hero-content">
+      <view class="search-wrap">
+        <icon type="search" size="16" color="#f8e8b1"></icon>
         <input
           class="search-input"
-          placeholder="搜索精灵名称"
+          placeholder="搜索精灵名称或编号..."
+          placeholder-style="color: rgba(255, 241, 214, 0.72);"
           confirm-type="search"
           bindinput="onSearchInput"
           bindconfirm="onSearch"
           value="{{keyword}}"
         />
       </view>
-
-      <scroll-view class="element-tabs" scroll-x enable-flex show-scrollbar="false">
-        <view class="tabs-wrap">
-          <block wx:for="{{elements}}" wx:key="name">
-            <view
-              class="tab-item {{currentElement === item.name ? 'active' : ''}}"
-              data-element="{{item.name}}"
-              bindtap="switchElement"
-            >
-              <image wx:if="{{item.iconUrl}}" class="tab-icon" src="{{item.iconUrl}}" mode="aspectFit"></image>
-              <text>{{item.name}}</text>
-            </view>
-          </block>
+      <view class="pokedex-stats">
+        <view class="stat-item">
+          <text class="stat-num">{{totalCount}}</text>
+          <text class="stat-label">图鉴总数</text>
         </view>
-      </scroll-view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-num">{{collectedCount}}</text>
+          <text class="stat-label">已收录</text>
+        </view>
+      </view>
     </view>
+  </view>
+
+  <view class="pokedex-main">
+    <scroll-view class="tabs-scroll" scroll-x show-scrollbar="{{false}}">
+      <view class="tabs">
+        <block wx:for="{{elements}}" wx:key="name">
+          <view
+            class="tab-item {{currentElement === item.name ? 'active' : ''}}"
+            data-element="{{item.name}}"
+            bindtap="switchElement"
+          >
+            <image
+              wx:if="{{currentElement === item.name}}"
+              class="tab-active-bg"
+              src="https://roco.cdn.itianci.cn/imgs/miniapp/btn.webp"
+              mode="scaleToFill"
+            />
+            <image wx:if="{{item.iconUrl}}" class="tab-icon" src="{{item.iconUrl}}" mode="aspectFit"></image>
+            <text class="tab-label">{{item.name}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
 
     <view wx:if="{{elves.length}}" class="elf-grid">
-      <block wx:for="{{elves}}" wx:key="id">
+      <block wx:for="{{elves}}" wx:key="id" wx:for-index="elfIndex">
         <view class="elf-card" bindtap="goToDetail" data-id="{{item.id}}">
+          <view wx:if="{{item.isNew}}" class="elf-new-badge">NEW</view>
+          <text class="elf-no">{{ec.padNo(elfIndex + 1)}}</text>
+
           <view class="elf-avatar-wrap">
             <image
               wx:if="{{item.displayImage}}"
@@ -55,12 +79,19 @@
             ></image>
             <text wx:else class="elf-avatar-fallback">{{item.avatarText}}</text>
           </view>
+
           <text class="elf-name">{{item.name}}</text>
-          <view class="elf-tags">
-            <block wx:for="{{item.elements}}" wx:key="*this">
-              <text class="tag-element">{{item}}系</text>
-            </block>
-            <text class="tag-rarity {{item.rarity}}">{{item.rarity}}</text>
+          <view wx:if="{{item.elements && item.elements.length}}" class="elf-type">
+            <image
+              class="elf-type-icon"
+              src="{{'https://roco.cdn.itianci.cn/imgs/shuxing/' + item.elements[0] + '.webp'}}"
+              mode="aspectFit"
+            />
+            <text>{{item.elements[0]}}</text>
+          </view>
+
+          <view class="elf-stage">
+            <text class="elf-stage-text">{{item.category || '初始形态'}}</text>
           </view>
         </view>
       </block>
@@ -69,4 +100,4 @@
     <view wx:else class="empty-state">暂时没有符合条件的精灵</view>
     <view wx:if="{{elves.length}}" class="load-more-tip">{{hasMore ? (isLoadingMore ? "加载中..." : "上拉加载更多") : "没有更多精灵了"}}</view>
   </view>
-</view>
+</scroll-view>

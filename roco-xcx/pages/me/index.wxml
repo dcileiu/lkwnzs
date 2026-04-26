@@ -1,31 +1,53 @@
-<view class="page-container">
-  <view class="profile-card">
-    <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-      <image class="avatar" src="{{profile.avatar || 'https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg'}}" mode="aspectFill"></image>
-    </button>
-    <view class="profile-info">
-      <view class="nickname-row">
-        <text class="nickname">{{profile.nickname || '洛克训练师'}}</text>
-        <view class="nickname-actions">
-          <text class="edit-btn" bindtap="editNickname">修改名称</text>
-          <text class="wx-btn" bindtap="useWechatNickname">同步微信名</text>
+<scroll-view class="page-container" scroll-y enable-flex>
+  <view class="hero">
+    <image class="hero-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/me.webp" mode="widthFix"></image>
+    <view class="hero-overlay"></view>
+  </view>
+
+  <view class="me-main">
+    <view class="profile-card">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar" src="{{profile.avatar || 'https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg'}}" mode="aspectFill"></image>
+      </button>
+      <view class="profile-info">
+        <view class="nickname-row">
+          <text class="nickname">{{profile.nickname || '洛克训练师'}}</text>
+          <view class="nickname-actions">
+            <text class="edit-btn" bindtap="editNickname">修改名称</text>
+            <text class="wx-btn" bindtap="useWechatNickname">同步微信名</text>
+          </view>
+        </view>
+        <view class="profile-meta-row">
+          <text class="desc">欢迎小洛克回来，看看攻略吧！</text>
+          <text class="uid">UID: {{uid || '未登录'}}</text>
         </view>
       </view>
-      <text class="desc">欢迎小洛克回来，看看攻略？</text>
-    </view>
-  </view>
-
-  <view class="stats-grid">
-    <view class="stat-card" bindtap="openLikedArticles">
-      <text class="stat-label">文章点赞</text>
-      <text class="stat-value">{{likeCount}}</text>
-      <text class="stat-link">查看我点赞的文章 ></text>
     </view>
 
-    <view class="stat-card" bindtap="openFavoriteArticles">
-      <text class="stat-label">文章收藏</text>
-      <text class="stat-value">{{favoriteCount}}</text>
-      <text class="stat-link">查看我收藏的文章 ></text>
+    <view class="menu-card">
+      <block wx:for="{{menus}}" wx:key="key">
+        <view
+          class="menu-item {{index === 0 ? 'first' : ''}} {{index === menus.length - 1 ? 'last' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="onMenuTap"
+        >
+          <view class="menu-text-wrap">
+            <view class="menu-title-row">
+              <text class="menu-title">{{item.title}}</text>
+              <text wx:if="{{item.key === 'like'}}" class="menu-count">{{likeCount}}</text>
+              <text wx:if="{{item.key === 'favorite'}}" class="menu-count">{{favoriteCount}}</text>
+            </view>
+            <text class="menu-desc">{{item.desc}}</text>
+          </view>
+          <text class="menu-arrow">›</text>
+        </view>
+      </block>
+    </view>
+
+    <view class="about-card" bindtap="onAboutTap">
+      <view class="about-title">关于洛克王国世界</view>
+      <view class="about-subtitle">更多关于游戏世界的资讯</view>
+      <text class="about-arrow">›</text>
     </view>
   </view>
-</view>
+</scroll-view>

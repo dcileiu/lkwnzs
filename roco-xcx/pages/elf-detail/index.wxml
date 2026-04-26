@@ -1,19 +1,30 @@
 <view class="page-container">
-  <view wx:if="{{!elf}}" class="loading-state">正在加载精灵资料...</view>
+  <view class="hero">
+    <image class="hero-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/elf-detail-bg.webp" mode="widthFix"></image>
+    <view class="hero-overlay"></view>
+    <view class="nav-back" bindtap="goBack">
+      <text class="nav-back-icon">‹</text>
+    </view>
+  </view>
 
-  <view wx:else class="detail-page">
+  <view class="detail-main">
+    <view wx:if="{{!elf}}" class="loading-state">正在加载精灵资料...</view>
+
+    <view wx:else class="detail-page">
     <view class="hero-card">
       <view class="hero-main">
         <view class="hero-media">
-          <image
-            class="hero-image"
-            src="{{activeImage || '/assets/default-elf.png'}}"
-            mode="aspectFit"
-            binderror="onHeroImageError"
-          ></image>
+          <view class="hero-image-wrap">
+            <image
+              class="hero-image"
+              src="{{activeImage || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"
+              mode="aspectFit"
+              binderror="onHeroImageError"
+            ></image>
+          </view>
 
           <view wx:if="{{elf.eggImageUrl}}" class="hero-egg-panel">
-            <text class="hero-egg-label">精灵蛋</text>
+            <text class="hero-egg-label">✦ 精灵蛋 ✦</text>
             <image class="hero-egg-image" src="{{elf.eggImageUrl}}" mode="aspectFit"></image>
           </view>
         </view>
@@ -25,69 +36,80 @@
           </view>
 
           <view class="hero-tags">
-            <block wx:for="{{elf.elements}}" wx:key="*this">
-              <text class="hero-tag">{{item}}系</text>
-            </block>
-            <text class="hero-tag">{{elf.rarity}}</text>
-            <text wx:if="{{elf.category}}" class="hero-tag category">分类：{{elf.category}}</text>
-            <text wx:if="{{elf.group}}" class="hero-tag group">组别：{{elf.group}}</text>
+            <view class="hero-tags-main">
+              <block wx:for="{{elf.elements}}" wx:key="*this">
+                <text class="hero-tag tag-element">❄ {{item}}系</text>
+              </block>
+              <text class="hero-tag tag-rarity">{{elf.rarity}}</text>
+            </view>
+            <text wx:if="{{elf.category}}" class="hero-tag tag-category">{{elf.category}}</text>
           </view>
 
           <view class="stats-grid">
             <view class="stat-item">
-              <text class="stat-label">身高</text>
-              <text class="stat-value">{{elf.height || '-'}}</text>
+              <view class="stat-info">
+                <text class="stat-label">身高</text>
+                <text class="stat-value">{{elf.height || '-'}}</text>
+              </view>
+              <text class="stat-icon">📏</text>
             </view>
             <view class="stat-item">
-              <text class="stat-label">体重</text>
-              <text class="stat-value">{{elf.weight || '-'}}</text>
+              <view class="stat-info">
+                <text class="stat-label">体重</text>
+                <text class="stat-value">{{elf.weight || '-'}}</text>
+              </view>
+              <text class="stat-icon">🎒</text>
             </view>
             <view class="stat-item">
-              <text class="stat-label">种族值</text>
-              <text class="stat-value">{{elf.raceValue || '-'}}</text>
+              <view class="stat-info">
+                <text class="stat-label">种族值</text>
+                <text class="stat-value">{{elf.raceValue || '-'}}</text>
+              </view>
+              <text class="stat-icon">🧬</text>
             </view>
             <view class="stat-item">
-              <text class="stat-label">基础四维</text>
-              <text class="stat-value">{{elf.totalStats}}</text>
+              <view class="stat-info">
+                <text class="stat-label">基础四维</text>
+                <text class="stat-value">{{elf.totalStats}}</text>
+              </view>
+              <text class="stat-icon">📊</text>
             </view>
             <view class="stat-item">
-              <text class="stat-label">生命</text>
-              <text class="stat-value">{{elf.hp}}</text>
+              <view class="stat-info">
+                <text class="stat-label">生命</text>
+                <text class="stat-value">{{elf.hp}}</text>
+              </view>
+              <text class="stat-icon">❤️</text>
             </view>
             <view class="stat-item">
-              <text class="stat-label">攻击</text>
-              <text class="stat-value">{{elf.attack}}</text>
+              <view class="stat-info">
+                <text class="stat-label">攻击</text>
+                <text class="stat-value">{{elf.attack}}</text>
+              </view>
+              <text class="stat-icon">⚔️</text>
             </view>
             <view class="stat-item">
-              <text class="stat-label">防御</text>
-              <text class="stat-value">{{elf.defense}}</text>
+              <view class="stat-info">
+                <text class="stat-label">防御</text>
+                <text class="stat-value">{{elf.defense}}</text>
+              </view>
+              <text class="stat-icon">🛡️</text>
             </view>
             <view class="stat-item">
-              <text class="stat-label">速度</text>
-              <text class="stat-value">{{elf.speed}}</text>
+              <view class="stat-info">
+                <text class="stat-label">速度</text>
+                <text class="stat-value">{{elf.speed}}</text>
+              </view>
+              <text class="stat-icon">🪶</text>
             </view>
           </view>
         </view>
       </view>
-
-      <!-- <scroll-view wx:if="{{galleryImages.length}}" class="gallery-strip" scroll-x>
-        <view class="gallery-track">
-          <block wx:for="{{galleryImages}}" wx:key="id">
-            <view
-              class="gallery-thumb {{activeImage === item.url ? 'active' : ''}}"
-              bindtap="selectImage"
-              data-url="{{item.url}}"
-            >
-              <image class="gallery-thumb-image" src="{{item.url}}" mode="aspectFill"></image>
-            </view>
-          </block>
-        </view>
-      </scroll-view> -->
     </view>
 
     <view class="section-card">
       <view class="section-head">
-        <text class="section-title">精灵相关形态（同组）</text>
+        <text class="section-title">✦ 精灵相关形态（同族）✦</text>
         <text class="section-sub">精灵的其他阶段形态</text>
       </view>
 
@@ -96,7 +118,7 @@
           <view class="group-card" bindtap="openElf" data-id="{{item.id}}">
             <image
               class="group-card-image"
-              src="{{item.coverImage || item.avatar || '/assets/default-elf.png'}}"
+              src="{{item.coverImage || item.avatar || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"
               mode="aspectFit"
             ></image>
             <view class="group-card-body">
@@ -114,7 +136,8 @@
         </block>
       </view>
 
-      <view wx:else class="empty-state">该精灵暂时没有同组成员</view>
+      <view wx:else class="empty-state">该精灵暂时没有同族成员</view>
+    </view>
     </view>
   </view>
 </view>

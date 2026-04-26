@@ -2,8 +2,6 @@ const api = require('../../utils/api.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
 const { normalizeImageUrl } = require('../../utils/url.js')
 
-const OVERVIEW_ICON_URL = '/assets/zonglan.svg'
-
 function buildElfCard(item = {}) {
   const coverImage = normalizeImageUrl(item.coverImage)
   const avatar = normalizeImageUrl(item.avatar)
@@ -50,7 +48,7 @@ Page({
   async fetchElements() {
     const defaultElements = ['全部', '火', '水', '草', '光', '暗', '电', '冰', '普通'].map((name) => ({
       name,
-      iconUrl: name === '全部' ? OVERVIEW_ICON_URL : ''
+      iconUrl: ''
     }))
 
     try {
@@ -63,7 +61,7 @@ Page({
         }))
         .filter((item) => item.name)
 
-      const allElements = [{ name: '全部', iconUrl: OVERVIEW_ICON_URL }, ...remoteElements]
+      const allElements = [{ name: '全部', iconUrl: '' }, ...remoteElements]
 
       this.setData({
         elements: allElements.length ? allElements : defaultElements
