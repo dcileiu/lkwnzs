@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start -p 3090",
     "lint": "eslint",
+    "deploy:safe": "node scripts/deploy-safe.mjs",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:bootstrap": "node scripts/bootstrap-db.mjs",

@@ -88,18 +88,28 @@
 
 .quick-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 14rpx;
   margin: 18rpx 20rpx 24rpx;
 }
 
 .quick-card {
   position: relative;
-  flex: 1;
+  flex: 0 0 calc((100% - 28rpx) / 3);
   height: 128rpx;
   border-radius: 22rpx;
   overflow: hidden;
+  gap: 28rpx;
   box-shadow: 0 10rpx 18rpx rgba(10, 24, 53, 0.25);
   box-sizing: border-box;
+}
+
+.quick-card.is-coming .quick-mask {
+  background: linear-gradient(
+    180deg,
+    rgba(6, 18, 41, 0.1) 0%,
+    rgba(6, 18, 41, 0.3) 100%
+  );
 }
 
 .quick-bg,

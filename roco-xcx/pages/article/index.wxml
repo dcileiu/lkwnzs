@@ -23,7 +23,9 @@
   </view>
 
   <view class="content-area" wx:if="{{article}}">
-    <view class="action-bar" style="top: {{actionBarStickyTop}}px;">
+    <view id="actionBarAnchor" class="action-bar-anchor"></view>
+    <view wx:if="{{isActionBarDocked}}" class="action-bar-placeholder"></view>
+    <view class="action-bar {{isActionBarDocked ? 'is-docked' : ''}}" style="top: {{actionBarStickyTop}}px;">
       <view class="action-btn {{isLiked ? 'active' : ''}}" bindtap="toggleLike">
         <text class="action-icon">{{isLiked ? '❤' : '♡'}}</text>
         <text class="action-label">点赞</text>

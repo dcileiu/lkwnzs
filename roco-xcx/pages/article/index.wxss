@@ -151,6 +151,15 @@
   color: rgba(240, 247, 255, 0.95);
 }
 
+.action-bar-anchor {
+  height: 0;
+}
+
+.action-bar-placeholder {
+  height: 88rpx;
+  margin: 18rpx 6rpx 0;
+}
+
 .action-bar {
   margin: 18rpx 6rpx 0;
   position: sticky;
@@ -182,6 +191,16 @@
   border: none;
 }
 
+.action-share {
+  width: auto;
+  height: auto;
+  min-height: 0;
+  line-height: normal;
+  font-size: inherit;
+  color: inherit;
+  text-align: center;
+}
+
 .action-btn:last-child {
   border-right: none;
 }
@@ -200,6 +219,51 @@
 .action-btn.active .action-icon,
 .action-btn.active .action-label {
   color: #b6452f;
+}
+
+.action-bar.is-docked {
+  position: fixed;
+  right: 14rpx;
+  width: 104rpx;
+  margin: 0;
+  flex-direction: column;
+  border-radius: 28rpx;
+  border-color: rgba(214, 195, 159, 0.94);
+  background: rgba(248, 240, 223, 0.94);
+  box-shadow: 0 12rpx 30rpx rgba(21, 35, 69, 0.28);
+  backdrop-filter: blur(10rpx);
+  -webkit-backdrop-filter: blur(10rpx);
+}
+
+.action-bar.is-docked .action-btn {
+  flex: none;
+  width: 100%;
+  min-height: 98rpx;
+  padding: 12rpx 0 10rpx;
+  flex-direction: column;
+  gap: 4rpx;
+  border-right: none;
+  border-bottom: 1rpx solid rgba(164, 132, 81, 0.26);
+  line-height: 1.2;
+}
+
+.action-bar.is-docked .action-share {
+  height: 98rpx;
+  min-height: 98rpx;
+}
+
+.action-bar.is-docked .action-btn:last-child {
+  border-bottom: none;
+}
+
+.action-bar.is-docked .action-icon {
+  font-size: 30rpx;
+  line-height: 1.15;
+}
+
+.action-bar.is-docked .action-label {
+  font-size: 22rpx;
+  line-height: 1.15;
 }
 
 .article-card {

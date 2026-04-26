@@ -38,6 +38,28 @@ npm run db:sync-egg-media
 - sync egg image URLs into `Elf.eggImageUrl`
 - sync fruit image URLs into `Elf.fruitImageUrl`
 
+## Safe Server Update
+
+For production updates, use the guarded deploy script after `git pull` and `npm install`:
+
+```bash
+npm run deploy:safe
+pm2 restart <your-backend-process-name>
+```
+
+`deploy:safe` will:
+
+- verify Prisma is connected to `prisma/dev.db`
+- create a timestamped SQLite backup under `prisma/backups/`
+- run Prisma schema push without accepting destructive data loss
+- run the data sync scripts and build the app
+
+If the server should use the existing database with user data, set `.env` explicitly:
+
+```env
+DATABASE_URL="file:/www/wwwroot/roco-backend/prisma/dev.db"
+```
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

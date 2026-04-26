@@ -33,7 +33,8 @@ Page({
     commentInput: '',
     articleContentHtml: '',
     navTopPadding: 32,
-    actionBarStickyTop: 64
+    actionBarStickyTop: 64,
+    isActionBarDocked: false
   },
 
   onLoad(options) {
@@ -43,6 +44,10 @@ Page({
       this.fetchArticle(id)
       this.articleId = id
     }
+  },
+
+  onReady() {
+    this.measureActionBarDockPoint()
   },
 
   syncSafeTopPadding() {
@@ -82,12 +87,33 @@ Page({
         isLiked: userActions.isLiked(id),
         isFavorited: userActions.isFavorited(id)
       })
+      wx.nextTick(() => this.measureActionBarDockPoint())
       wx.setNavigationBarTitle({ title: res.title || '攻略详情' })
     } catch (err) {
       wx.showToast({ title: '加载失败', icon: 'error' })
       console.error(err)
     } finally {
       wx.hideLoading()
+    }
+  },
+
+  measureActionBarDockPoint() {
+    const query = wx.createSelectorQuery().in(this)
+    query.select('#actionBarAnchor').boundingClientRect()
+    query.selectViewport().scrollOffset()
+    query.exec(([rect, viewport]) => {
+      if (!rect) return
+      const scrollTop = (viewport && viewport.scrollTop) || 0
+      this.actionBarDockPoint = Math.max(0, rect.top + scrollTop - this.data.actionBarStickyTop)
+    })
+  },
+
+  onPageScroll(e) {
+    if (typeof this.actionBarDockPoint !== 'number') return
+
+    const shouldDock = e.scrollTop >= this.actionBarDockPoint
+    if (shouldDock !== this.data.isActionBarDocked) {
+      this.setData({ isActionBarDocked: shouldDock })
     }
   },
 

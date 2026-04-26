@@ -21,7 +21,7 @@
   <view class="home-main">
     <view class="quick-actions">
       <block wx:for="{{quickCards}}" wx:key="text">
-        <view class="quick-card" bindtap="navTo" data-url="{{item.url}}">
+        <view class="quick-card {{item.status === 'coming' ? 'is-coming' : ''}}" bindtap="navTo" data-url="{{item.url}}" data-status="{{item.status}}">
           <image class="quick-bg" src="{{item.bg}}" mode="scaleToFill"></image>
           <view class="quick-mask"></view>
           <view class="quick-body">

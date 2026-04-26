@@ -256,11 +256,7 @@ async function ensureSampleArticle() {
   })
 
   if (existing) {
-    await prisma.article.update({
-      where: { id: existing.id },
-      data,
-    })
-    return { created: false, updated: true }
+    return { created: false, updated: false }
   }
 
   await prisma.article.create({ data })
@@ -276,7 +272,7 @@ async function main() {
     `精灵同步：源数据 ${elfResult.totalSourceCount} 条，新增 ${elfResult.createdCount} 条，更新 ${elfResult.updatedCount} 条。`
   )
   console.log(
-    `示例文章：${articleResult.created ? "已创建" : articleResult.updated ? "已更新" : "未变更"}。`
+    `示例文章：${articleResult.created ? "已创建" : articleResult.updated ? "已更新" : "已存在，未覆盖"}。`
   )
 }
 
