@@ -1,6 +1,6 @@
-<view class="page-container">
+﻿<view class="page-container">
   <view class="hero" wx:if="{{article}}">
-    <image class="hero-bg" src="{{article.cover || article.image || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp'}}" mode="aspectFill"></image>
+    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp" mode="aspectFill"></image>
     <view class="hero-overlay"></view>
 
     <view class="top-nav" style="padding-top: {{navTopPadding}}px;">

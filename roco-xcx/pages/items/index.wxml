@@ -1,0 +1,91 @@
+<scroll-view class="page-container" scroll-y enable-flex bindscrolltolower="loadMoreItems">
+  <view class="hero">
+    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp" mode="aspectFill"></image>
+    <view class="hero-overlay"></view>
+    <view class="top-nav" style="padding-top: {{navTopPadding}}px;">
+      <view class="nav-btn nav-back" bindtap="onBackTap">‹</view>
+      <text class="nav-title">✦ 全部道具 ✦</text>
+    </view>
+    <view class="hero-content">
+      <view class="search-wrap">
+        <icon type="search" size="16" color="#f8e8b1"></icon>
+        <input
+          class="search-input"
+          placeholder="搜索道具名称、效果或获取方式..."
+          placeholder-style="color: rgba(255, 241, 214, 0.72);"
+          confirm-type="search"
+          bindinput="onSearchInput"
+          bindconfirm="onSearch"
+          value="{{keyword}}"
+        />
+        <text wx:if="{{keyword}}" class="search-clear" bindtap="clearSearch">×</text>
+      </view>
+
+      <view class="item-stats">
+        <view class="stat-item">
+          <text class="stat-num">{{totalCount}}</text>
+          <text class="stat-label">道具总数</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-num">{{filteredTotal}}</text>
+          <text class="stat-label">当前展示</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="items-main">
+    <scroll-view class="tabs-scroll" scroll-x show-scrollbar="{{false}}">
+      <view class="tabs">
+        <block wx:for="{{categories}}" wx:key="id">
+          <view
+            class="tab-item {{currentCategory === item.id ? 'active' : ''}}"
+            data-category="{{item.id}}"
+            bindtap="switchCategory"
+          >
+            <image
+              wx:if="{{currentCategory === item.id}}"
+              class="tab-active-bg"
+              src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/btn.webp"
+              mode="scaleToFill"
+            />
+            <text class="tab-label">{{item.name}}</text>
+            <text class="tab-count">{{item.count || 0}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+
+    <view wx:if="{{items.length}}" class="item-grid">
+      <block wx:for="{{items}}" wx:key="id">
+        <view class="item-card" bindtap="showItemDetail" data-index="{{index}}">
+          <view class="item-image-wrap">
+            <image
+              wx:if="{{item.imageUrl}}"
+              class="item-image"
+              src="{{item.imageUrl}}"
+              mode="aspectFit"
+              binderror="onItemImageError"
+              data-id="{{item.id}}"
+            ></image>
+            <text wx:else class="item-image-fallback">{{item.fallbackText}}</text>
+          </view>
+
+          <text class="item-name">{{item.name}}</text>
+          <view class="item-tags">
+            <text class="item-category">{{item.categoryName}}</text>
+            <text class="item-rarity">{{item.rarityLabel}}</text>
+          </view>
+          <text class="item-summary">{{item.summary}}</text>
+          <view wx:if="{{item.learnableElfCount > 0}}" class="learnable-badge">
+            可学精灵 {{item.learnableElfCount}}
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <view wx:else class="empty-state">暂时没有符合条件的道具</view>
+    <view wx:if="{{items.length}}" class="load-more-tip">{{hasMore ? (isLoadingMore ? "加载中..." : "上拉加载更多") : "没有更多道具了"}}</view>
+  </view>
+</scroll-view>

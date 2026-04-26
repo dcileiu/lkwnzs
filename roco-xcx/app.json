@@ -5,6 +5,7 @@
     "pages/guide/index",
     "pages/hatch/index",
     "pages/pokedex/index",
+    "pages/items/index",
     "pages/elf-detail/index",
     "pages/collection/index",
     "pages/article/index",

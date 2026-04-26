@@ -51,6 +51,7 @@
         <block wx:for="{{hotArticles}}" wx:key="id">
           <swiper-item class="art-item">
             <view class="guide-card" bindtap="navTo" data-url="/pages/article/index?id={{item.id}}">
+              <image class="guide-card-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/home-article-bg.webp" mode="scaleToFill"></image>
               <image class="guide-cover" src="{{item.thumbnail || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles.webp'}}" mode="aspectFill"></image>
               <view class="guide-info">
                 <view class="guide-title">{{item.title}}</view>
