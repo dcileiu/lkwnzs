@@ -1,4 +1,4 @@
-﻿<scroll-view class="page-container" scroll-y enable-flex>
+<scroll-view class="page-container" scroll-y enable-flex>
   <view class="hero">
     <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/roco.webp" mode="widthFix"></image>
     <view class="hero-overlay"></view>
@@ -19,7 +19,7 @@
   </view>
 
   <view class="home-main">
-    <view class="quick-actions">
+    <scroll-view class="quick-actions" scroll-x show-scrollbar="{{false}}">
       <block wx:for="{{quickCards}}" wx:key="text">
         <view class="quick-card {{item.status === 'coming' ? 'is-coming' : ''}}" bindtap="navTo" data-url="{{item.url}}" data-status="{{item.status}}">
           <image class="quick-bg" src="{{item.bg}}" mode="scaleToFill"></image>
@@ -27,10 +27,11 @@
           <view class="quick-body">
             <text class="quick-title">{{item.text}}</text>
             <text class="quick-sub">{{item.subText}}</text>
+            <text class="quick-arrow">›</text>
           </view>
         </view>
       </block>
-    </view>
+    </scroll-view>
 
     <view class="section guide-section">
       <view class="section-header">

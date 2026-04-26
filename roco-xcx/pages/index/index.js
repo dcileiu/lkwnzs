@@ -10,12 +10,10 @@ Page({
     searchKeyword: '',
     guideCurrent: 0,
     quickCards: [
-      { text: '孵蛋预测', subText: '预测精灵和孵化', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/zi-card.webp', url: '/pages/hatch/index' },
-      { text: '精灵图鉴', subText: '查看精灵详情', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/lan-card.webp', url: '/pages/pokedex/index' },
-      { text: '新手攻略', subText: '快速入门指南', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/lv-card.webp', url: '/pages/guide/index' },
-      { text: '蛋组查询', subText: '查看精灵蛋组', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/zi-card.webp', status: 'coming' },
-      { text: '全部道具', subText: '浏览道具图鉴', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/lan-card.webp', status: 'coming' },
-      { text: '远行商人', subText: '商店物品查询', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/lv-card.webp', status: 'coming' }
+      { text: '精灵图鉴', subText: '查看精灵详情', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/jinglingtuji.webp', url: '/pages/pokedex/index' },
+      { text: '蛋组查询', subText: '查看精灵蛋组', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/danzupeidui.webp', status: 'coming' },
+      { text: '全部道具', subText: '浏览道具图鉴', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/quanbudaoju.webp', status: 'coming' },
+      { text: '远行商人', subText: '商店物品查询', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/yuanxingshangren.webp', status: 'coming' }
     ]
   },
 
