@@ -1,6 +1,6 @@
-<scroll-view class="page-container" scroll-y enable-flex>
+﻿<scroll-view class="page-container" scroll-y enable-flex>
   <view class="hero">
-    <image class="hero-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/eggs.webp" mode="widthFix"></image>
+    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/eggs.webp" mode="widthFix"></image>
     <view class="hero-overlay"></view>
   </view>
 
@@ -71,7 +71,7 @@
             <view class="result-avatar">
               <image
                 class="result-avatar-img"
-                src="{{item.elfCoverImage || item.eggImageUrl || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"
+                src="{{item.elfCoverImage || item.eggImageUrl || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"
                 mode="aspectFit"
               ></image>
             </view>
@@ -105,3 +105,4 @@
     </view>
   </view>
 </scroll-view>
+

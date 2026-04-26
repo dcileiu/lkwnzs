@@ -8,10 +8,15 @@ dotenv.config({ path: path.join(process.cwd(), ".env.local"), override: true })
 
 const prisma = new PrismaClient()
 const JINGLING_FILE = path.join(process.cwd(), "data", "jingling.json")
+const CDN_HOSTS = new Set(["wallpaper.cdn.itianci.cn"])
+
+function stripBom(content) {
+  return content.replace(/^\uFEFF/, "")
+}
 
 async function loadJinglingRecords() {
   const content = await fs.readFile(JINGLING_FILE, "utf8")
-  const parsed = JSON.parse(content)
+  const parsed = JSON.parse(stripBom(content))
 
   if (!Array.isArray(parsed)) {
     throw new Error("data/jingling.json 必须是数组。")
@@ -21,7 +26,23 @@ async function loadJinglingRecords() {
 }
 
 function normalizeUrl(value) {
-  return typeof value === "string" && value.trim() ? value.trim() : null
+  if (typeof value !== "string") return null
+
+  const normalized = value.trim().replace(/\.wepb(\?|#|$)/gi, ".webp$1")
+  if (!normalized) return null
+  if (!/^https?:\/\//i.test(normalized)) {
+    return normalized.startsWith("/") ? normalized : `/${normalized}`
+  }
+
+  try {
+    const parsed = new URL(normalized)
+    if (!CDN_HOSTS.has(parsed.host.toLowerCase())) {
+      return normalized
+    }
+    return `${parsed.pathname}${parsed.search}${parsed.hash}`
+  } catch {
+    return normalized
+  }
 }
 
 async function main() {

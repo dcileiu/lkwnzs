@@ -3,11 +3,15 @@ import path from "node:path"
 
 const JINGLING_FILE = path.join(process.cwd(), "data", "jingling.json")
 const EGG_ASSET_DIR = path.join(process.cwd(), "data", "imgs", "eggs")
-const CDN_BASE_URL = "https://roco.cdn.itianci.cn/imgs/jingling"
+const CDN_BASE_URL = "/imgs/jingling"
+
+function stripBom(content) {
+  return content.replace(/^\uFEFF/, "")
+}
 
 async function loadJsonArray(filePath) {
   const content = await fs.readFile(filePath, "utf8")
-  const parsed = JSON.parse(content)
+  const parsed = JSON.parse(stripBom(content))
 
   if (!Array.isArray(parsed)) {
     throw new Error(`${path.basename(filePath)} 必须是数组。`)

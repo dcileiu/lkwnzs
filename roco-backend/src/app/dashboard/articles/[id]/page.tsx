@@ -3,12 +3,14 @@ import { notFound } from "next/navigation"
 
 import { updateArticle } from "@/app/actions/articles"
 import { ArticleContentEditor } from "@/components/article-content-editor"
+import { ArticleCoverUploader } from "@/components/article-cover-uploader"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { normalizeImagePathForStorage, resolveImageUrl } from "@/lib/media"
 import { prisma } from "@/lib/prisma"
 
 interface EditArticlePageProps {
@@ -27,18 +29,26 @@ export default async function EditArticlePage({ params }: EditArticlePageProps) 
     notFound()
   }
 
+  const coverPath = normalizeImagePathForStorage(article.thumbnail)
+  const coverPreviewUrl = resolveImageUrl(article.thumbnail)
+
   return (
     <div className="flex max-w-4xl flex-col gap-4 p-4 lg:p-8">
-      <div className="flex items-center justify-between">
+      <div className="sticky top-0 z-20 -mx-4 flex items-center justify-between border-b bg-background/95 px-4 py-3 backdrop-blur lg:-mx-8 lg:px-8">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">编辑攻略</h1>
           <p className="mt-1 text-muted-foreground">
-            修改文章内容，支持 Markdown。
+            修改 Markdown 内容，保存后会同步更新 HTML 渲染结果。
           </p>
         </div>
-        <Button variant="outline" asChild>
-          <Link href="/dashboard/articles">返回列表</Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/articles">返回列表</Link>
+          </Button>
+          <Button type="submit" form="article-edit-form">
+            保存修改
+          </Button>
+        </div>
       </div>
 
       <Card>
@@ -47,7 +57,7 @@ export default async function EditArticlePage({ params }: EditArticlePageProps) 
           <CardDescription>编辑标题、分类和正文内容。</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={updateArticle} className="space-y-6">
+          <form id="article-edit-form" action={updateArticle} className="space-y-6">
             <input type="hidden" name="id" value={article.id} />
             
             <div className="space-y-2">
@@ -87,35 +97,26 @@ export default async function EditArticlePage({ params }: EditArticlePageProps) 
                   placeholder="输入作者名称"
                 />
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="cover">封面链接（可不填）</Label>
-              <Input
-                id="cover"
-                name="cover"
-                defaultValue={article.thumbnail || ""}
-                placeholder="https://example.com/cover.jpg（留空则使用默认封面）"
-              />
-            </div>
-
-            <ArticleContentEditor defaultValue={article.content} />
-
-            <div className="flex items-center space-x-2 rounded-md border p-4">
-              <Checkbox id="isHot" name="isHot" defaultChecked={article.isHot} />
-              <div className="space-y-1 leading-none">
-                <Label htmlFor="isHot" className="font-medium">
-                  标记为热门攻略
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  勾选后会优先展示在首页热门攻略区域。
-                </p>
+              <div className="flex items-center space-x-2 rounded-md border p-4 md:col-span-2">
+                <Checkbox id="isHot" name="isHot" defaultChecked={article.isHot} />
+                <div className="space-y-1 leading-none">
+                  <Label htmlFor="isHot" className="font-medium">
+                    标记为热门攻略
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    勾选后会优先展示在首页热门攻略区域。
+                  </p>
+                </div>
               </div>
             </div>
 
-            <Button type="submit" className="w-full">
-              保存修改
-            </Button>
+            <ArticleCoverUploader
+              initialValue={coverPath}
+              initialPreviewUrl={coverPreviewUrl}
+            />
+
+            <ArticleContentEditor defaultValue={article.contentMarkdown || article.content} />
           </form>
         </CardContent>
       </Card>

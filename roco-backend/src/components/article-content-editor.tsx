@@ -1,174 +1,110 @@
 "use client"
 
 import * as React from "react"
-import { ImageUpIcon, LoaderCircleIcon } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
+import { marked } from "marked"
+import { MdEditor, type UploadImgEvent } from "md-editor-rt"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 
-type UploadResult = {
-  code: number
-  message: string
-  data?: {
-    key: string
-    url: string
-  }
-}
+const CDN_BASE_URL = "https://wallpaper.cdn.itianci.cn"
 
-function insertTextAtCursor(textarea: HTMLTextAreaElement, text: string) {
-  const start = textarea.selectionStart ?? textarea.value.length
-  const end = textarea.selectionEnd ?? start
-  const nextValue =
-    textarea.value.slice(0, start) + text + textarea.value.slice(end)
-
-  textarea.value = nextValue
-
-  const nextCursor = start + text.length
-
-  requestAnimationFrame(() => {
-    textarea.focus()
-    textarea.setSelectionRange(nextCursor, nextCursor)
-  })
-}
-
-function toMarkdownImage(fileName: string, url: string) {
-  const alt = fileName.replace(/\.[a-zA-Z0-9]+$/, "") || "image"
-  return `\n![${alt}](${url})\n`
-}
-
-async function uploadImage(file: File) {
-  const formData = new FormData()
-  formData.set("file", file)
-  formData.set("folder", "imgs/article")
-
-  const response = await fetch("/api/qiniu/upload", {
-    method: "POST",
-    body: formData,
-  })
-
-  const payload = (await response.json()) as UploadResult
-
-  if (!response.ok || payload.code !== 200 || !payload.data?.url) {
-    throw new Error(payload.message || "图片上传失败")
-  }
-
-  return payload.data.url
+type UploadResponse = {
+  path?: string
+  url?: string
+  publicUrl?: string
 }
 
 interface ArticleContentEditorProps {
   defaultValue?: string
 }
 
+function toHtml(markdown: string) {
+  const html = marked.parse(markdown || "")
+  return typeof html === "string" ? html : ""
+}
+
+function buildPreviewUrl(value: string | null | undefined) {
+  if (!value) return ""
+  if (/^https?:\/\//i.test(value)) return value
+
+  return `${CDN_BASE_URL}${value.startsWith("/") ? value : `/${value}`}`
+}
+
+function normalizeEditorMarkdown(markdown: string) {
+  if (!markdown) return markdown
+
+  return markdown.replace(
+    /(!\[[^\]]*]\()([^) \t\r\n]+)(\))/gi,
+    (_, left: string, src: string, right: string) => {
+      return `${left}${buildPreviewUrl(src)}${right}`
+    },
+  )
+}
+
 export function ArticleContentEditor({ defaultValue }: ArticleContentEditorProps = {}) {
-  const textareaRef = React.useRef<HTMLTextAreaElement>(null)
-  const fileInputRef = React.useRef<HTMLInputElement>(null)
-  const [isUploading, setIsUploading] = React.useState(false)
-  const [statusText, setStatusText] = React.useState(
-    "支持 Markdown，支持直接粘贴截图/图片，系统会自动上传到七牛云并插入图片链接。"
-  )
+  const initialMarkdown = normalizeEditorMarkdown(defaultValue || "")
+  const [markdown, setMarkdown] = React.useState(initialMarkdown)
+  const [html, setHtml] = React.useState(() => toHtml(initialMarkdown))
+  const [uploadError, setUploadError] = React.useState("")
 
-  const handleFiles = React.useCallback(async (files: File[]) => {
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"))
-
-    if (!imageFiles.length || !textareaRef.current) {
-      return
-    }
-
-    setIsUploading(true)
-    setStatusText(`正在上传 ${imageFiles.length} 张图片...`)
-
-    try {
-      for (const file of imageFiles) {
-        const imageUrl = await uploadImage(file)
-        insertTextAtCursor(
-          textareaRef.current,
-          toMarkdownImage(file.name, imageUrl)
-        )
-      }
-
-      setStatusText("图片上传完成，已自动插入到正文中。")
-    } catch (error) {
-      setStatusText(
-        error instanceof Error ? error.message : "图片上传失败，请稍后重试。"
-      )
-    } finally {
-      setIsUploading(false)
-
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""
-      }
-    }
+  const handleChange = React.useCallback((value: string) => {
+    setMarkdown(value)
+    setHtml(toHtml(value))
   }, [])
 
-  const handlePaste = React.useCallback(
-    async (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
-      const clipboardFiles = Array.from(event.clipboardData.files).filter(
-        (file) => file.type.startsWith("image/")
-      )
+  const handleUploadImg = React.useCallback<UploadImgEvent>((files, callback) => {
+    setUploadError("")
 
-      if (!clipboardFiles.length) {
-        return
-      }
+    Promise.all(
+      files.map(async (file) => {
+        const formData = new FormData()
+        formData.set("file", file)
+        formData.set("folder", "articles/content")
 
-      event.preventDefault()
-      await handleFiles(clipboardFiles)
-    },
-    [handleFiles]
-  )
+        const response = await fetch("/api/qiniu/upload", {
+          method: "POST",
+          body: formData,
+        })
+        const result = await response.json()
 
-  const handleChooseImage = React.useCallback(() => {
-    fileInputRef.current?.click()
+        if (!response.ok || result.code !== 200) {
+          throw new Error(result.message || "图片上传失败")
+        }
+
+        const uploaded = result.data as UploadResponse
+        const previewUrl = uploaded.publicUrl || buildPreviewUrl(uploaded.path || uploaded.url)
+
+        if (!previewUrl) {
+          throw new Error("图片上传成功但未返回地址")
+        }
+
+        return previewUrl
+      }),
+    )
+      .then((urls) => {
+        callback(urls)
+      })
+      .catch((error) => {
+        setUploadError(error instanceof Error ? error.message : "图片上传失败")
+      })
   }, [])
-
-  const handleInputChange = React.useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const selectedFiles = Array.from(event.target.files || [])
-      await handleFiles(selectedFiles)
-    },
-    [handleFiles]
-  )
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between gap-3">
-        <Label htmlFor="content">内容正文 (Content)</Label>
-        <div className="flex items-center gap-2">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            className="hidden"
-            onChange={handleInputChange}
-          />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={isUploading}
-            onClick={handleChooseImage}
-          >
-            {isUploading ? (
-              <LoaderCircleIcon className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <ImageUpIcon className="mr-2 h-4 w-4" />
-            )}
-            上传图片
-          </Button>
-        </div>
-      </div>
-      <Textarea
-        ref={textareaRef}
-        id="content"
-        name="content"
-        required
-        className="min-h-[250px]"
-        placeholder="在此输入攻略正文（支持 Markdown，也可以直接粘贴图片自动上传）..."
-        defaultValue={defaultValue}
-        onPaste={handlePaste}
+      <Label htmlFor="article-content-editor">内容正文 (Markdown)</Label>
+      <MdEditor
+        editorId="article-content-editor"
+        modelValue={markdown}
+        onChange={handleChange}
+        onUploadImg={handleUploadImg}
+        language="zh-CN"
+        style={{ minHeight: "420px" }}
       />
-      <p className="text-xs text-muted-foreground">{statusText}</p>
+      <input type="hidden" name="content" value={html} />
+      <input type="hidden" name="contentMarkdown" value={markdown} />
+      <p className="text-xs text-muted-foreground">
+        可直接复制图片后粘贴到编辑器，图片会自动上传；提交时保存 HTML 和 Markdown。
+      </p>
+      {uploadError ? <p className="text-sm text-destructive">{uploadError}</p> : null}
     </div>
   )
 }

@@ -1,9 +1,9 @@
-<view class="page-container">
+﻿<view class="page-container">
   <view wx:if="{{articles.length === 0}}" class="empty-state">暂无文章记录</view>
 
   <block wx:for="{{articles}}" wx:key="id">
     <view class="article-card" bindtap="openArticle" data-id="{{item.id}}">
-      <image class="thumb" src="{{item.thumbnail || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-article.png'}}" mode="aspectFill"></image>
+      <image class="thumb" src="{{item.thumbnail || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/default-article.png'}}" mode="aspectFill"></image>
       <view class="content">
         <text class="title">{{item.title}}</text>
         <text class="meta">{{item.category || '未分类'}} · {{item.views || 0}} 阅读</text>
@@ -11,3 +11,4 @@
     </view>
   </block>
 </view>
+

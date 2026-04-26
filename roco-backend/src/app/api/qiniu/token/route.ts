@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server"
-import { createUploadToken } from "@/lib/qiniu"
+import {
+  buildQiniuPublicUrl,
+  buildQiniuStoragePath,
+  createUploadToken,
+} from "@/lib/qiniu"
 
 export const runtime = "nodejs"
 
@@ -17,7 +21,9 @@ export async function GET(request: Request) {
       data: {
         token: tokenInfo.token,
         key: tokenInfo.key,
+        path: buildQiniuStoragePath(tokenInfo.key),
         domain: tokenInfo.domain,
+        publicUrl: buildQiniuPublicUrl(tokenInfo.domain, tokenInfo.key),
         uploadUrl: tokenInfo.uploadUrl,
         expiresAt: tokenInfo.deadline * 1000,
       },

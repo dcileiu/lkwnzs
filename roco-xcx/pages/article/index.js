@@ -1,5 +1,29 @@
 const api = require('../../utils/api.js')
 const userActions = require('../../utils/user-actions.js')
+const { normalizeImageUrl } = require('../../utils/url.js')
+
+function normalizeArticleHtml(contentHtml) {
+  if (!contentHtml || typeof contentHtml !== 'string') {
+    return ''
+  }
+
+  return contentHtml.replace(/<img\b([^>]*)>/gi, (match, attrs = '') => {
+    if (/style\s*=/i.test(attrs)) {
+      return `<img${attrs}>`
+    }
+    return `<img${attrs} style="max-width:100%;height:auto;display:block;margin:16px auto;">`
+  })
+}
+
+function resolveSourceAuthor(article = {}) {
+  return (
+    article.sourceName ||
+    article.source ||
+    article.authorName ||
+    (article.author && article.author.name) ||
+    '洛克攻略组'
+  )
+}
 
 Page({
   data: {
@@ -7,10 +31,13 @@ Page({
     isLiked: false,
     isFavorited: false,
     commentInput: '',
-    isActionBarSticky: false
+    articleContentHtml: '',
+    navTopPadding: 32,
+    actionBarStickyTop: 64
   },
 
   onLoad(options) {
+    this.syncSafeTopPadding()
     const { id } = options
     if (id) {
       this.fetchArticle(id)
@@ -18,13 +45,40 @@ Page({
     }
   },
 
+  syncSafeTopPadding() {
+    try {
+      const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
+      const statusBarHeight =
+        windowInfo.statusBarHeight ||
+        (windowInfo.safeArea ? windowInfo.safeArea.top : 0) ||
+        20
+      this.setData({
+        navTopPadding: statusBarHeight + 10,
+        actionBarStickyTop: statusBarHeight + 44
+      })
+    } catch (err) {
+      this.setData({
+        navTopPadding: 32,
+        actionBarStickyTop: 64
+      })
+    }
+  },
+
   async fetchArticle(id) {
     try {
       wx.showLoading({ title: '加载中' })
       const res = await api.getArticleDetail(id)
-      userActions.saveArticleSnapshot(res)
+      const article = {
+        ...res,
+        cover: normalizeImageUrl(res.cover),
+        image: normalizeImageUrl(res.image),
+        thumbnail: normalizeImageUrl(res.thumbnail),
+        sourceAuthor: resolveSourceAuthor(res)
+      }
+      userActions.saveArticleSnapshot(article)
       this.setData({
-        article: res,
+        article,
+        articleContentHtml: normalizeArticleHtml(res.contentHtml || res.content),
         isLiked: userActions.isLiked(id),
         isFavorited: userActions.isFavorited(id)
       })
@@ -92,12 +146,28 @@ Page({
     wx.showToast({ title: '评论成功', icon: 'success' })
   },
 
-
-  onPageScroll(e) {
-    const shouldSticky = e.scrollTop > 200
-    if (shouldSticky !== this.data.isActionBarSticky) {
-      this.setData({ isActionBarSticky: shouldSticky })
+  onBackTap() {
+    const pages = getCurrentPages()
+    if (pages.length > 1) {
+      wx.navigateBack()
+      return
     }
+    wx.switchTab({ url: '/pages/index/index' })
+  },
+
+  copySourceLink() {
+    const article = this.data.article || {}
+    const url = article.sourceUrl || article.url
+    if (!url) {
+      wx.showToast({ title: '暂无链接', icon: 'none' })
+      return
+    }
+    wx.setClipboardData({
+      data: url,
+      success: () => {
+        wx.showToast({ title: '链接已复制', icon: 'none' })
+      }
+    })
   },
 
   onShareAppMessage() {

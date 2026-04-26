@@ -1,4 +1,4 @@
-const api = require('../../utils/api.js')
+﻿const api = require('../../utils/api.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
 const auth = require('../../utils/auth.js')
 const { normalizeImageUrl } = require('../../utils/url.js')
@@ -10,9 +10,9 @@ Page({
     searchKeyword: '',
     guideCurrent: 0,
     quickCards: [
-      { text: '孵蛋预测', subText: '预测精灵和孵化', bg: 'https://roco.cdn.itianci.cn/imgs/miniapp/zi-card.webp', url: '/pages/hatch/index' },
-      { text: '精灵图鉴', subText: '查看精灵详情', bg: 'https://roco.cdn.itianci.cn/imgs/miniapp/lan-card.webp', url: '/pages/pokedex/index' },
-      { text: '新手攻略', subText: '快速入门指南', bg: 'https://roco.cdn.itianci.cn/imgs/miniapp/lv-card.webp', url: '/pages/guide/index' }
+      { text: '孵蛋预测', subText: '预测精灵和孵化', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/zi-card.webp', url: '/pages/hatch/index' },
+      { text: '精灵图鉴', subText: '查看精灵详情', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/lan-card.webp', url: '/pages/pokedex/index' },
+      { text: '新手攻略', subText: '快速入门指南', bg: 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/lv-card.webp', url: '/pages/guide/index' }
     ]
   },
 
@@ -83,3 +83,4 @@ Page({
     wx.navigateTo({ url: `/pages/elf-detail/index?id=${id}` })
   }
 })
+

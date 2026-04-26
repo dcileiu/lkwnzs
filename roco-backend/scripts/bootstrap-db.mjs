@@ -10,6 +10,11 @@ const prisma = new PrismaClient()
 
 const SAMPLE_AUTHOR_NAME = "洛克助手运营组"
 const SAMPLE_ARTICLE_TITLE = "新手开荒指南：前 30 分钟先做这 5 件事"
+const CDN_HOSTS = new Set(["wallpaper.cdn.itianci.cn"])
+
+function stripBom(content) {
+  return content.replace(/^\uFEFF/, "")
+}
 
 function normalizeElementList(input) {
   const rawValues = Array.isArray(input) ? input : [input ?? ""]
@@ -40,11 +45,25 @@ function uniqueImageUrls(...urls) {
 
 function normalizeImageUrl(url) {
   if (typeof url !== "string") return ""
-  return url.trim().replace(/\.wepb(\?|#|$)/gi, ".webp$1")
+  const normalized = url.trim().replace(/\.wepb(\?|#|$)/gi, ".webp$1")
+  if (!normalized) return ""
+  if (!/^https?:\/\//i.test(normalized)) {
+    return normalized.startsWith("/") ? normalized : `/${normalized}`
+  }
+
+  try {
+    const parsed = new URL(normalized)
+    if (!CDN_HOSTS.has(parsed.host.toLowerCase())) {
+      return normalized
+    }
+    return `${parsed.pathname}${parsed.search}${parsed.hash}`
+  } catch {
+    return normalized
+  }
 }
 
 function extractArticleThumbnail(content) {
-  const match = content.match(/!\[[^\]]*]\((https?:\/\/[^)\s]+)\)/i)
+  const match = content.match(/!\[[^\]]*]\(([^)\s]+)\)/i)
   return match?.[1] || null
 }
 
@@ -62,7 +81,7 @@ function extractArticleSummary(content, limit = 140) {
 
 function buildSampleArticleContent() {
   return [
-    "![迪莫](https://roco.cdn.itianci.cn/imgs/jingling/%E8%BF%AA%E8%8E%AB.webp)",
+    "![迪莫](/imgs/jingling/迪莫.webp)",
     "",
     "# 新手开荒指南：前 30 分钟先做这 5 件事",
     "",
@@ -117,7 +136,7 @@ function buildSampleArticleContent() {
 async function loadElfRecords() {
   const filePath = path.join(process.cwd(), "data", "jingling.json")
   const content = await fs.readFile(filePath, "utf8")
-  const parsed = JSON.parse(content)
+  const parsed = JSON.parse(stripBom(content))
 
   if (!Array.isArray(parsed)) {
     throw new Error("data/jingling.json 格式不正确，必须是数组。")

@@ -1,4 +1,4 @@
-<wxs module="ec">
+﻿<wxs module="ec">
   function padNo(n) {
     if (n < 10) return '00' + n;
     if (n < 100) return '0' + n;
@@ -11,7 +11,7 @@
 
 <scroll-view class="page-container" scroll-y enable-flex bindscrolltolower="loadMoreElves">
   <view class="hero">
-    <image class="hero-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/pokedex.webp" mode="widthFix"></image>
+    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/pokedex.webp" mode="widthFix"></image>
     <view class="hero-overlay"></view>
     <view class="hero-content">
       <view class="search-wrap">
@@ -52,7 +52,7 @@
             <image
               wx:if="{{currentElement === item.name}}"
               class="tab-active-bg"
-              src="https://roco.cdn.itianci.cn/imgs/miniapp/btn.webp"
+              src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/btn.webp"
               mode="scaleToFill"
             />
             <image wx:if="{{item.iconUrl}}" class="tab-icon" src="{{item.iconUrl}}" mode="aspectFit"></image>
@@ -84,7 +84,7 @@
           <view wx:if="{{item.elements && item.elements.length}}" class="elf-type">
             <image
               class="elf-type-icon"
-              src="{{'https://roco.cdn.itianci.cn/imgs/shuxing/' + item.elements[0] + '.webp'}}"
+              src="{{'https://wallpaper.cdn.itianci.cn/imgs/shuxing/' + item.elements[0] + '.webp'}}"
               mode="aspectFit"
             />
             <text>{{item.elements[0]}}</text>
@@ -101,3 +101,4 @@
     <view wx:if="{{elves.length}}" class="load-more-tip">{{hasMore ? (isLoadingMore ? "加载中..." : "上拉加载更多") : "没有更多精灵了"}}</view>
   </view>
 </scroll-view>
+

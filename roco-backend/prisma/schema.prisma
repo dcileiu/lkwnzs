@@ -39,23 +39,24 @@ model Author {
 }
 
 model Article {
-  id           String            @id @default(cuid())
-  title        String
-  summary      String?
-  thumbnail    String?
-  content      String
-  category     String
-  readingTime  Int               @default(5)
-  views        Int               @default(0)
-  likes        Int               @default(0)
-  bookmarks    Int               @default(0)
-  isHot        Boolean           @default(false)
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-  authorId     String
-  author       Author            @relation(fields: [authorId], references: [id])
-  comments     Comment[]
-  interactions UserInteraction[]
+  id              String            @id @default(cuid())
+  title           String
+  summary         String?
+  thumbnail       String?
+  content         String
+  contentMarkdown String?
+  category        String
+  readingTime     Int               @default(5)
+  views           Int               @default(0)
+  likes           Int               @default(0)
+  bookmarks       Int               @default(0)
+  isHot           Boolean           @default(false)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  authorId        String
+  author          Author            @relation(fields: [authorId], references: [id])
+  comments        Comment[]
+  interactions    UserInteraction[]
 }
 
 model Comment {
@@ -82,33 +83,34 @@ model UserInteraction {
 }
 
 model Elf {
-  id                    String              @id @default(cuid())
-  name                  String
-  avatar                String?
-  element               String
-  rarity                String
-  group                 String?
-  category              String?
-  height                String?
-  weight                String?
-  raceValue             String?
-  eggImageUrl           String?
-  fruitImageUrl         String?
-  totalStats            Int                 @default(0)
-  hp                    Int                 @default(0)
-  attack                Int                 @default(0)
-  defense               Int                 @default(0)
-  speed                 Int                 @default(0)
-  isHot                 Boolean             @default(false)
-  detailQueryCount      Int                 @default(0)
-  tags                  String?
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt
-  hatchRules            HatchRule[]
-  collections           UserElfCollection[]
-  images                ElfImage[]
-  evolutionParentLinks  ElfEvolution[]      @relation("ElfEvolutionParent")
-  evolutionChildLinks   ElfEvolution[]      @relation("ElfEvolutionChild")
+  id                   String                   @id @default(cuid())
+  name                 String
+  avatar               String?
+  element              String
+  rarity               String
+  group                String?
+  category             String?
+  height               String?
+  weight               String?
+  raceValue            String?
+  eggImageUrl          String?
+  fruitImageUrl        String?
+  totalStats           Int                      @default(0)
+  hp                   Int                      @default(0)
+  attack               Int                      @default(0)
+  defense              Int                      @default(0)
+  speed                Int                      @default(0)
+  isHot                Boolean                  @default(false)
+  detailQueryCount     Int                      @default(0)
+  tags                 String?
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+  hatchRules           HatchRule[]
+  collections          UserElfCollection[]
+  images               ElfImage[]
+  learnableSkillStones SkillStoneLearnableElf[]
+  evolutionParentLinks ElfEvolution[]           @relation("ElfEvolutionParent")
+  evolutionChildLinks  ElfEvolution[]           @relation("ElfEvolutionChild")
 }
 
 model Egg {
@@ -171,6 +173,74 @@ model EggImage {
   @@index([eggId, sortOrder])
 }
 
+model ItemCategory {
+  id          String              @id
+  name        String
+  icon        String?
+  description String?
+  sortOrder   Int                 @default(0)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  fields      ItemCategoryField[]
+  items       Item[]
+
+  @@index([sortOrder])
+}
+
+model ItemCategoryField {
+  id          String       @id @default(cuid())
+  categoryId  String
+  key         String
+  label       String
+  type        String
+  required    Boolean      @default(false)
+  placeholder String?
+  optionsJson String?
+  sortOrder   Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  category    ItemCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, key])
+  @@index([categoryId, sortOrder])
+}
+
+model Item {
+  id             String                   @id @default(cuid())
+  categoryId     String
+  name           String
+  image          String?
+  desc           String?
+  rarity         String?
+  effect         String?
+  obtain         String?
+  attr           String?
+  extraJson      String?
+  sortOrder      Int                      @default(0)
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+  category       ItemCategory             @relation(fields: [categoryId], references: [id])
+  learnableElves SkillStoneLearnableElf[]
+
+  @@unique([categoryId, name])
+  @@index([categoryId, sortOrder])
+  @@index([name])
+}
+
+model SkillStoneLearnableElf {
+  id        String   @id @default(cuid())
+  itemId    String
+  elfId     String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  elf       Elf      @relation(fields: [elfId], references: [id], onDelete: Cascade)
+
+  @@unique([itemId, elfId])
+  @@index([elfId])
+  @@index([itemId, sortOrder])
+}
+
 model EvolutionChain {
   id        String         @id @default(cuid())
   name      String?
@@ -181,19 +251,19 @@ model EvolutionChain {
 }
 
 model ElfEvolution {
-  id          String          @id @default(cuid())
+  id          String         @id @default(cuid())
   chainId     String
   parentElfId String?
   childElfId  String
-  stage       Int             @default(1)
-  sortOrder   Int             @default(0)
+  stage       Int            @default(1)
+  sortOrder   Int            @default(0)
   requirement String?
   note        String?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  chain       EvolutionChain  @relation(fields: [chainId], references: [id], onDelete: Cascade)
-  parentElf   Elf?            @relation("ElfEvolutionParent", fields: [parentElfId], references: [id], onDelete: Cascade)
-  childElf    Elf             @relation("ElfEvolutionChild", fields: [childElfId], references: [id], onDelete: Cascade)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  chain       EvolutionChain @relation(fields: [chainId], references: [id], onDelete: Cascade)
+  parentElf   Elf?           @relation("ElfEvolutionParent", fields: [parentElfId], references: [id], onDelete: Cascade)
+  childElf    Elf            @relation("ElfEvolutionChild", fields: [childElfId], references: [id], onDelete: Cascade)
 
   @@unique([chainId, childElfId])
   @@index([chainId, stage, sortOrder])

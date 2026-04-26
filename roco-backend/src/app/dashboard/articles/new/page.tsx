@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import { createArticle } from "@/app/actions/articles"
 import { ArticleContentEditor } from "@/components/article-content-editor"
+import { ArticleCoverUploader } from "@/components/article-cover-uploader"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -12,16 +13,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export default function NewArticlePage() {
   return (
     <div className="flex max-w-4xl flex-col gap-4 p-4 lg:p-8">
-      <div className="flex items-center justify-between">
+      <div className="sticky top-0 z-20 -mx-4 flex items-center justify-between border-b bg-background/95 px-4 py-3 backdrop-blur lg:-mx-8 lg:px-8">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">发布新攻略</h1>
           <p className="mt-1 text-muted-foreground">
-            支持 Markdown，支持直接粘贴图片并自动上传到七牛云。
+            使用 Markdown 编辑，提交时会自动保存 HTML 渲染结果。
           </p>
         </div>
-        <Button variant="outline" asChild>
-          <Link href="/dashboard/articles">返回列表</Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/articles">返回列表</Link>
+          </Button>
+          <Button type="submit" form="article-create-form">
+            发布攻略
+          </Button>
+        </div>
       </div>
 
       <Card>
@@ -30,7 +36,7 @@ export default function NewArticlePage() {
           <CardDescription>填写标题、分类和正文内容后即可发布。</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={createArticle} className="space-y-6">
+          <form id="article-create-form" action={createArticle} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="title">标题</Label>
               <Input
@@ -67,34 +73,23 @@ export default function NewArticlePage() {
                   placeholder="输入作者名称"
                 />
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="cover">封面链接（可不填）</Label>
-              <Input
-                id="cover"
-                name="cover"
-                placeholder="https://example.com/cover.jpg（留空则使用默认封面）"
-              />
-            </div>
-
-            <ArticleContentEditor />
-
-            <div className="flex items-center space-x-2 rounded-md border p-4">
-              <Checkbox id="isHot" name="isHot" />
-              <div className="space-y-1 leading-none">
-                <Label htmlFor="isHot" className="font-medium">
-                  标记为热门攻略
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  勾选后会优先展示在首页热门攻略区域。
-                </p>
+              <div className="flex items-center space-x-2 rounded-md border p-4 md:col-span-2">
+                <Checkbox id="isHot" name="isHot" />
+                <div className="space-y-1 leading-none">
+                  <Label htmlFor="isHot" className="font-medium">
+                    标记为热门攻略
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    勾选后会优先展示在首页热门攻略区域。
+                  </p>
+                </div>
               </div>
             </div>
 
-            <Button type="submit" className="w-full">
-              发布攻略
-            </Button>
+            <ArticleCoverUploader />
+
+            <ArticleContentEditor />
           </form>
         </CardContent>
       </Card>

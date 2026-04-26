@@ -4,11 +4,41 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { readCategoriesData } from "@/lib/game-data"
+import { prisma } from "@/lib/prisma"
+
+async function readItemCategories() {
+  try {
+    const categories = await prisma.itemCategory.findMany({
+      include: {
+        _count: {
+          select: {
+            fields: true,
+            items: true,
+          },
+        },
+      },
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    })
+
+    return {
+      categories,
+      error: null as string | null,
+    }
+  } catch (error) {
+    return {
+      categories: [],
+      error: error instanceof Error ? error.message : String(error),
+    }
+  }
+}
 
 export default async function CategoriesPage() {
-  const categories = await readCategoriesData()
+  const [categories, itemCategoryResult] = await Promise.all([
+    readCategoriesData(),
+    readItemCategories(),
+  ])
   const elfCategories = categories.filter((category) => category.target === "elf")
-  const itemCategories = categories.filter((category) => category.target === "item")
+  const itemCategories = itemCategoryResult.categories
 
   return (
     <div className="flex flex-col gap-6 p-4 lg:p-8">
@@ -20,7 +50,9 @@ export default async function CategoriesPage() {
       <Card>
         <CardHeader>
           <CardTitle>新增分类</CardTitle>
-          <CardDescription>分类会同时在精灵管理和道具管理中作为可选项。</CardDescription>
+          <CardDescription>
+            精灵分类写入种子分类文件；道具分类写入数据库，并用于驱动道具管理表单。
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form action={createCategory} className="grid grid-cols-[1fr_160px_auto] gap-3">
@@ -75,20 +107,33 @@ export default async function CategoriesPage() {
         <Card>
           <CardHeader>
             <CardTitle>道具分类</CardTitle>
-            <CardDescription>{itemCategories.length} 个分类</CardDescription>
+            <CardDescription>
+              {itemCategoryResult.error
+                ? "数据库道具分类表尚未就绪"
+                : `${itemCategories.length} 个分类`}
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {itemCategories.length === 0 ? (
-              <p className="text-sm text-muted-foreground">暂无道具分类。</p>
+            {itemCategoryResult.error ? (
+              <pre className="overflow-auto rounded-lg border bg-muted p-3 text-xs text-muted-foreground">
+                {itemCategoryResult.error}
+              </pre>
+            ) : itemCategories.length === 0 ? (
+              <p className="text-sm text-muted-foreground">暂无道具分类，请先导入 daoju.json 或新增分类。</p>
             ) : (
               itemCategories.map((category) => (
-                <form key={`${category.target}-${category.id}`} action={deleteCategory} className="flex items-center justify-between rounded-lg border p-3">
+                <form key={`item-${category.id}`} action={deleteCategory} className="flex items-center justify-between rounded-lg border p-3">
                   <div>
-                    <p className="font-medium">{category.name}</p>
-                    <p className="text-xs text-muted-foreground">ID: {category.id}</p>
+                    <p className="font-medium">
+                      {category.icon ? `${category.icon} ` : ""}
+                      {category.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      ID: {category.id} · 道具 {category._count.items} 个 · 字段 {category._count.fields} 个
+                    </p>
                   </div>
                   <input type="hidden" name="id" value={category.id} />
-                  <input type="hidden" name="target" value={category.target} />
+                  <input type="hidden" name="target" value="item" />
                   <Button type="submit" variant="destructive" size="sm">删除</Button>
                 </form>
               ))

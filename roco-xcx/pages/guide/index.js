@@ -1,4 +1,4 @@
-const api = require('../../utils/api.js')
+﻿const api = require('../../utils/api.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
 const { normalizeImageUrl } = require('../../utils/url.js')
 
@@ -11,7 +11,7 @@ function formatArticle(item = {}) {
 
   return {
     ...item,
-    thumbnail: normalizeImageUrl(item.thumbnail) || 'https://roco.cdn.itianci.cn/imgs/miniapp/articles.webp',
+    thumbnail: normalizeImageUrl(item.thumbnail) || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles.webp',
     summary: item.summary || item.description || '零氪玩家也能快速上手，核心思路与阵容推荐一篇看懂。',
     authorName,
     views: item.views || 0,
@@ -107,3 +107,4 @@ Page({
     })
   }
 })
+

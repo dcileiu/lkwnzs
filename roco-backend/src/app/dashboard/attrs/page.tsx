@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ELEMENT_NAMES } from "@/lib/game-data"
+import { resolveImageUrl } from "@/lib/media"
 
 export default function AttrsPage() {
   return (
@@ -18,7 +19,7 @@ export default function AttrsPage() {
         <CardContent>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
             {ELEMENT_NAMES.map((element) => {
-              const iconUrl = `https://roco.cdn.itianci.cn/imgs/属性/${element}.wepb`
+              const iconUrl = resolveImageUrl(`/imgs/属性/${element}.webp`)
 
               return (
                 <div key={element} className="rounded-lg border p-3">

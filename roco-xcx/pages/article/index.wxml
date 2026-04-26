@@ -1,43 +1,53 @@
 <view class="page-container">
+  <view class="hero" wx:if="{{article}}">
+    <image class="hero-bg" src="{{article.cover || article.image || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp'}}" mode="aspectFill"></image>
+    <view class="hero-overlay"></view>
+
+    <view class="top-nav" style="padding-top: {{navTopPadding}}px;">
+      <view class="nav-btn nav-back" bindtap="onBackTap">‹</view>
+      <text class="nav-title">✦ 攻略详情 ✦</text>
+    </view>
+
+    <view class="hero-main">
+      <text class="hero-title">{{article.title}}</text>
+      <view class="hero-tags">
+        <text class="tag-hot" wx:if="{{article.isHot}}">🔥 HOT</text>
+        <text class="tag-category" wx:if="{{article.category}}">{{article.category}}</text>
+      </view>
+      <view class="hero-meta">
+        <text class="meta-item">👁 {{article.views || 0}}</text>
+        <text class="meta-item">☆ {{article.favorites || article.likes || 0}}</text>
+        <text class="meta-item">⏱ {{article.readingTime || 1}}分钟前阅读</text>
+      </view>
+    </view>
+  </view>
+
   <view class="content-area" wx:if="{{article}}">
-    <text class="article-title">{{article.title}}</text>
-
-    <view class="tag-row">
-      <text class="tag-badge hot" wx:if="{{article.isHot}}">🔥 HOT</text>
-      <text class="tag-badge category" wx:if="{{article.category}}">{{article.category}}</text>
-    </view>
-
-    <view class="stats-row">
-      <text class="stat">👁 {{article.views || 0}}</text>
-      <text class="stat">☆ {{article.favorites || article.likes || 0}}</text>
-      <text class="stat">⏱ {{article.readingTime || 1}}分钟阅读</text>
-    </view>
-
-    <view class="action-bar {{isActionBarSticky ? 'sticky compact' : ''}}">
+    <view class="action-bar" style="top: {{actionBarStickyTop}}px;">
       <view class="action-btn {{isLiked ? 'active' : ''}}" bindtap="toggleLike">
-        <text class="action-icon" wx:if="{{!isActionBarSticky}}">{{isLiked ? '❤️' : '♡'}}</text>
-        <text class="action-label">{{isLiked ? '已点赞' : '点赞'}}</text>
+        <text class="action-icon">{{isLiked ? '❤' : '♡'}}</text>
+        <text class="action-label">点赞</text>
       </view>
       <view class="action-btn {{isFavorited ? 'active' : ''}}" bindtap="toggleFavorite">
-        <text class="action-icon" wx:if="{{!isActionBarSticky}}">{{isFavorited ? '⭐' : '☆'}}</text>
-        <text class="action-label">{{isFavorited ? '已收藏' : '收藏'}}</text>
+        <text class="action-icon">{{isFavorited ? '★' : '☆'}}</text>
+        <text class="action-label">收藏</text>
       </view>
-      <view class="action-btn" open-type="share">
-        <text class="action-icon" wx:if="{{!isActionBarSticky}}">↗</text>
+      <button class="action-btn action-share" open-type="share">
+        <text class="action-icon">↗</text>
         <text class="action-label">分享</text>
+      </button>
+    </view>
+
+    <view class="article-card">
+      <rich-text class="body-rich-text" nodes="{{articleContentHtml}}"></rich-text>
+      <view class="article-source" wx:if="{{article.sourceAuthor}}">
+        <text>来源：{{article.sourceAuthor}}</text>
       </view>
     </view>
 
-    <view class="article-body">
-      <text class="body-text">{{article.content}}</text>
-      <view class="article-source">来源于：{{article.source || article.sourceName || (article.author && article.author.name) || '未知'}}</view>
-    </view>
-
-    <view class="comments-section">
-      <text class="section-title">💬 评论 ({{article.comments ? article.comments.length : 0}})</text>
-
-      <view class="comment-input-row">
-        <image class="my-avatar" src="https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg"></image>
+    <view class="comment-compose">
+      <text class="comment-title">评论 ({{article.comments ? article.comments.length : 0}})</text>
+      <view class="comment-input-wrap">
         <input
           class="comment-input"
           placeholder="写下你的评论..."
@@ -48,21 +58,19 @@
         />
         <view class="send-btn" bindtap="submitComment">发送</view>
       </view>
+    </view>
 
+    <view class="comments-section" wx:if="{{article.comments && article.comments.length}}">
       <block wx:for="{{article.comments}}" wx:key="id">
         <view class="comment-item">
-          <image class="comment-avatar" src="{{item.user.avatar || 'https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg'}}"></image>
+          <image class="comment-avatar" src="{{(item.user && item.user.avatar) || 'https://wallpaper.cdn.itianci.cn/imgs/avatar/default-avatar.jpg'}}"></image>
           <view class="comment-body">
-            <text class="comment-name">{{item.user.nickname}}</text>
+            <text class="comment-name">{{(item.user && item.user.nickname) || '洛克玩家'}}</text>
             <text class="comment-text">{{item.content}}</text>
             <text class="comment-time">{{item.createdAt}}</text>
           </view>
         </view>
       </block>
-
-      <view wx:if="{{!article.comments || article.comments.length === 0}}" class="empty-comments">
-        还没有评论，快来抢沙发吧！
-      </view>
     </view>
   </view>
 
@@ -70,3 +78,4 @@
     <text>加载中...</text>
   </view>
 </view>
+

@@ -1,6 +1,6 @@
-<scroll-view class="page-container" scroll-y enable-flex>
+﻿<scroll-view class="page-container" scroll-y enable-flex>
   <view class="hero">
-    <image class="hero-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/roco.webp" mode="widthFix"></image>
+    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/roco.webp" mode="widthFix"></image>
     <view class="hero-overlay"></view>
     <view class="hero-content">
       <view class="search-wrap">
@@ -48,9 +48,9 @@
         indicator-dots="{{false}}"
       >
         <block wx:for="{{hotArticles}}" wx:key="id">
-          <swiper-item>
+          <swiper-item class="art-item">
             <view class="guide-card" bindtap="navTo" data-url="/pages/article/index?id={{item.id}}">
-              <image class="guide-cover" src="{{item.thumbnail || 'https://roco.cdn.itianci.cn/imgs/miniapp/articles.webp'}}" mode="aspectFill"></image>
+              <image class="guide-cover" src="{{item.thumbnail || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles.webp'}}" mode="aspectFill"></image>
               <view class="guide-info">
                 <view class="guide-title">{{item.title}}</view>
                 <view class="guide-meta">
@@ -77,17 +77,17 @@
       <scroll-view class="elf-scroll" scroll-x show-scrollbar="{{false}}">
         <block wx:for="{{hotElves}}" wx:key="id">
           <view class="elf-card" bindtap="goElfDetail" data-id="{{item.id}}">
-            <image class="elf-card-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/elf-card.webp" mode="scaleToFill"></image>
+            <image class="elf-card-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/elf-card.webp" mode="scaleToFill"></image>
             <view class="elf-card-body">
               <view class="elf-avatar-bg">
-                <image src="{{item.coverImage || item.avatar || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}" class="elf-avatar" mode="aspectFit"></image>
+                <image src="{{item.coverImage || item.avatar || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}" class="elf-avatar" mode="aspectFit"></image>
               </view>
               <text class="elf-name">{{item.name}}</text>
               <view class="elf-type">
                 <image
                   wx:if="{{item.elements && item.elements.length}}"
                   class="elf-type-icon"
-                  src="{{'https://roco.cdn.itianci.cn/imgs/shuxing/' + item.elements[0] + '.webp'}}"
+                  src="{{'https://wallpaper.cdn.itianci.cn/imgs/shuxing/' + item.elements[0] + '.webp'}}"
                   mode="aspectFit"
                 />
                 <text>{{item.elements && item.elements.length ? item.elements[0] : '未知'}}</text>
@@ -102,3 +102,4 @@
     </view>
   </view>
 </scroll-view>
+

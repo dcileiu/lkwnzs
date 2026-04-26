@@ -1,14 +1,18 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
-import { normalizeElementList, serializeElementList } from "@/lib/elements"
-import { sortImageRecords, type StoredImageRecord } from "@/lib/media"
-import { prisma } from "@/lib/prisma"
+import { normalizeElementList, serializeElementList } from "@/lib/elements";
+import {
+  resolveImageUrl,
+  sortImageRecords,
+  type StoredImageRecord,
+} from "@/lib/media";
+import { prisma } from "@/lib/prisma";
 
 export async function GET(
   _: Request,
-  props: { params: Promise<{ id: string }> }
+  props: { params: Promise<{ id: string }> },
 ) {
-  const { id } = await props.params
+  const { id } = await props.params;
 
   const egg = await prisma.egg.findUnique({
     where: { id },
@@ -29,21 +33,24 @@ export async function GET(
         orderBy: { probability: "desc" },
       },
     },
-  })
+  });
 
   if (!egg) {
-    return NextResponse.json({ code: 404, message: "not found" }, { status: 404 })
+    return NextResponse.json(
+      { code: 404, message: "not found" },
+      { status: 404 },
+    );
   }
 
   const eggImages = sortImageRecords(egg.images as StoredImageRecord[]).map(
     (image: StoredImageRecord) => ({
       id: image.id,
-      url: image.url,
+      url: resolveImageUrl(image.url),
       altText: image.altText ?? "",
       sortOrder: image.sortOrder,
-    })
-  )
-  const coverImage = egg.avatar ?? eggImages[0]?.url ?? null
+    }),
+  );
+  const coverImage = egg.avatar ?? eggImages[0]?.url ?? null;
 
   return NextResponse.json({
     code: 200,
@@ -51,21 +58,21 @@ export async function GET(
     data: {
       id: egg.id,
       name: egg.name,
-      avatar: coverImage,
-      coverImage,
-      image: coverImage,
+      avatar: resolveImageUrl(coverImage),
+      coverImage: resolveImageUrl(coverImage),
+      image: resolveImageUrl(coverImage),
       images: eggImages,
       rules: egg.rules.map((rule) => {
         const elfImages = sortImageRecords(
-          rule.elf.images as StoredImageRecord[]
+          rule.elf.images as StoredImageRecord[],
         ).map((image: StoredImageRecord) => ({
           id: image.id,
           url: image.url,
           altText: image.altText ?? "",
           sortOrder: image.sortOrder,
-        }))
-        const elfCoverImage = rule.elf.avatar ?? elfImages[0]?.url ?? null
-        const elfElements = normalizeElementList(rule.elf.element)
+        }));
+        const elfCoverImage = rule.elf.avatar ?? elfImages[0]?.url ?? null;
+        const elfElements = normalizeElementList(rule.elf.element);
 
         return {
           id: rule.id,
@@ -80,12 +87,12 @@ export async function GET(
             element: serializeElementList(elfElements),
             elements: elfElements,
             rarity: rule.elf.rarity,
-            avatar: elfCoverImage,
-            coverImage: elfCoverImage,
+            avatar: resolveImageUrl(elfCoverImage),
+            coverImage: resolveImageUrl(elfCoverImage),
             images: elfImages,
           },
-        }
+        };
       }),
     },
-  })
+  });
 }

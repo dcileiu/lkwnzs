@@ -1,19 +1,18 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
-import { ELEMENT_NAMES } from "@/lib/game-data"
-import { readCategoriesData } from "@/lib/game-data"
-
-const ELEMENT_ICON_BASE = "https://roco.cdn.itianci.cn/imgs/shuxing"
+import { ELEMENT_NAMES } from "@/lib/game-data";
+import { readCategoriesData } from "@/lib/game-data";
+import { resolveImageUrl } from "@/lib/media";
 
 export async function GET() {
-  const allCategories = await readCategoriesData()
-  const elfCategories = allCategories.filter((c) => c.target === "elf")
+  const allCategories = await readCategoriesData();
+  const elfCategories = allCategories.filter((c) => c.target === "elf");
 
   const elements = ELEMENT_NAMES.map((name) => ({
     id: name,
     name,
-    iconUrl: `${ELEMENT_ICON_BASE}/${name}.webp`,
-  }))
+    iconUrl: resolveImageUrl(`/imgs/shuxing/${name}.webp`),
+  }));
 
   return NextResponse.json({
     code: 200,
@@ -22,5 +21,5 @@ export async function GET() {
       elements,
       categories: elfCategories,
     },
-  })
+  });
 }

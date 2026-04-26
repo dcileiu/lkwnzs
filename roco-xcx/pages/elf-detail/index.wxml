@@ -1,6 +1,6 @@
-<view class="page-container">
+﻿<view class="page-container">
   <view class="hero">
-    <image class="hero-bg" src="https://roco.cdn.itianci.cn/imgs/miniapp/elf-detail-bg.webp" mode="widthFix"></image>
+    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/elf-detail-bg.webp" mode="widthFix"></image>
     <view class="hero-overlay"></view>
     <view class="nav-back" bindtap="goBack">
       <text class="nav-back-icon">‹</text>
@@ -17,7 +17,7 @@
           <view class="hero-image-wrap">
             <image
               class="hero-image"
-              src="{{activeImage || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"
+              src="{{activeImage || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"
               mode="aspectFit"
               binderror="onHeroImageError"
             ></image>
@@ -118,7 +118,7 @@
           <view class="group-card" bindtap="openElf" data-id="{{item.id}}">
             <image
               class="group-card-image"
-              src="{{item.coverImage || item.avatar || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"
+              src="{{item.coverImage || item.avatar || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"
               mode="aspectFit"
             ></image>
             <view class="group-card-body">
@@ -141,3 +141,4 @@
     </view>
   </view>
 </view>
+

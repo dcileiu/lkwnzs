@@ -1,4 +1,4 @@
-<view class="page-container">
+﻿<view class="page-container">
   <view class="search-box">
     <icon type="search" size="14" color="#999"></icon>
     <input
@@ -36,7 +36,7 @@
       <view class="section-title">精灵结果 ({{elves.length}})</view>
       <block wx:for="{{elves}}" wx:key="id">
         <view class="card elf-card" bindtap="goElfDetail" data-id="{{item.id}}">
-          <image class="elf-avatar" src="{{item.coverImage || item.avatar || 'https://roco.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"></image>
+          <image class="elf-avatar" src="{{item.coverImage || item.avatar || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/default-elf.png'}}"></image>
           <view class="elf-info">
             <view class="card-title">{{item.name}}</view>
             <view class="card-meta">{{item.rarity || '未知'}} · {{item.elements && item.elements.length ? item.elements.join(' / ') : '无属性'}}</view>
@@ -47,3 +47,4 @@
     </block>
   </scroll-view>
 </view>
+

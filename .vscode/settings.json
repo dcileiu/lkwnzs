@@ -1,3 +1,8 @@
 {
+    "files.encoding": "utf8",
+    "files.autoGuessEncoding": false,
+    "[wxss]": {
+        "files.encoding": "utf8"
+    },
     "prisma.pinToPrisma6": true
 }

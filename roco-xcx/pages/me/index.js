@@ -1,10 +1,10 @@
-const userActions = require('../../utils/user-actions.js')
+﻿const userActions = require('../../utils/user-actions.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
 const auth = require('../../utils/auth.js')
 
 const DEFAULT_PROFILE = {
   nickname: '洛克训练师',
-  avatar: 'https://roco.cdn.itianci.cn/imgs/avatar/default-avatar.jpg'
+  avatar: 'https://wallpaper.cdn.itianci.cn/imgs/avatar/default-avatar.jpg'
 }
 
 Page({
@@ -144,3 +144,4 @@ Page({
     wx.showToast({ title: '更多内容即将上线', icon: 'none' })
   },
 })
+

@@ -4,7 +4,7 @@
   padding-bottom: calc(env(safe-area-inset-bottom) + 160rpx);
   background-image:
     linear-gradient(rgba(30, 58, 100, 0.8), rgba(30, 58, 100, 0.8)),
-    url("https://roco.cdn.itianci.cn/imgs/miniapp/bgi.webp");
+    url("https://wallpaper.cdn.itianci.cn/imgs/miniapp/bgi.webp");
   background-size: cover, cover;
   background-repeat: no-repeat, no-repeat;
   background-position:
@@ -229,7 +229,7 @@
   align-items: center;
   padding: 24rpx 10rpx 18rpx;
   border-radius: 16rpx;
-  background-image: url("https://roco.cdn.itianci.cn/imgs/miniapp/elf-card.webp");
+  background-image: url("https://wallpaper.cdn.itianci.cn/imgs/miniapp/elf-card.webp");
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -348,3 +348,4 @@
   font-size: 24rpx;
   padding: 24rpx 0 10rpx;
 }
+

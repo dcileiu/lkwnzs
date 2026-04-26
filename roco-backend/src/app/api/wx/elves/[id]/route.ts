@@ -1,14 +1,18 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
-import { normalizeElementList, serializeElementList } from "@/lib/elements"
-import { sortImageRecords, type StoredImageRecord } from "@/lib/media"
-import { prisma } from "@/lib/prisma"
+import { normalizeElementList, serializeElementList } from "@/lib/elements";
+import {
+  resolveImageUrl,
+  sortImageRecords,
+  type StoredImageRecord,
+} from "@/lib/media";
+import { prisma } from "@/lib/prisma";
 
 export async function GET(
   _: Request,
-  props: { params: Promise<{ id: string }> }
+  props: { params: Promise<{ id: string }> },
 ) {
-  const { id } = await props.params
+  const { id } = await props.params;
 
   const elf = await prisma.elf.findUnique({
     where: { id },
@@ -17,10 +21,13 @@ export async function GET(
         orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
       },
     },
-  })
+  });
 
   if (!elf) {
-    return NextResponse.json({ code: 404, message: "not found" }, { status: 404 })
+    return NextResponse.json(
+      { code: 404, message: "not found" },
+      { status: 404 },
+    );
   }
 
   const incrementedElf = await prisma.elf.update({
@@ -33,17 +40,17 @@ export async function GET(
     select: {
       detailQueryCount: true,
     },
-  })
+  });
 
   const images = sortImageRecords(elf.images as StoredImageRecord[]).map(
     (image: StoredImageRecord) => ({
       id: image.id,
-      url: image.url,
+      url: resolveImageUrl(image.url),
       altText: image.altText ?? "",
       sortOrder: image.sortOrder,
-    })
-  )
-  const coverImage = elf.avatar ?? images[0]?.url ?? null
+    }),
+  );
+  const coverImage = elf.avatar ?? images[0]?.url ?? null;
 
   const relatedElves = elf.group
     ? await prisma.elf.findMany({
@@ -51,16 +58,20 @@ export async function GET(
           group: elf.group,
           NOT: { id: elf.id },
         },
-        orderBy: [{ detailQueryCount: "desc" }, { rarity: "desc" }, { name: "asc" }],
+        orderBy: [
+          { detailQueryCount: "desc" },
+          { rarity: "desc" },
+          { name: "asc" },
+        ],
         include: {
           images: {
             orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
           },
         },
       })
-    : []
+    : [];
 
-  const elements = normalizeElementList(elf.element)
+  const elements = normalizeElementList(elf.element);
 
   return NextResponse.json({
     code: 200,
@@ -76,8 +87,8 @@ export async function GET(
       height: elf.height ?? "",
       weight: elf.weight ?? "",
       raceValue: elf.raceValue ?? "",
-      eggImageUrl: elf.eggImageUrl ?? "",
-      fruitImageUrl: elf.fruitImageUrl ?? "",
+      eggImageUrl: resolveImageUrl(elf.eggImageUrl ?? ""),
+      fruitImageUrl: resolveImageUrl(elf.fruitImageUrl ?? ""),
       totalStats: elf.totalStats,
       hp: elf.hp,
       attack: elf.attack,
@@ -85,13 +96,15 @@ export async function GET(
       speed: elf.speed,
       isHot: elf.isHot,
       detailQueryCount: incrementedElf.detailQueryCount,
-      avatar: coverImage,
-      coverImage,
+      avatar: resolveImageUrl(coverImage),
+      coverImage: resolveImageUrl(coverImage),
       images,
       relatedElves: relatedElves.map((member) => {
-        const memberImages = sortImageRecords(member.images as StoredImageRecord[])
-        const memberCoverImage = member.avatar ?? memberImages[0]?.url ?? null
-        const memberElements = normalizeElementList(member.element)
+        const memberImages = sortImageRecords(
+          member.images as StoredImageRecord[],
+        );
+        const memberCoverImage = member.avatar ?? memberImages[0]?.url ?? null;
+        const memberElements = normalizeElementList(member.element);
 
         return {
           id: member.id,
@@ -102,15 +115,15 @@ export async function GET(
           height: member.height ?? "",
           weight: member.weight ?? "",
           raceValue: member.raceValue ?? "",
-          eggImageUrl: member.eggImageUrl ?? "",
-          fruitImageUrl: member.fruitImageUrl ?? "",
+          eggImageUrl: resolveImageUrl(member.eggImageUrl ?? ""),
+          fruitImageUrl: resolveImageUrl(member.fruitImageUrl ?? ""),
           detailQueryCount: member.detailQueryCount ?? 0,
           element: serializeElementList(memberElements),
           elements: memberElements,
-          avatar: memberCoverImage,
-          coverImage: memberCoverImage,
-        }
+          avatar: resolveImageUrl(memberCoverImage),
+          coverImage: resolveImageUrl(memberCoverImage),
+        };
       }),
     },
-  })
+  });
 }

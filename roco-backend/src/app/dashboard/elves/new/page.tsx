@@ -77,11 +77,11 @@ export default async function NewElfPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="eggImageUrl">精灵蛋图片 URL</Label>
-                <Input id="eggImageUrl" name="eggImageUrl" placeholder="https://roco.cdn.itianci.cn/imgs/eggs/demo.webp" />
+                <Input id="eggImageUrl" name="eggImageUrl" placeholder="/imgs/eggs/demo.webp" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="fruitImageUrl">精灵果实图片 URL</Label>
-                <Input id="fruitImageUrl" name="fruitImageUrl" placeholder="https://roco.cdn.itianci.cn/imgs/eggs/demo-fruit.webp" />
+                <Input id="fruitImageUrl" name="fruitImageUrl" placeholder="/imgs/eggs/demo-fruit.webp" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="rarity">稀有度</Label>
@@ -135,7 +135,7 @@ export default async function NewElfPage() {
                 <Input
                   id="coverImage"
                   name="coverImage"
-                  placeholder="https://roco.cdn.itianci.cn/elves/cover.png"
+                  placeholder="/elves/cover.png"
                 />
               </div>
               <div className="space-y-2">
@@ -145,9 +145,9 @@ export default async function NewElfPage() {
                   name="galleryImages"
                   className="min-h-[120px]"
                   placeholder={[
-                    "https://roco.cdn.itianci.cn/elves/stage-1.png",
-                    "https://roco.cdn.itianci.cn/elves/stage-2.png",
-                    "https://roco.cdn.itianci.cn/elves/stage-3.png",
+                    "/elves/stage-1.png",
+                    "/elves/stage-2.png",
+                    "/elves/stage-3.png",
                   ].join("\n")}
                 />
               </div>

@@ -1,3 +1,6 @@
+const CDN_BASE_URL = 'https://wallpaper.cdn.itianci.cn'
+const CDN_HOSTS = ['wallpaper.cdn.itianci.cn']
+
 function safeDecode(value = '') {
   try {
     return decodeURIComponent(value)
@@ -39,7 +42,8 @@ function normalizeImageUrl(url = '') {
   const suffix = queryIndex === -1 ? '' : fixedExt.slice(queryIndex)
 
   if (!/^https?:\/\//i.test(pathWithoutQuery)) {
-    return `${normalizePath(pathWithoutQuery)}${suffix}`
+    const pathname = normalizePath(pathWithoutQuery)
+    return `${CDN_BASE_URL}${pathname.startsWith('/') ? pathname : `/${pathname}`}${suffix}`
   }
 
   const matched = pathWithoutQuery.match(/^(https?:\/\/[^/]+)(\/.*)?$/i)
@@ -47,10 +51,16 @@ function normalizeImageUrl(url = '') {
 
   const host = matched[1]
   const pathname = matched[2] || ''
+  const hostname = host.replace(/^https?:\/\//i, '').toLowerCase()
+
+  if (CDN_HOSTS.includes(hostname)) {
+    return `${CDN_BASE_URL}${normalizePath(pathname)}${suffix}`
+  }
 
   return `${host}${normalizePath(pathname)}${suffix}`
 }
 
 module.exports = {
+  CDN_BASE_URL,
   normalizeImageUrl
 }
