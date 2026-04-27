@@ -162,9 +162,5 @@ Page({
       })
     }
   },
-
-  onAboutTap() {
-    wx.showToast({ title: '更多内容即将上线', icon: 'none' })
-  },
 })
 

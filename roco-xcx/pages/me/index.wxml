@@ -42,11 +42,6 @@
       </block>
     </view>
 
-    <view class="about-card" bindtap="onAboutTap">
-      <view class="about-title">关于洛克王国世界</view>
-      <view class="about-subtitle">更多关于游戏世界的资讯</view>
-      <text class="about-arrow">›</text>
-    </view>
   </view>
 </scroll-view>
 
