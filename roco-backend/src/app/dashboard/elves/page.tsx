@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
+import { ElfEditDialog } from "@/components/elf-edit-dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
   DASHBOARD_PAGE_SIZE,
@@ -12,24 +15,49 @@ import {
   parsePageParam,
 } from "@/components/dashboard-pagination"
 import { resolveImageUrl } from "@/lib/media"
+import { ELEMENT_NAMES, readCategoriesData } from "@/lib/game-data"
 import { PlusIcon } from "lucide-react"
+import type { Prisma } from "@prisma/client"
 
 interface ElvesPageProps {
   searchParams: Promise<{
+    keyword?: string
+    group?: string
+    category?: string
+    element?: string
     page?: string
   }>
 }
 
 export default async function ElvesPage({ searchParams }: ElvesPageProps) {
   const resolvedSearchParams = await searchParams
+  const keyword = (resolvedSearchParams.keyword || "").trim()
+  const group = (resolvedSearchParams.group || "").trim()
+  const category = (resolvedSearchParams.category || "").trim()
+  const element = (resolvedSearchParams.element || "").trim()
   const page = parsePageParam(resolvedSearchParams.page)
   const pageSize = DASHBOARD_PAGE_SIZE
+  const hasFilters = Boolean(keyword || group || category || element)
 
-  const [total, elves] = await Promise.all([
-    prisma.elf.count(),
+  const where: Prisma.ElfWhereInput = {
+    ...(keyword ? { name: { contains: keyword } } : {}),
+    ...(group ? { group } : {}),
+    ...(category ? { category } : {}),
+    ...(element ? { element } : {}),
+  }
+
+  const [total, elves, groupOptionsRaw, categoryOptionsRaw, elementOptionsRaw, categoriesData] = await Promise.all([
+    prisma.elf.count({ where }),
     prisma.elf.findMany({
+      where,
       orderBy: [{ detailQueryCount: "desc" }, { createdAt: "desc" }],
       include: {
+        images: {
+          select: {
+            url: true,
+          },
+          orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+        },
         _count: {
           select: {
             images: true,
@@ -39,7 +67,45 @@ export default async function ElvesPage({ searchParams }: ElvesPageProps) {
       skip: (page - 1) * pageSize,
       take: pageSize,
     }),
+    prisma.elf.findMany({
+      select: { group: true },
+      where: { group: { not: null } },
+      orderBy: { group: "asc" },
+      distinct: ["group"],
+    }),
+    prisma.elf.findMany({
+      select: { category: true },
+      where: { category: { not: null } },
+      orderBy: { category: "asc" },
+      distinct: ["category"],
+    }),
+    prisma.elf.findMany({
+      select: { element: true },
+      where: { element: { not: "" } },
+      orderBy: { element: "asc" },
+      distinct: ["element"],
+    }),
+    readCategoriesData(),
   ])
+  const groupOptions = groupOptionsRaw.map((item) => item.group).filter((item): item is string => Boolean(item?.trim()))
+  const categoryOptions = categoryOptionsRaw
+    .map((item) => item.category)
+    .filter((item): item is string => Boolean(item?.trim()))
+  const elementOptions = elementOptionsRaw
+    .map((item) => item.element)
+    .filter((item): item is string => Boolean(item?.trim()))
+  const elfCategoryOptions = categoriesData
+    .filter((categoryItem) => categoryItem.target === "elf")
+    .map((categoryItem) => categoryItem.name)
+  const redirectSearch = new URLSearchParams()
+  if (keyword) redirectSearch.set("keyword", keyword)
+  if (group) redirectSearch.set("group", group)
+  if (category) redirectSearch.set("category", category)
+  if (element) redirectSearch.set("element", element)
+  if (page > 1) redirectSearch.set("page", String(page))
+  const redirectTo = redirectSearch.toString()
+    ? `/dashboard/elves?${redirectSearch.toString()}`
+    : "/dashboard/elves"
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-8">
@@ -59,6 +125,93 @@ export default async function ElvesPage({ searchParams }: ElvesPageProps) {
           </Button>
         </div>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>筛选查询</CardTitle>
+          <CardDescription>支持名称关键词和组别/分类/属性筛选。</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form className="grid gap-3 md:grid-cols-5">
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="keyword">名称关键词</Label>
+              <Input
+                id="keyword"
+                name="keyword"
+                defaultValue={keyword}
+                placeholder="搜索精灵名称"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="group">组别</Label>
+              <select
+                id="group"
+                name="group"
+                defaultValue={group}
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              >
+                <option value="">全部组别</option>
+                {groupOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="category">分类</Label>
+              <select
+                id="category"
+                name="category"
+                defaultValue={category}
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              >
+                <option value="">全部分类</option>
+                {categoryOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="element">属性</Label>
+              <select
+                id="element"
+                name="element"
+                defaultValue={element}
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              >
+                <option value="">全部属性</option>
+                {elementOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-end">
+              <Button type="submit" className="w-full">
+                查询
+              </Button>
+            </div>
+            <div className="flex items-end">
+              <Button type="button" variant="outline" className="w-full" asChild>
+                <Link href="/dashboard/elves">清除</Link>
+              </Button>
+            </div>
+          </form>
+          {hasFilters ? (
+            <p className="mt-3 text-sm text-muted-foreground">
+              当前筛选：
+              {keyword ? ` 关键词「${keyword}」` : ""}
+              {group ? ` · 组别「${group}」` : ""}
+              {category ? ` · 分类「${category}」` : ""}
+              {element ? ` · 属性「${element}」` : ""}，共 {total} 条。
+            </p>
+          ) : null}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
@@ -124,9 +277,12 @@ export default async function ElvesPage({ searchParams }: ElvesPageProps) {
                     <TableCell className="text-right">{elf.detailQueryCount}</TableCell>
                     <TableCell className="text-right">{elf._count.images}</TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm" className="mr-2" asChild>
-                        <Link href={`/dashboard/elves/${elf.id}`}>编辑</Link>
-                      </Button>
+                      <ElfEditDialog
+                        elf={elf}
+                        elementOptions={[...ELEMENT_NAMES]}
+                        categoryOptions={elfCategoryOptions}
+                        redirectTo={redirectTo}
+                      />
                       <form action={deleteElf.bind(null, elf.id)} className="inline">
                         <ConfirmSubmitButton
                           variant="destructive"
@@ -149,6 +305,12 @@ export default async function ElvesPage({ searchParams }: ElvesPageProps) {
             pageSize={pageSize}
             total={total}
             basePath="/dashboard/elves"
+            query={{
+              keyword,
+              group,
+              category,
+              element,
+            }}
           />
         </CardContent>
       </Card>

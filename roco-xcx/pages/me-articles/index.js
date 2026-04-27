@@ -1,4 +1,5 @@
 const userActions = require('../../utils/user-actions.js')
+const api = require('../../utils/api.js')
 
 Page({
   data: {
@@ -18,12 +19,28 @@ Page({
     this.loadArticles()
   },
 
-  loadArticles() {
-    const articles = this.type === 'favorite'
-      ? userActions.getFavoritedArticles()
-      : userActions.getLikedArticles()
+  async loadArticles() {
+    const ids = this.type === 'favorite'
+      ? userActions.getFavoritedArticleIds()
+      : userActions.getLikedArticleIds()
 
-    this.setData({ articles })
+    if (!ids.length) {
+      this.setData({ articles: [] })
+      return
+    }
+
+    try {
+      const visibleArticles = await api.getArticles({
+        ids: ids.join(','),
+        limit: ids.length
+      })
+      const visibleMap = new Map((visibleArticles || []).map((item) => [item.id, item]))
+      const orderedVisible = ids.map((id) => visibleMap.get(id)).filter(Boolean)
+      this.setData({ articles: orderedVisible })
+    } catch (error) {
+      console.error(error)
+      this.setData({ articles: [] })
+    }
   },
 
   openArticle(e) {

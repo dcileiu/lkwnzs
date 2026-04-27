@@ -62,6 +62,10 @@ function getArticlesByType(type) {
   return ids.map((id) => cache[id]).filter(Boolean)
 }
 
+function getIdsByType(type) {
+  return getArray(type === 'like' ? LIKE_IDS_KEY : FAVORITE_IDS_KEY)
+}
+
 function getStats() {
   return {
     likes: getArray(LIKE_IDS_KEY).length,
@@ -88,8 +92,14 @@ module.exports = {
   getLikedArticles() {
     return getArticlesByType('like')
   },
+  getLikedArticleIds() {
+    return getIdsByType('like')
+  },
   getFavoritedArticles() {
     return getArticlesByType('favorite')
+  },
+  getFavoritedArticleIds() {
+    return getIdsByType('favorite')
   },
   isLiked,
   isFavorited,

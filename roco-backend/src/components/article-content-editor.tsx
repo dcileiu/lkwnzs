@@ -15,6 +15,7 @@ type UploadResponse = {
 
 interface ArticleContentEditorProps {
   defaultValue?: string
+  editorId?: string
 }
 
 function toHtml(markdown: string) {
@@ -46,7 +47,10 @@ function normalizeStrongSpacing(markdown: string) {
   return markdown.replace(/\*\*\s+([^\n]+?)\s+\*\*/g, "**$1**")
 }
 
-export function ArticleContentEditor({ defaultValue }: ArticleContentEditorProps = {}) {
+export function ArticleContentEditor({
+  defaultValue,
+  editorId = "article-content-editor",
+}: ArticleContentEditorProps = {}) {
   const initialMarkdown = normalizeStrongSpacing(normalizeEditorMarkdown(defaultValue || ""))
   const [markdown, setMarkdown] = React.useState(initialMarkdown)
   const [html, setHtml] = React.useState(() => toHtml(initialMarkdown))
@@ -115,9 +119,9 @@ export function ArticleContentEditor({ defaultValue }: ArticleContentEditorProps
 
   return (
     <div className="space-y-2">
-      <Label htmlFor="article-content-editor">内容正文 (Markdown)</Label>
+      <Label htmlFor={editorId}>内容正文 (Markdown)</Label>
       <MdEditor
-        editorId="article-content-editor"
+        editorId={editorId}
         modelValue={markdown}
         onChange={handleChange}
         onUploadImg={handleUploadImg}

@@ -38,16 +38,35 @@ Page({
     galleryImages: [],
     activeImage: DEFAULT_ELF_IMAGE,
     heroImageCandidates: [],
-    relatedElves: []
+    relatedElves: [],
+    navTopPadding: 32
   },
 
   onLoad(options) {
+    this.syncSafeTopPadding()
     if (!options.id) {
       wx.showToast({ title: '缺少精灵 ID', icon: 'none' })
       return
     }
 
     this.fetchDetail(options.id)
+  },
+
+  syncSafeTopPadding() {
+    try {
+      const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
+      const statusBarHeight =
+        windowInfo.statusBarHeight ||
+        (windowInfo.safeArea ? windowInfo.safeArea.top : 0) ||
+        20
+      this.setData({
+        navTopPadding: statusBarHeight + 10
+      })
+    } catch (err) {
+      this.setData({
+        navTopPadding: 32
+      })
+    }
   },
 
   async fetchDetail(id) {
@@ -133,6 +152,10 @@ Page({
     }
 
     wx.switchTab({ url: '/pages/pokedex/index' })
+  },
+
+  onBackTap() {
+    this.goBack()
   }
 })
 

@@ -85,6 +85,9 @@ export async function deleteElf(id: string) {
 
 export async function updateElf(formData: FormData) {
   const id = ((formData.get("id") as string | null) ?? "").trim();
+  const redirectTo =
+    ((formData.get("redirectTo") as string | null) ?? "").trim() ||
+    "/dashboard/elves";
   if (!id) {
     throw new Error("Missing elf id");
   }
@@ -151,5 +154,5 @@ export async function updateElf(formData: FormData) {
   });
 
   revalidatePath("/dashboard/elves");
-  redirect("/dashboard/elves");
+  redirect(redirectTo);
 }

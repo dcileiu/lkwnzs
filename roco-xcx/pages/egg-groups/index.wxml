@@ -8,7 +8,7 @@
     </view>
     <view class="hero-content">
       <view class="hero-title">宠物蛋组对照表</view>
-      <view class="hero-sub">按蛋组查看可配对精灵，数据可在后台维护</view>
+      <view class="hero-sub">按蛋组查看可配对精灵</view>
       <view class="egg-stats">
         <view class="stat-item">
           <text class="stat-num">{{totalGroups}}</text>
