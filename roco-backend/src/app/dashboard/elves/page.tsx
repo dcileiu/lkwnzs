@@ -124,8 +124,8 @@ export default async function ElvesPage({ searchParams }: ElvesPageProps) {
                     <TableCell className="text-right">{elf.detailQueryCount}</TableCell>
                     <TableCell className="text-right">{elf._count.images}</TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm" className="mr-2" disabled>
-                        编辑
+                      <Button variant="outline" size="sm" className="mr-2" asChild>
+                        <Link href={`/dashboard/elves/${elf.id}`}>编辑</Link>
                       </Button>
                       <form action={deleteElf.bind(null, elf.id)} className="inline">
                         <ConfirmSubmitButton

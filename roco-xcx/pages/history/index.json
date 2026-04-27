@@ -1,0 +1,6 @@
+{
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "浏览历史",
+  "enablePullDownRefresh": true,
+  "usingComponents": {}
+}

@@ -42,6 +42,15 @@ const api = {
   getArticleDetail(id) {
     return request(`/articles/${id}`, 'GET');
   },
+  recordHistory(payload) {
+    return request('/history', 'POST', payload);
+  },
+  getHistory(params) {
+    return request('/history', 'GET', params);
+  },
+  clearHistory(payload) {
+    return request('/history', 'DELETE', payload);
+  },
   // Elves Pokedex Data
   getElves(params) {
     return request('/elves', 'GET', params);

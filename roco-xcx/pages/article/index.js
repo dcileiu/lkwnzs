@@ -1,5 +1,6 @@
 const api = require('../../utils/api.js')
 const userActions = require('../../utils/user-actions.js')
+const auth = require('../../utils/auth.js')
 const { normalizeImageUrl } = require('../../utils/url.js')
 
 function normalizeArticleHtml(contentHtml) {
@@ -81,6 +82,16 @@ Page({
         sourceAuthor: resolveSourceAuthor(res)
       }
       userActions.saveArticleSnapshot(article)
+      const user = await auth.ensureLogin()
+      if (user?.openId) {
+        api.recordHistory({
+          openId: user.openId,
+          targetType: 'article',
+          targetId: id
+        }).catch((err) => {
+          console.warn('record article history failed', err)
+        })
+      }
       this.setData({
         article,
         articleContentHtml: normalizeArticleHtml(res.contentHtml || res.content),

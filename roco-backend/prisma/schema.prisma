@@ -25,6 +25,7 @@ model User {
   comments     Comment[]
   collections  UserElfCollection[]
   interactions UserInteraction[]
+  browseHistory UserBrowseHistory[]
 }
 
 model Author {
@@ -80,6 +81,22 @@ model UserInteraction {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, articleId, type])
+}
+
+model UserBrowseHistory {
+  id         String   @id @default(cuid())
+  userId     String
+  targetType String
+  targetId   String
+  viewedAt   DateTime @default(now())
+  viewCount  Int      @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, targetType, targetId])
+  @@index([userId, viewedAt])
+  @@index([targetType, targetId])
 }
 
 model Elf {

@@ -120,7 +120,7 @@ Page({
       return
     }
     if (key === 'history') {
-      wx.showToast({ title: '浏览历史即将上线', icon: 'none' })
+      wx.navigateTo({ url: '/pages/history/index' })
       return
     }
     if (key === 'feedback') {

@@ -1,4 +1,5 @@
-﻿const api = require('../../utils/api.js')
+const api = require('../../utils/api.js')
+const auth = require('../../utils/auth.js')
 const { normalizeImageUrl } = require('../../utils/url.js')
 
 const DEFAULT_ELF_IMAGE = 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/default-elf.png'
@@ -54,6 +55,16 @@ Page({
       wx.showLoading({ title: '加载中...' })
 
       const elf = await api.getElfDetail(id)
+      const user = await auth.ensureLogin()
+      if (user?.openId) {
+        api.recordHistory({
+          openId: user.openId,
+          targetType: 'elf',
+          targetId: id
+        }).catch((err) => {
+          console.warn('record elf history failed', err)
+        })
+      }
       const galleryImages = normalizeGalleryImages(elf?.images || [])
       const normalizedElf = {
         ...elf,

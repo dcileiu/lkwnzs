@@ -82,3 +82,74 @@ export async function deleteElf(id: string) {
   await prisma.elf.delete({ where: { id } });
   revalidatePath("/dashboard/elves");
 }
+
+export async function updateElf(formData: FormData) {
+  const id = ((formData.get("id") as string | null) ?? "").trim();
+  if (!id) {
+    throw new Error("Missing elf id");
+  }
+
+  const name = formData.get("name") as string;
+  const elements = normalizeElementList([
+    ...(formData.getAll("elements") as string[]),
+    (formData.get("element") as string | null) || "",
+  ]);
+  const rarity = formData.get("rarity") as string;
+  const group = ((formData.get("group") as string | null) ?? "").trim();
+  const category = ((formData.get("category") as string | null) ?? "").trim();
+  const isHot = formData.get("isHot") === "on";
+  const height = ((formData.get("height") as string | null) ?? "").trim();
+  const weight = ((formData.get("weight") as string | null) ?? "").trim();
+  const raceValue = ((formData.get("raceValue") as string | null) ?? "").trim();
+  const eggImageUrl = normalizeImagePathForStorage(
+    ((formData.get("eggImageUrl") as string | null) ?? "").trim(),
+  );
+  const fruitImageUrl = normalizeImagePathForStorage(
+    ((formData.get("fruitImageUrl") as string | null) ?? "").trim(),
+  );
+  const imageRecords = parseImageRecords(formData.get("galleryImages"));
+  const coverImage = resolveCoverImage(
+    formData.get("coverImage"),
+    imageRecords,
+  );
+
+  const hp = parseInt((formData.get("hp") as string) || "0");
+  const attack = parseInt((formData.get("attack") as string) || "0");
+  const defense = parseInt((formData.get("defense") as string) || "0");
+  const speed = parseInt((formData.get("speed") as string) || "0");
+  const totalStats = hp + attack + defense + speed;
+
+  if (!name || elements.length === 0 || !rarity) {
+    throw new Error("Missing required fields");
+  }
+
+  await prisma.elf.update({
+    where: { id },
+    data: {
+      name,
+      element: serializeElementList(elements),
+      rarity,
+      group: group || null,
+      category: category || null,
+      avatar: coverImage,
+      height: height || null,
+      weight: weight || null,
+      raceValue: raceValue || null,
+      eggImageUrl: eggImageUrl || null,
+      fruitImageUrl: fruitImageUrl || null,
+      isHot,
+      hp,
+      attack,
+      defense,
+      speed,
+      totalStats,
+      images: {
+        deleteMany: {},
+        ...(imageRecords.length > 0 ? { create: imageRecords } : {}),
+      },
+    },
+  });
+
+  revalidatePath("/dashboard/elves");
+  redirect("/dashboard/elves");
+}
