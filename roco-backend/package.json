@@ -16,6 +16,7 @@
     "db:fix-user-avatar": "node scripts/fix-user-default-avatar.mjs",
     "db:normalize-image-paths": "node scripts/normalize-image-paths.mjs",
     "db:sync-egg-media": "node scripts/sync-egg-media-to-db.mjs",
+    "db:sync-elf-groups": "node scripts/sync-elf-groups-to-db.mjs",
     "db:import-daoju": "node scripts/import-daoju-to-db.mjs",
     "db:import-egg-groups": "node scripts/import-egg-groups-to-db.mjs",
     "db:init": "npm run db:push && npm run db:bootstrap && npm run db:sync-egg-media",

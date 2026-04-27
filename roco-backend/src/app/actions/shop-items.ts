@@ -66,14 +66,6 @@ export async function createShopItem(formData: FormData) {
     throw new Error("道具不存在")
   }
 
-  const exists = await prisma.shopItem.findUnique({
-    where: { itemId },
-    select: { id: true },
-  })
-  if (exists) {
-    throw new Error("该道具已经在远行商人里上架，请直接编辑现有商品")
-  }
-
   const roundSlot = readOptionalRoundSlot(formData, "roundSlot")
   const manualStartAt = readDate(formData, "startAt")
   const manualEndAt = readDate(formData, "endAt")

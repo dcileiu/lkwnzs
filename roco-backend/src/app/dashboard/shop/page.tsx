@@ -14,6 +14,14 @@ import {
   DashboardPagination,
   parsePageParam,
 } from "@/components/dashboard-pagination"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ShopItemPicker } from "@/components/shop-item-picker"
@@ -27,7 +35,6 @@ export const dynamic = "force-dynamic"
 interface ShopPageProps {
   searchParams: Promise<{
     page?: string
-    edit?: string
     keyword?: string
     status?: string
   }>
@@ -121,7 +128,6 @@ async function getDashboardData({
         take: pageSize,
       }),
       prisma.item.findMany({
-        where: { shopEntry: null },
         include: {
           category: true,
         },
@@ -149,14 +155,12 @@ async function getDashboardData({
 export default async function ShopDashboardPage({ searchParams }: ShopPageProps) {
   const resolvedSearchParams = await searchParams
   const page = parsePageParam(resolvedSearchParams.page)
-  const editId = (resolvedSearchParams.edit || "").trim()
   const keyword = (resolvedSearchParams.keyword || "").trim()
   const status = (resolvedSearchParams.status || "all").trim()
   const pageSize = DASHBOARD_PAGE_SIZE
   const { shopItems, availableItems, totalShopItems, enabledCount, error } =
     await getDashboardData({ page, pageSize, keyword, status })
   const liveCount = shopItems.filter((s) => s.enabled && isWithinWindow(s.startAt, s.endAt)).length
-  const editingShop = shopItems.find((shop) => shop.id === editId) || null
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:p-8">
@@ -214,19 +218,24 @@ export default async function ShopDashboardPage({ searchParams }: ShopPageProps)
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>添加商品</CardTitle>
-          <CardDescription>
-            从已存在的道具中选择一个上架到远行商人。同一道具同一时间只能上架一次。
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {availableItems.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              所有道具都已上架，或尚无道具数据。请先在「道具管理」中导入道具。
-            </p>
-          ) : (
-            <form action={createShopItem} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <CardHeader className="flex flex-row items-center justify-between gap-3">
+          <div>
+            <CardTitle>商品管理</CardTitle>
+            <CardDescription>支持同一道具在不同时间、多轮次重复上架。</CardDescription>
+          </div>
+          <Dialog>
+            <DialogTrigger render={<Button />}>新增商品</DialogTrigger>
+            <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-3xl">
+              <DialogHeader>
+                <DialogTitle>新增远行商人商品</DialogTitle>
+                <DialogDescription>从已存在道具中新增一条上架记录。</DialogDescription>
+              </DialogHeader>
+              {availableItems.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  尚无道具数据，请先在「道具管理」中导入道具。
+                </p>
+              ) : (
+                <form action={createShopItem} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               <div className="space-y-2 md:col-span-2 lg:col-span-3">
                 <Label htmlFor="new-itemId">选择道具</Label>
                 <ShopItemPicker
@@ -303,18 +312,20 @@ export default async function ShopDashboardPage({ searchParams }: ShopPageProps)
                   立即启用
                 </Label>
               </div>
-              <div className="md:col-span-2 lg:col-span-3">
-                <Button type="submit">添加到远行商人</Button>
-              </div>
-            </form>
-          )}
-        </CardContent>
+                  <div className="md:col-span-2 lg:col-span-3">
+                    <Button type="submit">添加到远行商人</Button>
+                  </div>
+                </form>
+              )}
+            </DialogContent>
+          </Dialog>
+        </CardHeader>
       </Card>
 
       <Card>
         <CardHeader>
           <CardTitle>已上架商品</CardTitle>
-          <CardDescription>列表展示，点击编辑后再显示输入框。每页 {pageSize} 条。</CardDescription>
+          <CardDescription>列表展示，新增和编辑均通过弹窗操作。每页 {pageSize} 条。</CardDescription>
         </CardHeader>
         <CardContent>
           <form className="mb-4 grid gap-3 rounded-lg border p-3 md:grid-cols-[1fr_180px_auto_auto]">
@@ -407,9 +418,123 @@ export default async function ShopDashboardPage({ searchParams }: ShopPageProps)
                       <TableCell>{formatDateTimeDisplay(shop.endAt)}</TableCell>
                       <TableCell>
                         <div className="flex justify-end gap-2">
-                          <Button type="button" variant="outline" size="sm" asChild>
-                            <a href={`/dashboard/shop?page=${page}&edit=${shop.id}`}>编辑</a>
-                          </Button>
+                          <Dialog>
+                            <DialogTrigger render={<Button type="button" variant="outline" size="sm" />}>
+                              编辑
+                            </DialogTrigger>
+                            <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-3xl">
+                              <DialogHeader>
+                                <DialogTitle>编辑商品：{shop.item.name}</DialogTitle>
+                                <DialogDescription>保存后即时生效。</DialogDescription>
+                              </DialogHeader>
+                              <form action={updateShopItem} className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                                <input type="hidden" name="id" value={shop.id} />
+                                <div className="space-y-2">
+                                  <Label htmlFor={`price-${shop.id}`}>价格</Label>
+                                  <Input
+                                    id={`price-${shop.id}`}
+                                    name="price"
+                                    type="number"
+                                    min="0"
+                                    defaultValue={shop.price}
+                                    required
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor={`currency-${shop.id}`}>
+                                    货币（当前：{getCurrencyLabel(shop.currency)}）
+                                  </Label>
+                                  <select
+                                    id={`currency-${shop.id}`}
+                                    name="currency"
+                                    defaultValue={shop.currency}
+                                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+                                  >
+                                    {CURRENCY_OPTIONS.map((option) => (
+                                      <option key={option.value} value={option.value}>
+                                        {option.label}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor={`stock-${shop.id}`}>库存（留空 = 不限）</Label>
+                                  <Input
+                                    id={`stock-${shop.id}`}
+                                    name="stock"
+                                    type="number"
+                                    min="0"
+                                    defaultValue={shop.stock ?? ""}
+                                    placeholder="不限"
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor={`sort-${shop.id}`}>排序</Label>
+                                  <Input
+                                    id={`sort-${shop.id}`}
+                                    name="sortOrder"
+                                    type="number"
+                                    defaultValue={shop.sortOrder}
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor={`roundSlot-${shop.id}`}>每日轮次（推荐）</Label>
+                                  <select
+                                    id={`roundSlot-${shop.id}`}
+                                    name="roundSlot"
+                                    defaultValue={shop.roundSlot ? String(shop.roundSlot) : ""}
+                                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+                                  >
+                                    <option value="">不使用轮次（按具体时间）</option>
+                                    {ROUND_SLOT_OPTIONS.map((option) => (
+                                      <option key={option.value} value={option.value}>
+                                        {option.label}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor={`startAt-${shop.id}`}>上架时间</Label>
+                                  <Input
+                                    id={`startAt-${shop.id}`}
+                                    name="startAt"
+                                    type="datetime-local"
+                                    defaultValue={formatDateTimeLocal(shop.startAt)}
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor={`endAt-${shop.id}`}>下架时间</Label>
+                                  <Input
+                                    id={`endAt-${shop.id}`}
+                                    name="endAt"
+                                    type="datetime-local"
+                                    defaultValue={formatDateTimeLocal(shop.endAt)}
+                                  />
+                                </div>
+                                <div className="space-y-2 md:col-span-2 lg:col-span-3">
+                                  <Label htmlFor={`note-${shop.id}`}>备注</Label>
+                                  <Textarea
+                                    id={`note-${shop.id}`}
+                                    name="note"
+                                    rows={2}
+                                    defaultValue={shop.note ?? ""}
+                                    placeholder="例如：本周限时特价"
+                                  />
+                                </div>
+                                <div className="flex items-center gap-2 md:col-span-2 lg:col-span-3">
+                                  <Checkbox id={`enabled-${shop.id}`} name="enabled" defaultChecked={shop.enabled} />
+                                  <Label htmlFor={`enabled-${shop.id}`} className="font-medium">
+                                    启用此商品
+                                  </Label>
+                                </div>
+                                <div className="md:col-span-2 lg:col-span-3">
+                                  <Button type="submit" size="sm">
+                                    保存修改
+                                  </Button>
+                                </div>
+                              </form>
+                            </DialogContent>
+                          </Dialog>
                           <form action={toggleShopItemEnabled}>
                             <input type="hidden" name="id" value={shop.id} />
                             <input type="hidden" name="enabled" value={shop.enabled ? "false" : "true"} />
@@ -445,145 +570,10 @@ export default async function ShopDashboardPage({ searchParams }: ShopPageProps)
             query={{
               keyword,
               status,
-              edit: editId,
             }}
           />
         </CardContent>
       </Card>
-
-      {editingShop ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>编辑商品：{editingShop.item.name}</CardTitle>
-            <CardDescription>仅在点击编辑后展示表单，保存后即时生效。</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form action={updateShopItem} className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-              <input type="hidden" name="id" value={editingShop.id} />
-
-              <div className="space-y-2">
-                <Label htmlFor={`price-${editingShop.id}`}>价格</Label>
-                <Input
-                  id={`price-${editingShop.id}`}
-                  name="price"
-                  type="number"
-                  min="0"
-                  defaultValue={editingShop.price}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`currency-${editingShop.id}`}>
-                  货币（当前：{getCurrencyLabel(editingShop.currency)}）
-                </Label>
-                <select
-                  id={`currency-${editingShop.id}`}
-                  name="currency"
-                  defaultValue={editingShop.currency}
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-                >
-                  {CURRENCY_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`stock-${editingShop.id}`}>库存（留空 = 不限）</Label>
-                <Input
-                  id={`stock-${editingShop.id}`}
-                  name="stock"
-                  type="number"
-                  min="0"
-                  defaultValue={editingShop.stock ?? ""}
-                  placeholder="不限"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`sort-${editingShop.id}`}>排序</Label>
-                <Input
-                  id={`sort-${editingShop.id}`}
-                  name="sortOrder"
-                  type="number"
-                  defaultValue={editingShop.sortOrder}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`roundSlot-${editingShop.id}`}>每日轮次（推荐）</Label>
-                <select
-                  id={`roundSlot-${editingShop.id}`}
-                  name="roundSlot"
-                  defaultValue={editingShop.roundSlot ? String(editingShop.roundSlot) : ""}
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-                >
-                  <option value="">不使用轮次（按具体时间）</option>
-                  {ROUND_SLOT_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`startAt-${editingShop.id}`}>上架时间</Label>
-                <Input
-                  id={`startAt-${editingShop.id}`}
-                  name="startAt"
-                  type="datetime-local"
-                  defaultValue={formatDateTimeLocal(editingShop.startAt)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`endAt-${editingShop.id}`}>下架时间</Label>
-                <Input
-                  id={`endAt-${editingShop.id}`}
-                  name="endAt"
-                  type="datetime-local"
-                  defaultValue={formatDateTimeLocal(editingShop.endAt)}
-                />
-              </div>
-
-              <div className="space-y-2 md:col-span-2 lg:col-span-3">
-                <Label htmlFor={`note-${editingShop.id}`}>备注</Label>
-                <Textarea
-                  id={`note-${editingShop.id}`}
-                  name="note"
-                  rows={2}
-                  defaultValue={editingShop.note ?? ""}
-                  placeholder="例如：本周限时特价"
-                />
-              </div>
-
-              <div className="flex items-center gap-2 md:col-span-2 lg:col-span-3">
-                <Checkbox
-                  id={`enabled-${editingShop.id}`}
-                  name="enabled"
-                  defaultChecked={editingShop.enabled}
-                />
-                <Label htmlFor={`enabled-${editingShop.id}`} className="font-medium">
-                  启用此商品
-                </Label>
-              </div>
-
-              <div className="flex gap-2 md:col-span-2 lg:col-span-3">
-                <Button type="submit" size="sm">
-                  保存修改
-                </Button>
-                <Button type="button" variant="outline" size="sm" asChild>
-                  <a href={`/dashboard/shop?page=${page}`}>取消编辑</a>
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      ) : null}
     </div>
   )
 }

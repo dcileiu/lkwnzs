@@ -250,7 +250,7 @@ model Item {
   updatedAt      DateTime                 @updatedAt
   category       ItemCategory             @relation(fields: [categoryId], references: [id])
   learnableElves SkillStoneLearnableElf[]
-  shopEntry      ShopItem?
+  shopEntries    ShopItem[]
 
   @@unique([categoryId, name])
   @@index([categoryId, sortOrder])
@@ -259,7 +259,7 @@ model Item {
 
 model ShopItem {
   id        String    @id @default(cuid())
-  itemId    String    @unique
+  itemId    String
   price     Int       @default(0)
   currency  String    @default("gold")
   stock     Int?
