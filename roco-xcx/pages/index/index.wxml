@@ -33,7 +33,7 @@
       </block>
     </scroll-view>
 
-    <view class="section guide-section">
+    <view class="section guide-section" wx:if="{{hotArticles.length > 0}}">
       <view class="section-header">
         <text class="title">🔥热门攻略</text>
         <text class="more" bindtap="navTo" data-url="/pages/guide/index">查看全部 ></text>

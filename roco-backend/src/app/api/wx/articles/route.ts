@@ -13,6 +13,7 @@ export async function GET(request: Request) {
   const limit = parseInt(searchParams.get("limit") || "10");
 
   const whereCondition: Prisma.ArticleWhereInput = {};
+  whereCondition.isVisible = true;
   if (category && category !== "全部") whereCondition.category = category;
   if (isHot === "true") whereCondition.isHot = true;
   if (keyword) {

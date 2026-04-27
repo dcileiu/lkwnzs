@@ -53,6 +53,7 @@ export async function createArticle(formData: FormData) {
   const cover = normalizeArticleCover(formData.get("cover"));
   const authorName = (formData.get("authorName") as string) || "管理员";
   const isHot = formData.get("isHot") === "on";
+  const isVisible = formData.get("isVisible") === "on";
 
   if (!title || !category || !content) {
     throw new Error("Missing required fields");
@@ -78,6 +79,7 @@ export async function createArticle(formData: FormData) {
       thumbnail: cover,
       summary: extractArticleSummary(content),
       isHot,
+      isVisible,
       authorId: author.id,
       readingTime: Math.max(1, Math.ceil(stripHtml(content).length / 400)),
     },
@@ -100,6 +102,7 @@ export async function updateArticle(formData: FormData) {
   const cover = normalizeArticleCover(formData.get("cover"));
   const authorName = (formData.get("authorName") as string) || "管理员";
   const isHot = formData.get("isHot") === "on";
+  const isVisible = formData.get("isVisible") === "on";
 
   if (!id || !title || !category || !content) {
     throw new Error("Missing required fields");
@@ -126,6 +129,7 @@ export async function updateArticle(formData: FormData) {
       thumbnail: cover,
       summary: extractArticleSummary(content),
       isHot,
+      isVisible,
       authorId: author.id,
       readingTime: Math.max(1, Math.ceil(stripHtml(content).length / 400)),
     },
@@ -137,5 +141,14 @@ export async function updateArticle(formData: FormData) {
 
 export async function deleteArticle(id: string) {
   await prisma.article.delete({ where: { id } });
+  revalidatePath("/dashboard/articles");
+}
+
+export async function setAllArticlesVisible(visible: boolean) {
+  await prisma.article.updateMany({
+    data: {
+      isVisible: visible,
+    },
+  });
   revalidatePath("/dashboard/articles");
 }

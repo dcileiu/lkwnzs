@@ -109,6 +109,17 @@ export default async function EditArticlePage({ params }: EditArticlePageProps) 
                   </p>
                 </div>
               </div>
+              <div className="flex items-center space-x-2 rounded-md border p-4 md:col-span-2">
+                <Checkbox id="isVisible" name="isVisible" defaultChecked={article.isVisible} />
+                <div className="space-y-1 leading-none">
+                  <Label htmlFor="isVisible" className="font-medium">
+                    小程序显示
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    关闭后文章仅在后台可见，小程序文章列表不会展示。
+                  </p>
+                </div>
+              </div>
             </div>
 
             <ArticleCoverUploader

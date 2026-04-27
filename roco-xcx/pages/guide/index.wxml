@@ -107,7 +107,7 @@
     </block>
 
     <view wx:if="{{!featuredArticles.length && !hotArticles.length}}" class="empty-state">
-      没有找到相关攻略~
+      目前小程序不支持攻略文章内容，去看看其他功能吧
     </view>
   </view>
 </scroll-view>

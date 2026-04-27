@@ -62,6 +62,13 @@ export async function GET(
     );
   }
 
+  if (!article.isVisible) {
+    return NextResponse.json(
+      { code: 404, message: "not found" },
+      { status: 404 },
+    );
+  }
+
   // Optionally increment views count asynchronously
   // without awaiting to speed up response
   prisma.article

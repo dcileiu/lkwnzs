@@ -12,7 +12,7 @@ import {
   DashboardPagination,
   parsePageParam,
 } from "@/components/dashboard-pagination"
-import { deleteArticle } from "@/app/actions/articles"
+import { deleteArticle, setAllArticlesVisible } from "@/app/actions/articles"
 
 interface ArticlesPageProps {
   searchParams: Promise<{
@@ -25,8 +25,9 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
   const page = parsePageParam(resolvedSearchParams.page)
   const pageSize = DASHBOARD_PAGE_SIZE
 
-  const [total, articles] = await Promise.all([
+  const [total, visibleCount, articles] = await Promise.all([
     prisma.article.count(),
+    prisma.article.count({ where: { isVisible: true } }),
     prisma.article.findMany({
       orderBy: { createdAt: "desc" },
       include: { author: true },
@@ -56,8 +57,20 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
         <CardHeader>
           <CardTitle>全部文章</CardTitle>
           <CardDescription>
-            当前共有 {total} 篇攻略文章，每页 {pageSize} 条。
+            当前共有 {total} 篇攻略文章，其中小程序可见 {visibleCount} 篇，每页 {pageSize} 条。
           </CardDescription>
+          <div className="flex flex-wrap items-center gap-2">
+            <form action={setAllArticlesVisible.bind(null, false)}>
+              <Button type="submit" variant="outline" size="sm">
+                一键隐藏所有文章
+              </Button>
+            </form>
+            <form action={setAllArticlesVisible.bind(null, true)}>
+              <Button type="submit" variant="outline" size="sm">
+                一键显示所有文章
+              </Button>
+            </form>
+          </div>
         </CardHeader>
         <CardContent>
           <Table>
@@ -87,11 +100,18 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
                     </TableCell>
                     <TableCell>{article.author.name}</TableCell>
                     <TableCell>
-                      {article.isHot ? (
-                        <Badge className="bg-orange-500">热门</Badge>
-                      ) : (
-                        <span className="text-sm text-muted-foreground">普通</span>
-                      )}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {article.isHot ? (
+                          <Badge className="bg-orange-500">热门</Badge>
+                        ) : (
+                          <span className="text-sm text-muted-foreground">普通</span>
+                        )}
+                        {article.isVisible ? (
+                          <Badge className="bg-emerald-600">显示中</Badge>
+                        ) : (
+                          <Badge variant="secondary">已隐藏</Badge>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="text-right">{article.views}</TableCell>
                     <TableCell>
