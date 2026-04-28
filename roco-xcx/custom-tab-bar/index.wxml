@@ -1,10 +1,10 @@
-﻿<view class="tabbar-wrapper">
+<view class="tabbar-wrapper">
   <view class="tabbar-shell">
     <image class="menu-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/menu.webp" mode="aspectFill"></image>
     <view class="tab-list">
       <block wx:for="{{list}}" wx:key="pagePath">
-        <view class="tab-item {{selected === index ? 'active' : ''}}" data-index="{{index}}" bindtap="switchTab">
-          <image wx:if="{{selected === index}}" class="active-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/active.webp" mode="scaleToFill"></image>
+        <view class="tab-item {{selectedPath === item.pagePath ? 'active' : ''}}" data-index="{{index}}" bindtap="switchTab">
+          <image wx:if="{{selectedPath === item.pagePath}}" class="active-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/active.webp" mode="scaleToFill"></image>
           <text class="tab-text">{{item.text}}</text>
           <view wx:if="{{index < list.length - 1}}" class="divider"></view>
         </view>

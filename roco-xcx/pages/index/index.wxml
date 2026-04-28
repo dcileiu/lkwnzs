@@ -7,7 +7,7 @@
         <icon type="search" size="16" color="#f8e8b1"></icon>
         <input
           class="search-input"
-          placeholder="搜索精灵、攻略..."
+          placeholder="输入你想搜索的内容"
           placeholder-style="color: rgba(255, 241, 214, 0.72);"
           confirm-type="search"
           value="{{searchKeyword}}"

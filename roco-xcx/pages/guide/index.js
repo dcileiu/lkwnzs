@@ -1,4 +1,4 @@
-﻿const api = require('../../utils/api.js')
+const api = require('../../utils/api.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
 const { normalizeImageUrl } = require('../../utils/url.js')
 
@@ -65,6 +65,13 @@ Page({
         featuredArticles,
         hotArticles
       })
+      const hasArticles = items.length > 0
+      const tabBar = typeof this.getTabBar === 'function' ? this.getTabBar() : null
+      if (tabBar && typeof tabBar.setGuideTabVisible === 'function') {
+        tabBar.setGuideTabVisible(hasArticles)
+      } else {
+        wx.setStorageSync('guide_tab_visible', hasArticles)
+      }
     } catch (err) {
       console.error(err)
     } finally {

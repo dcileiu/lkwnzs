@@ -1,4 +1,4 @@
-function setTabBarSelected(page, selected) {
+function setTabBarSelected(page) {
   if (!page || typeof page.getTabBar !== 'function') {
     return
   }
@@ -9,7 +9,7 @@ function setTabBarSelected(page, selected) {
     return
   }
 
-  tabBar.setData({ selected })
+  tabBar.setData({ selectedPath: `/${page.route}` })
 }
 
 module.exports = {

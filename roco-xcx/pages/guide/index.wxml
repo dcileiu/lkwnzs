@@ -7,7 +7,7 @@
         <icon type="search" size="16" color="#f8e8b1"></icon>
         <input
           class="search-input"
-          placeholder="搜索攻略、技巧、玩法..."
+          placeholder="输入你想搜索的内容"
           placeholder-style="color: rgba(255, 241, 214, 0.72);"
           value="{{keyword}}"
           bindinput="onSearchInput"

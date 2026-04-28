@@ -43,6 +43,12 @@ Page({
           avatar: normalizeImageUrl(item.avatar)
         }))
       })
+      const tabBar = typeof this.getTabBar === 'function' ? this.getTabBar() : null
+      if (tabBar && typeof tabBar.setGuideTabVisible === 'function') {
+        tabBar.setGuideTabVisible((articles || []).length > 0)
+      } else {
+        wx.setStorageSync('guide_tab_visible', (articles || []).length > 0)
+      }
     } catch (err) {
       console.error(err)
     } finally {
