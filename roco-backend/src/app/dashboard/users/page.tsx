@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -107,8 +108,8 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
                     <TableCell className="font-medium">
                       {user.nickname || "未设置昵称"}
                     </TableCell>
-                    <TableCell className="text-muted-foreground text-xs font-mono">
-                      {user.openId.slice(0, 12)}...
+                    <TableCell className="max-w-[420px] break-all text-xs font-mono text-muted-foreground">
+                      {user.openId}
                     </TableCell>
                     <TableCell className="text-right">{user._count.comments}</TableCell>
                     <TableCell className="text-right">{user._count.interactions}</TableCell>
@@ -117,7 +118,9 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
                       {new Date(user.createdAt).toLocaleDateString("zh-CN")}
                     </TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm">查看详情</Button>
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href={`/dashboard/users/${user.id}`}>查看详情</Link>
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))

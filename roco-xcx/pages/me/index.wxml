@@ -13,7 +13,6 @@
         <view class="nickname-row">
             <text class="nickname">{{profile.nickname || '洛克训练师'}}</text>
             <text class="edit-btn" bindtap="editNickname">修改名称</text>
-            <text class="wx-btn" bindtap="useWechatNickname">同步微信名</text>
         </view>
         <view class="profile-meta-row">
           <text class="desc">小洛克，欢迎回来！</text>
@@ -42,6 +41,29 @@
       </block>
     </view>
 
+  </view>
+
+  <view wx:if="{{showNicknameDialog}}" class="nickname-dialog-mask" catchtouchmove="true">
+    <view class="nickname-dialog" catchtap="noop">
+      <view class="nickname-dialog-title">修改名称</view>
+      <input
+        class="nickname-dialog-input"
+        value="{{nicknameDraft}}"
+        placeholder="请输入新的用户名"
+        maxlength="20"
+        focus
+        bindfocus="onNicknameFocus"
+        bindinput="onNicknameInput"
+      />
+      <view wx:if="{{showWechatSuggestion && wechatNickname}}" class="nickname-suggestion-wrap">
+        <text class="nickname-suggestion-label">微信昵称候选</text>
+        <view class="nickname-suggestion-chip" bindtap="fillWechatNickname">{{wechatNickname}}</view>
+      </view>
+      <view class="nickname-dialog-actions">
+        <view class="nickname-dialog-btn cancel" bindtap="closeNicknameDialog">取消</view>
+        <view class="nickname-dialog-btn confirm" bindtap="submitNickname">确定</view>
+      </view>
+    </view>
   </view>
 </scroll-view>
 

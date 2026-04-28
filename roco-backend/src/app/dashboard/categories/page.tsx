@@ -1,7 +1,15 @@
-import { createCategory, deleteCategory } from "@/app/actions/categories"
+import { createCategory, deleteCategory, updateCategory } from "@/app/actions/categories"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { readCategoriesData } from "@/lib/game-data"
@@ -98,14 +106,41 @@ export default async function CategoriesPage() {
                   </div>
                   <input type="hidden" name="id" value={category.id} />
                   <input type="hidden" name="target" value={category.target} />
-                  <ConfirmSubmitButton
-                    type="submit"
-                    variant="destructive"
-                    size="sm"
-                    confirmMessage={`确认删除分类「${category.name}」吗？`}
-                  >
-                    删除
-                  </ConfirmSubmitButton>
+                  <div className="flex items-center gap-2">
+                    <Dialog>
+                      <DialogTrigger render={<Button type="button" variant="outline" size="sm" />}>
+                        编辑
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>编辑分类</DialogTitle>
+                          <DialogDescription>修改精灵分类名称，不会变更分类 ID。</DialogDescription>
+                        </DialogHeader>
+                        <form action={updateCategory} className="space-y-3">
+                          <input type="hidden" name="id" value={category.id} />
+                          <input type="hidden" name="target" value={category.target} />
+                          <div className="space-y-2">
+                            <Label htmlFor={`elf-category-name-${category.id}`}>分类名称</Label>
+                            <Input
+                              id={`elf-category-name-${category.id}`}
+                              name="name"
+                              required
+                              defaultValue={category.name}
+                            />
+                          </div>
+                          <Button type="submit">保存</Button>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
+                    <ConfirmSubmitButton
+                      type="submit"
+                      variant="destructive"
+                      size="sm"
+                      confirmMessage={`确认删除分类「${category.name}」吗？`}
+                    >
+                      删除
+                    </ConfirmSubmitButton>
+                  </div>
                 </form>
               ))
             )}
@@ -142,14 +177,59 @@ export default async function CategoriesPage() {
                   </div>
                   <input type="hidden" name="id" value={category.id} />
                   <input type="hidden" name="target" value="item" />
-                  <ConfirmSubmitButton
-                    type="submit"
-                    variant="destructive"
-                    size="sm"
-                    confirmMessage={`确认删除分类「${category.name}」吗？`}
-                  >
-                    删除
-                  </ConfirmSubmitButton>
+                  <div className="flex items-center gap-2">
+                    <Dialog>
+                      <DialogTrigger render={<Button type="button" variant="outline" size="sm" />}>
+                        编辑
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>编辑分类</DialogTitle>
+                          <DialogDescription>可修改道具分类名称、图标和描述，不会变更分类 ID。</DialogDescription>
+                        </DialogHeader>
+                        <form action={updateCategory} className="space-y-3">
+                          <input type="hidden" name="id" value={category.id} />
+                          <input type="hidden" name="target" value="item" />
+                          <div className="space-y-2">
+                            <Label htmlFor={`item-category-name-${category.id}`}>分类名称</Label>
+                            <Input
+                              id={`item-category-name-${category.id}`}
+                              name="name"
+                              required
+                              defaultValue={category.name}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`item-category-icon-${category.id}`}>图标</Label>
+                            <Input
+                              id={`item-category-icon-${category.id}`}
+                              name="icon"
+                              defaultValue={category.icon ?? ""}
+                              placeholder="例如：🧪 / 🛡️"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`item-category-desc-${category.id}`}>描述</Label>
+                            <Input
+                              id={`item-category-desc-${category.id}`}
+                              name="description"
+                              defaultValue={category.description ?? ""}
+                              placeholder="例如：用于战斗增益的道具"
+                            />
+                          </div>
+                          <Button type="submit">保存</Button>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
+                    <ConfirmSubmitButton
+                      type="submit"
+                      variant="destructive"
+                      size="sm"
+                      confirmMessage={`确认删除分类「${category.name}」吗？`}
+                    >
+                      删除
+                    </ConfirmSubmitButton>
+                  </div>
                 </form>
               ))
             )}

@@ -32,9 +32,40 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const clearAdminClientState = () => {
+    // Best-effort cleanup for any legacy/local cached admin info.
+    const keys = [
+      "admin",
+      "admin_user",
+      "adminUser",
+      "admin_info",
+      "adminInfo",
+      "admin_token",
+      "adminToken",
+      "token",
+    ]
+    try {
+      keys.forEach((key) => {
+        window.localStorage.removeItem(key)
+        window.sessionStorage.removeItem(key)
+      })
+    } catch {
+      // Ignore storage access errors in restricted environments.
+    }
+  }
+
   const handleLogout = async () => {
-    await fetch("/logout", { method: "POST" })
-    window.location.href = "/login"
+    clearAdminClientState()
+    try {
+      await fetch("/logout", {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+      })
+    } finally {
+      clearAdminClientState()
+      window.location.replace("/login")
+    }
   }
 
   return (

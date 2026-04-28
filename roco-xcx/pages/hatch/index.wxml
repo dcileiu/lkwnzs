@@ -1,6 +1,6 @@
-﻿<scroll-view class="page-container" scroll-y enable-flex>
+<scroll-view class="page-container" scroll-y enable-flex>
   <view class="hero">
-    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/eggs.webp" mode="widthFix"></image>
+    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/eggs.webp" mode="aspectFill"></image>
     <view class="hero-overlay"></view>
   </view>
 
