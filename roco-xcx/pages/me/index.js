@@ -32,24 +32,39 @@ Page({
 
   async loadData() {
     const user = await auth.ensureLogin()
-    const stats = userActions.getStats()
+    const likedIds = userActions.getLikedArticleIds()
+    const favoritedIds = userActions.getFavoritedArticleIds()
     let articleHistoryCount = 0
+    let likeCount = 0
+    let favoriteCount = 0
     try {
-      const history = await api.getHistory({
-        openId: user?.openId || '',
-        targetType: 'article',
-        limit: 1
-      })
+      const [history, likedVisible, favoritedVisible] = await Promise.all([
+        api.getHistory({
+          openId: user?.openId || '',
+          targetType: 'article',
+          limit: 1
+        }),
+        likedIds.length > 0
+          ? api.getArticles({ ids: likedIds.join(','), limit: likedIds.length })
+          : Promise.resolve([]),
+        favoritedIds.length > 0
+          ? api.getArticles({ ids: favoritedIds.join(','), limit: favoritedIds.length })
+          : Promise.resolve([])
+      ])
       articleHistoryCount = (history.items || []).length
+      likeCount = Array.isArray(likedVisible) ? likedVisible.length : 0
+      favoriteCount = Array.isArray(favoritedVisible) ? favoritedVisible.length : 0
     } catch (err) {
       articleHistoryCount = 0
+      likeCount = 0
+      favoriteCount = 0
     }
 
     const menus = []
-    if (stats.likes > 0) {
+    if (likeCount > 0) {
       menus.push({ key: 'like', title: '文章点赞', desc: '查看我点赞的文章' })
     }
-    if (stats.favorites > 0) {
+    if (favoriteCount > 0) {
       menus.push({ key: 'favorite', title: '文章收藏', desc: '查看我收藏的文章' })
     }
     if (articleHistoryCount > 0) {
@@ -67,8 +82,8 @@ Page({
         avatar: user?.avatar || DEFAULT_PROFILE.avatar
       },
       uid: user?.id || user?.uid || '',
-      likeCount: stats.likes,
-      favoriteCount: stats.favorites,
+      likeCount,
+      favoriteCount,
       menus,
     })
   },
