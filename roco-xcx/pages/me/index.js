@@ -52,9 +52,9 @@ Page({
       menus.push({ key: 'history', title: '浏览历史', desc: '查看浏览记录' })
     }
     menus.push(
-      { key: 'feedback', title: '意见反馈', desc: '企鹅交流群:1098894412' },
+      { key: 'feedback', title: '意见反馈与搭子交流', desc: '搭子企鹅交流群:1098894412' },
       { key: 'settings', title: '设置中心', desc: '账号与偏好' },
-      { key: 'privacy', title: '隐私政策', desc: '保护你的隐私' }
+      { key: 'privacy', title: '免责声明', desc: '' }
     )
 
     this.setData({
@@ -147,7 +147,7 @@ Page({
       return
     }
     if (key === 'feedback') {
-      wx.showToast({ title: '意见反馈即将上线', icon: 'none' })
+      wx.showToast({ title: '意见反馈即将上线，可加交流群反馈哦', icon: 'none' })
       return
     }
     if (key === 'settings') {
@@ -156,15 +156,11 @@ Page({
     }
     if (key === 'privacy') {
       wx.showModal({
-        title: '隐私政策',
-        content: '我们重视并保护你的个人信息安全，详细条款将在后续版本开放。',
+        title: '免责声明',
+        content: '内容均来源于网络和小洛克们的投稿。',
         showCancel: false,
       })
     }
-  },
-
-  onAboutTap() {
-    wx.showToast({ title: '更多内容即将上线', icon: 'none' })
   },
 })
 

@@ -11,11 +11,23 @@ export async function GET(request: Request) {
   const keyword = (searchParams.get("keyword") || "").trim();
   const isHot = searchParams.get("isHot");
   const limit = parseInt(searchParams.get("limit") || "10");
+  const idsParam = (searchParams.get("ids") || "").trim();
+  const ids = idsParam
+    ? Array.from(
+        new Set(
+          idsParam
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean),
+        ),
+      )
+    : [];
 
   const whereCondition: Prisma.ArticleWhereInput = {};
   whereCondition.isVisible = true;
   if (category && category !== "全部") whereCondition.category = category;
   if (isHot === "true") whereCondition.isHot = true;
+  if (ids.length > 0) whereCondition.id = { in: ids };
   if (keyword) {
     whereCondition.OR = [
       { title: { contains: keyword } },

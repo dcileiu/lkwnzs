@@ -16,7 +16,7 @@
             <text class="wx-btn" bindtap="useWechatNickname">同步微信名</text>
         </view>
         <view class="profile-meta-row">
-          <text class="desc">欢迎小洛克回来，看看攻略吧！</text>
+          <text class="desc">小洛克，欢迎回来！</text>
           <text class="uid">UID: {{uid || '未登录'}}</text>
         </view>
       </view>
@@ -42,11 +42,6 @@
       </block>
     </view>
 
-    <view class="about-card" bindtap="onAboutTap">
-      <view class="about-title">关于洛克王国世界</view>
-      <view class="about-subtitle">更多关于游戏世界的资讯</view>
-      <text class="about-arrow">›</text>
-    </view>
   </view>
 </scroll-view>
 

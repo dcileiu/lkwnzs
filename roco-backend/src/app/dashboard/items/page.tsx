@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
+import { ItemEditDialog } from "@/components/item-edit-dialog"
 import {
   DASHBOARD_PAGE_SIZE,
   DashboardPagination,
@@ -378,9 +379,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                       </TableCell>
                       <TableCell>
                         <div className="flex justify-end gap-2">
-                          <Button type="button" variant="outline" size="sm" asChild>
-                            <Link href={`/dashboard/items/${item.id}`}>编辑</Link>
-                          </Button>
+                          <ItemEditDialog item={item} categories={categories} />
                           <form action={deleteItem}>
                             <input type="hidden" name="id" value={item.id} />
                             <ConfirmSubmitButton
