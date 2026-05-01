@@ -1,6 +1,7 @@
 const api = require('../../utils/api.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
 const { normalizeImageUrl } = require('../../utils/url.js')
+const { getArticleFeatureVisible } = require('../../utils/system-config.js')
 
 function formatArticle(item = {}) {
   const authorName =
@@ -31,6 +32,14 @@ Page({
   },
 
   onLoad() {
+    if (!getArticleFeatureVisible()) {
+      this.setData({
+        guideCurrent: 0,
+        featuredArticles: [],
+        hotArticles: []
+      })
+      return
+    }
     this.fetchArticles()
   },
 
@@ -39,6 +48,14 @@ Page({
   },
 
   async fetchArticles() {
+    if (!getArticleFeatureVisible()) {
+      this.setData({
+        guideCurrent: 0,
+        featuredArticles: [],
+        hotArticles: []
+      })
+      return
+    }
     try {
       wx.showLoading({ title: '加载中' })
 
@@ -65,12 +82,9 @@ Page({
         featuredArticles,
         hotArticles
       })
-      const hasArticles = items.length > 0
       const tabBar = typeof this.getTabBar === 'function' ? this.getTabBar() : null
       if (tabBar && typeof tabBar.setGuideTabVisible === 'function') {
-        tabBar.setGuideTabVisible(hasArticles)
-      } else {
-        wx.setStorageSync('guide_tab_visible', hasArticles)
+        tabBar.setGuideTabVisible(true)
       }
     } catch (err) {
       console.error(err)

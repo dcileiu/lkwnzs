@@ -4,9 +4,9 @@ import { resolveImageUrl } from "@/lib/media"
 import { prisma } from "@/lib/prisma"
 
 const CURRENCY_LABELS: Record<string, string> = {
+  rocoshell: "洛克贝",
   gold: "金币",
   diamond: "钻石",
-  rocoshell: "洛克贝",
   event: "活动币",
   other: "其他",
 }

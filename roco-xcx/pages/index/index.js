@@ -2,11 +2,16 @@ const api = require('../../utils/api.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
 const auth = require('../../utils/auth.js')
 const { normalizeImageUrl } = require('../../utils/url.js')
+const {
+  getArticleFeatureVisible,
+  refreshSystemConfigs
+} = require('../../utils/system-config.js')
 
 Page({
   data: {
     hotArticles: [],
     hotElves: [],
+    articleFeatureVisible: false,
     searchKeyword: '',
     guideCurrent: 0,
     quickCards: [
@@ -17,7 +22,8 @@ Page({
     ]
   },
 
-  onLoad() {
+  async onLoad() {
+    await this.syncSystemConfigs()
     this.fetchData()
   },
 
@@ -30,12 +36,14 @@ Page({
   async fetchData() {
     try {
       wx.showLoading({ title: '加载中' })
+      const articleFeatureVisible = getArticleFeatureVisible()
       const [articles, elvesData] = await Promise.all([
-        api.getArticles({ isHot: 'true', limit: 3 }),
+        articleFeatureVisible ? api.getArticles({ isHot: 'true', limit: 3 }) : Promise.resolve([]),
         api.getElves({ isHot: 'true', limit: 4 })
       ])
 
       this.setData({
+        articleFeatureVisible,
         hotArticles: (articles || []).slice(0, 3),
         hotElves: (elvesData?.items || []).map((item) => ({
           ...item,
@@ -45,14 +53,26 @@ Page({
       })
       const tabBar = typeof this.getTabBar === 'function' ? this.getTabBar() : null
       if (tabBar && typeof tabBar.setGuideTabVisible === 'function') {
-        tabBar.setGuideTabVisible((articles || []).length > 0)
-      } else {
-        wx.setStorageSync('guide_tab_visible', (articles || []).length > 0)
+        tabBar.setGuideTabVisible(articleFeatureVisible)
       }
     } catch (err) {
       console.error(err)
     } finally {
       wx.hideLoading()
+    }
+  },
+
+  async syncSystemConfigs() {
+    try {
+      const { articleFlagVisible } = await refreshSystemConfigs()
+      this.setData({ articleFeatureVisible: articleFlagVisible })
+      const tabBar = typeof this.getTabBar === 'function' ? this.getTabBar() : null
+      if (tabBar && typeof tabBar.setGuideTabVisible === 'function') {
+        tabBar.setGuideTabVisible(articleFlagVisible)
+      }
+    } catch (err) {
+      this.setData({ articleFeatureVisible: false })
+      wx.setStorageSync('article_feature_visible', false)
     }
   },
 

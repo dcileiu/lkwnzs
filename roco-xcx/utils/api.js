@@ -42,6 +42,9 @@ const api = {
   getArticleDetail(id) {
     return request(`/articles/${id}`, 'GET');
   },
+  getSystemConfigs(params) {
+    return request('/system-configs', 'GET', params);
+  },
   recordHistory(payload) {
     return request('/history', 'POST', payload);
   },

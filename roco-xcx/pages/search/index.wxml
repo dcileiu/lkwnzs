@@ -14,14 +14,14 @@
 
   <view class="tab-bar">
     <view class="tab-item {{activeTab === 'all' ? 'active' : ''}}" data-tab="all" bindtap="switchTab">全部</view>
-    <view class="tab-item {{activeTab === 'guide' ? 'active' : ''}}" data-tab="guide" bindtap="switchTab">攻略</view>
+    <view wx:if="{{articleFeatureVisible}}" class="tab-item {{activeTab === 'guide' ? 'active' : ''}}" data-tab="guide" bindtap="switchTab">攻略</view>
     <view class="tab-item {{activeTab === 'elf' ? 'active' : ''}}" data-tab="elf" bindtap="switchTab">精灵</view>
   </view>
 
   <scroll-view class="result-scroll" scroll-y>
     <view wx:if="{{loading}}" class="empty-state">搜索中...</view>
 
-    <block wx:if="{{!loading && (activeTab === 'all' || activeTab === 'guide')}}">
+    <block wx:if="{{articleFeatureVisible && !loading && (activeTab === 'all' || activeTab === 'guide')}}">
       <view class="section-title">攻略结果 ({{articles.length}})</view>
       <block wx:for="{{articles}}" wx:key="id">
         <view class="card" bindtap="goArticleDetail" data-id="{{item.id}}">

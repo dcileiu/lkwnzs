@@ -5,7 +5,7 @@ const TABS = [
   { pagePath: "/pages/pokedex/index", text: "图鉴" },
   { pagePath: "/pages/me/index", text: "我的" },
 ]
-const GUIDE_TAB_VISIBLE_KEY = "guide_tab_visible"
+const { ARTICLE_FLAG_CACHE_KEY } = require("../utils/system-config.js")
 
 Component({
   data: {
@@ -30,7 +30,7 @@ Component({
 
   methods: {
     refreshGuideTabVisibility() {
-      const visible = Boolean(wx.getStorageSync(GUIDE_TAB_VISIBLE_KEY))
+      const visible = Boolean(wx.getStorageSync(ARTICLE_FLAG_CACHE_KEY))
       const list = TABS.filter(
         (item) => item.pagePath !== "/pages/guide/index" || visible
       )
@@ -41,7 +41,7 @@ Component({
     },
 
     setGuideTabVisible(visible) {
-      wx.setStorageSync(GUIDE_TAB_VISIBLE_KEY, Boolean(visible))
+      wx.setStorageSync(ARTICLE_FLAG_CACHE_KEY, Boolean(visible))
       this.refreshGuideTabVisibility()
       this.syncSelected()
     },
@@ -73,10 +73,6 @@ Component({
       }
 
       const currentPath = `/${currentPage.route}`
-      const exists = this.data.list.some((item) => item.pagePath === currentPath)
-      if (!exists && currentPath === "/pages/guide/index") {
-        this.setGuideTabVisible(true)
-      }
       if (currentPath !== this.data.selectedPath) {
         this.setData({ selectedPath: currentPath })
       }

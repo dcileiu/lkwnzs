@@ -1,18 +1,22 @@
 const api = require('../../utils/api.js')
 const { normalizeImageUrl } = require('../../utils/url.js')
+const { getArticleFeatureVisible } = require('../../utils/system-config.js')
 
 Page({
   data: {
     keyword: '',
     activeTab: 'all',
     loading: false,
+    articleFeatureVisible: false,
     articles: [],
     elves: []
   },
 
   onLoad(options) {
+    const articleFeatureVisible = getArticleFeatureVisible()
     const keyword = decodeURIComponent(options?.keyword || '')
-    this.setData({ keyword }, () => {
+    const activeTab = articleFeatureVisible ? 'all' : 'elf'
+    this.setData({ keyword, articleFeatureVisible, activeTab }, () => {
       if (keyword) {
         this.searchAll()
       }
@@ -45,12 +49,15 @@ Page({
     wx.showLoading({ title: '搜索中...' })
 
     try {
+      const articleFeatureVisible = getArticleFeatureVisible()
       const [articles, elvesData] = await Promise.all([
-        api.getArticles({ keyword }),
+        articleFeatureVisible ? api.getArticles({ keyword }) : Promise.resolve([]),
         api.getElves({ keyword })
       ])
 
       this.setData({
+        articleFeatureVisible,
+        activeTab: articleFeatureVisible ? this.data.activeTab : 'elf',
         articles: Array.isArray(articles) ? articles : [],
         elves: (elvesData?.items || []).map((item) => ({
           ...item,

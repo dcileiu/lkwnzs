@@ -24,7 +24,21 @@
 
     <view class="menu-card">
       <block wx:for="{{menus}}" wx:key="key">
+        <button
+          wx:if="{{item.key === 'share'}}"
+          class="menu-item menu-share-btn {{index === 0 ? 'first' : ''}} {{index === menus.length - 1 ? 'last' : ''}}"
+          open-type="share"
+        >
+          <view class="menu-text-wrap">
+            <view class="menu-title-row">
+              <text class="menu-title">{{item.title}}</text>
+            </view>
+            <text class="menu-desc">{{item.desc}}</text>
+          </view>
+          <text class="menu-arrow">›</text>
+        </button>
         <view
+          wx:else
           class="menu-item {{index === 0 ? 'first' : ''}} {{index === menus.length - 1 ? 'last' : ''}}"
           data-key="{{item.key}}"
           bindtap="onMenuTap"

@@ -100,6 +100,16 @@ model UserBrowseHistory {
   @@index([targetType, targetId])
 }
 
+model SystemConfig {
+  id        Int      @id @default(autoincrement())
+  content   String?
+  isVisible Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isVisible, updatedAt])
+}
+
 model Elf {
   id                   String                   @id @default(cuid())
   name                 String

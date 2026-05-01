@@ -24,6 +24,7 @@ import {
   LayoutDashboardIcon,
   SearchIcon,
   Settings2Icon,
+  SlidersHorizontalIcon,
   ShieldIcon,
   StoreIcon,
   UsersIcon,
@@ -83,6 +84,11 @@ const data = {
     },
   ],
   navSecondary: [
+    {
+      title: "系统配置",
+      url: "/dashboard/system-configs",
+      icon: <SlidersHorizontalIcon />,
+    },
     {
       title: "系统设置",
       url: "/dashboard/settings",

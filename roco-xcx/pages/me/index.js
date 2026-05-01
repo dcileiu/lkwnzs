@@ -1,7 +1,7 @@
 const userActions = require('../../utils/user-actions.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
 const auth = require('../../utils/auth.js')
-const api = require('../../utils/api.js')
+const { getArticleFeatureVisible } = require('../../utils/system-config.js')
 
 const DEFAULT_PROFILE = {
   nickname: '洛克训练师',
@@ -21,6 +21,13 @@ Page({
     this.loadData()
   },
 
+  onShareAppMessage() {
+    return {
+      title: '洛克万能助手，训练师必备！',
+      path: '/pages/index/index',
+    }
+  },
+
   onShow() {
     setTabBarSelected(this, 4)
     this.loadData()
@@ -29,29 +36,16 @@ Page({
   async loadData() {
     const user = await auth.ensureLogin()
     const stats = userActions.getStats()
-    let articleHistoryCount = 0
-    try {
-      const history = await api.getHistory({
-        openId: user?.openId || '',
-        targetType: 'article',
-        limit: 1
-      })
-      articleHistoryCount = (history.items || []).length
-    } catch (err) {
-      articleHistoryCount = 0
-    }
+    const articleFeatureVisible = getArticleFeatureVisible()
 
     const menus = []
-    if (stats.likes > 0) {
+    if (articleFeatureVisible) {
       menus.push({ key: 'like', title: '文章点赞', desc: '查看我点赞的文章' })
-    }
-    if (stats.favorites > 0) {
       menus.push({ key: 'favorite', title: '文章收藏', desc: '查看我收藏的文章' })
-    }
-    if (articleHistoryCount > 0) {
       menus.push({ key: 'history', title: '浏览历史', desc: '查看浏览记录' })
     }
     menus.push(
+      { key: 'share', title: '分享小程序', desc: '推荐给好友' },
       { key: 'feedback', title: '意见反馈与搭子交流', desc: '搭子企鹅交流群:1098894412' },
       { key: 'settings', title: '设置中心', desc: '账号与偏好' },
       { key: 'privacy', title: '免责声明', desc: '' }

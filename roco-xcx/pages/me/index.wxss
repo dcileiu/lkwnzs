@@ -208,6 +208,28 @@
   border-bottom: none;
 }
 
+button.menu-share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  width: 100%;
+  margin: 0;
+  padding: 22rpx 22rpx;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  line-height: normal;
+  font-weight: inherit;
+  color: inherit;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+button.menu-share-btn::after {
+  border: none;
+}
+
 .menu-text-wrap {
   flex: 1;
   min-width: 0;
