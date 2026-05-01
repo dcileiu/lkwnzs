@@ -4,6 +4,7 @@ import {
   updateSystemConfig,
 } from "@/app/actions/system-configs"
 import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
+import { DashboardFormDialog } from "@/components/dashboard-form-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -30,12 +31,21 @@ export default async function SystemConfigsPage() {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>新增配置</CardTitle>
-          <CardDescription>配置 ID 为数据库自增，无需手动填写。</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form action={createSystemConfig} className="grid gap-3 md:grid-cols-2">
+        <CardHeader className="flex flex-row items-center justify-between gap-3">
+          <div>
+            <CardTitle>配置列表</CardTitle>
+            <CardDescription>共 {configs.length} 条配置，新增与编辑均通过弹窗。</CardDescription>
+          </div>
+          <DashboardFormDialog
+            triggerRender={<Button />}
+            triggerChildren="新增配置"
+            title="新增配置"
+            description="配置 ID 为数据库自增，无需手动填写。"
+            contentClassName="sm:max-w-xl"
+            formClassName="grid gap-3"
+            action={createSystemConfig}
+            resetFormOnOpen
+          >
             <div className="space-y-2">
               <Label htmlFor="new-config-visible">显示状态</Label>
               <div className="flex h-9 items-center gap-2 rounded-md border px-3">
@@ -43,21 +53,14 @@ export default async function SystemConfigsPage() {
                 <Label htmlFor="new-config-visible">显示</Label>
               </div>
             </div>
-            <div className="space-y-2 md:col-span-2">
+            <div className="space-y-2">
               <Label htmlFor="new-config-content">内容</Label>
-              <Textarea id="new-config-content" name="content" rows={3} placeholder="公告或其他配置内容，可留空" />
+              <Textarea id="new-config-content" name="content" rows={4} placeholder="公告或其他配置内容，可留空" />
             </div>
-            <div className="md:col-span-2">
+            <div>
               <Button type="submit">新增配置</Button>
             </div>
-          </form>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>配置列表</CardTitle>
-          <CardDescription>共 {configs.length} 条配置。</CardDescription>
+          </DashboardFormDialog>
         </CardHeader>
         <CardContent>
           <Table>
@@ -89,34 +92,52 @@ export default async function SystemConfigsPage() {
                       )}
                     </TableCell>
                     <TableCell className="max-w-[420px]">
-                      <form action={updateSystemConfig} className="grid gap-2">
-                        <input type="hidden" name="id" value={config.id} />
-                        <Textarea
-                          name="content"
-                          rows={2}
-                          defaultValue={config.content ?? ""}
-                          placeholder="可留空"
-                        />
-                        <div className="flex items-center gap-2">
-                          <Checkbox
-                            id={`visible-${config.id}`}
-                            name="isVisible"
-                            defaultChecked={config.isVisible}
-                          />
-                          <Label htmlFor={`visible-${config.id}`}>显示</Label>
-                        </div>
-                        <div>
-                          <Button type="submit" size="sm" variant="outline">
-                            保存
-                          </Button>
-                        </div>
-                      </form>
+                      <p className="line-clamp-2 text-sm text-muted-foreground">
+                        {config.content || "（空）"}
+                      </p>
                     </TableCell>
                     <TableCell className="text-xs text-muted-foreground">
                       {config.updatedAt.toLocaleString("zh-CN", { hour12: false })}
                     </TableCell>
                     <TableCell>
-                      <div className="flex justify-end">
+                      <div className="flex justify-end gap-2">
+                        <DashboardFormDialog
+                          triggerRender={<Button type="button" size="sm" variant="outline" />}
+                          triggerChildren="编辑"
+                          title={`编辑配置 #${config.id}`}
+                          description="更新配置内容或显隐状态，保存后立即生效。"
+                          contentClassName="sm:max-w-xl"
+                          formClassName="grid gap-3"
+                          action={updateSystemConfig}
+                        >
+                          <input type="hidden" name="id" value={config.id} />
+                          <div className="space-y-2">
+                            <Label htmlFor={`visible-${config.id}`}>显示状态</Label>
+                            <div className="flex h-9 items-center gap-2 rounded-md border px-3">
+                              <Checkbox
+                                id={`visible-${config.id}`}
+                                name="isVisible"
+                                defaultChecked={config.isVisible}
+                              />
+                              <Label htmlFor={`visible-${config.id}`}>显示</Label>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`content-${config.id}`}>内容</Label>
+                            <Textarea
+                              id={`content-${config.id}`}
+                              name="content"
+                              rows={4}
+                              defaultValue={config.content ?? ""}
+                              placeholder="可留空"
+                            />
+                          </div>
+                          <div>
+                            <Button type="submit" size="sm">
+                              保存
+                            </Button>
+                          </div>
+                        </DashboardFormDialog>
                         <form action={deleteSystemConfig}>
                           <input type="hidden" name="id" value={config.id} />
                           <ConfirmSubmitButton

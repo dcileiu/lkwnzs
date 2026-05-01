@@ -61,8 +61,8 @@ Page({
         avatar: user?.avatar || DEFAULT_PROFILE.avatar
       },
       uid: user?.id || user?.uid || '',
-      likeCount,
-      favoriteCount,
+      likeCount: stats.likes || 0,
+      favoriteCount: stats.favorites || 0,
       menus,
     })
   },

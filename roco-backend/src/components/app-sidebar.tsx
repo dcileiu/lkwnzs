@@ -23,7 +23,6 @@ import {
   PackageIcon,
   LayoutDashboardIcon,
   SearchIcon,
-  Settings2Icon,
   SlidersHorizontalIcon,
   ShieldIcon,
   StoreIcon,
@@ -88,11 +87,6 @@ const data = {
       title: "系统配置",
       url: "/dashboard/system-configs",
       icon: <SlidersHorizontalIcon />,
-    },
-    {
-      title: "系统设置",
-      url: "/dashboard/settings",
-      icon: <Settings2Icon />,
     },
     {
       title: "搜索",
