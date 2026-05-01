@@ -7,6 +7,8 @@ const {
   refreshSystemConfigs
 } = require('../../utils/system-config.js')
 
+const NOTICE_ACK_TIME_CACHE_KEY = 'home_notice_ack_updated_at'
+
 Page({
   data: {
     hotArticles: [],
@@ -64,16 +66,40 @@ Page({
 
   async syncSystemConfigs() {
     try {
-      const { articleFlagVisible } = await refreshSystemConfigs()
+      const { configs, articleFlagVisible } = await refreshSystemConfigs()
       this.setData({ articleFeatureVisible: articleFlagVisible })
       const tabBar = typeof this.getTabBar === 'function' ? this.getTabBar() : null
       if (tabBar && typeof tabBar.setGuideTabVisible === 'function') {
         tabBar.setGuideTabVisible(articleFlagVisible)
       }
+      this.tryShowAnnouncement(configs)
     } catch (err) {
       this.setData({ articleFeatureVisible: false })
       wx.setStorageSync('article_feature_visible', false)
     }
+  },
+
+  tryShowAnnouncement(configs = []) {
+    if (!Array.isArray(configs) || configs.length === 0) return
+
+    const notice = configs[0] || {}
+    const noticeContent = String(notice.content || '').trim()
+    const noticeUpdatedAt = String(notice.updatedAt || '').trim()
+    const cachedUpdatedAt = String(wx.getStorageSync(NOTICE_ACK_TIME_CACHE_KEY) || '').trim()
+
+    if (!noticeContent || !noticeUpdatedAt) return
+    if (noticeUpdatedAt === cachedUpdatedAt) return
+
+    wx.showModal({
+      title: '公告',
+      content: noticeContent,
+      confirmText: '我知道了',
+      success: (res) => {
+        if (res.confirm) {
+          wx.setStorageSync(NOTICE_ACK_TIME_CACHE_KEY, noticeUpdatedAt)
+        }
+      }
+    })
   },
 
   navTo(e) {
