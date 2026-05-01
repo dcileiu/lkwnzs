@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { ChevronDownIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -23,8 +24,10 @@ function buildItemLabel(item: ShopItemOption) {
 }
 
 export function ShopItemPicker({ items, name = "itemId", defaultItemId = "" }: ShopItemPickerProps) {
+  const rootRef = React.useRef<HTMLDivElement | null>(null)
   const [query, setQuery] = React.useState("")
   const [selectedId, setSelectedId] = React.useState(() => defaultItemId ?? "")
+  const [open, setOpen] = React.useState(false)
 
   const selectedItem = React.useMemo(
     () => items.find((item) => item.id === selectedId) || null,
@@ -43,17 +46,55 @@ export function ShopItemPicker({ items, name = "itemId", defaultItemId = "" }: S
       .slice(0, 120)
   }, [items, query])
 
+  React.useEffect(() => {
+    function handleDocumentClick(event: MouseEvent) {
+      if (!rootRef.current) return
+      if (!rootRef.current.contains(event.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleDocumentClick)
+    return () => document.removeEventListener("mousedown", handleDocumentClick)
+  }, [])
+
+  function handleSelect(item: ShopItemOption) {
+    setSelectedId(item.id)
+    setQuery(item.name)
+    setOpen(false)
+  }
+
+  function handleFocus() {
+    setOpen(true)
+  }
+
   return (
-    <div className="space-y-2">
+    <div ref={rootRef} className="space-y-2">
       <input type="hidden" name={name} value={selectedId} />
-      <input
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        placeholder="输入道具名/分类/品质搜索"
-        className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-      />
-      <div className="max-h-52 overflow-auto rounded-md border">
-        {filteredItems.length ? (
+      <div className="relative">
+        <input
+          value={query}
+          onFocus={handleFocus}
+          onChange={(event) => {
+            setQuery(event.target.value)
+            setOpen(true)
+          }}
+          placeholder="输入道具名/分类/品质搜索"
+          className="flex h-9 w-full rounded-md border border-input bg-background px-3 pr-10 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+        />
+        <ChevronDownIcon
+          className={cn(
+            "pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground transition-transform",
+            open ? "rotate-180" : "rotate-0",
+          )}
+        />
+      </div>
+      <div
+        className={cn(
+          "max-h-52 overflow-auto rounded-md border bg-background shadow-sm transition-all",
+          open ? "opacity-100" : "pointer-events-none max-h-0 overflow-hidden border-transparent opacity-0",
+        )}
+      >
+        {filteredItems.length > 0 ? (
           <div className="p-1">
             {filteredItems.map((item) => {
               const active = item.id === selectedId
@@ -61,7 +102,7 @@ export function ShopItemPicker({ items, name = "itemId", defaultItemId = "" }: S
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => setSelectedId(item.id)}
+                  onClick={() => handleSelect(item)}
                   className={cn(
                     "block w-full rounded px-2 py-1.5 text-left text-sm transition-colors",
                     active ? "bg-primary text-primary-foreground" : "hover:bg-muted",
@@ -73,7 +114,7 @@ export function ShopItemPicker({ items, name = "itemId", defaultItemId = "" }: S
             })}
           </div>
         ) : (
-          <p className="px-3 py-4 text-sm text-muted-foreground">没有匹配的道具</p>
+          <p className="px-3 py-4 text-center text-sm text-muted-foreground">没有匹配的道具</p>
         )}
       </div>
       <p className="text-xs text-muted-foreground">

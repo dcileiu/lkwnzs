@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { SearchableSelect } from "@/components/searchable-select"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { ELEMENT_NAMES, readCategoriesData } from "@/lib/game-data"
@@ -48,20 +49,15 @@ export default async function NewElfPage() {
                 <Input id="group" name="group" placeholder="例如：迪莫家族 / 新手御三家" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="category">分类</Label>
-                <select
-                  id="category"
+                <Label>分类</Label>
+                <SearchableSelect
                   name="category"
-                  defaultValue=""
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-                >
-                  <option value="">未分类</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.name}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                  options={[
+                    { value: "", label: "未分类" },
+                    ...categories.map((category) => ({ value: category.name, label: category.name })),
+                  ]}
+                  placeholder="选择分类（支持搜索）"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="height">身高</Label>

@@ -8,6 +8,7 @@ import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
 import { ElfEditDialog } from "@/components/elf-edit-dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { SearchableSelect } from "@/components/searchable-select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
   DASHBOARD_PAGE_SIZE,
@@ -143,52 +144,40 @@ export default async function ElvesPage({ searchParams }: ElvesPageProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="group">组别</Label>
-              <select
-                id="group"
+              <Label>组别</Label>
+              <SearchableSelect
                 name="group"
                 defaultValue={group}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-              >
-                <option value="">全部组别</option>
-                {groupOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+                options={[
+                  { value: "", label: "全部组别" },
+                  ...groupOptions.map((option) => ({ value: option, label: option })),
+                ]}
+                placeholder="全部组别"
+              />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="category">分类</Label>
-              <select
-                id="category"
+              <Label>分类</Label>
+              <SearchableSelect
                 name="category"
                 defaultValue={category}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-              >
-                <option value="">全部分类</option>
-                {categoryOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+                options={[
+                  { value: "", label: "全部分类" },
+                  ...categoryOptions.map((option) => ({ value: option, label: option })),
+                ]}
+                placeholder="全部分类"
+              />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="element">属性</Label>
-              <select
-                id="element"
+              <Label>属性</Label>
+              <SearchableSelect
                 name="element"
                 defaultValue={element}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-              >
-                <option value="">全部属性</option>
-                {elementOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+                options={[
+                  { value: "", label: "全部属性" },
+                  ...elementOptions.map((option) => ({ value: option, label: option })),
+                ]}
+                placeholder="全部属性"
+              />
             </div>
             <div className="flex items-end">
               <Button type="submit" className="w-full">

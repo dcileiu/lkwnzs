@@ -11,6 +11,7 @@ import {
 } from "@/components/dashboard-pagination"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { SearchableSelect } from "@/components/searchable-select"
 import { Textarea } from "@/components/ui/textarea"
 import { resolveImageUrl } from "@/lib/media"
 import { PlusIcon } from "lucide-react"
@@ -173,6 +174,10 @@ export default async function EvolutionsPage({ searchParams }: EvolutionsPagePro
       },
     }),
   ])
+  const elfOptions = elves.map((elf) => ({
+    value: elf.id,
+    label: elf.name,
+  }))
 
   return (
     <div className="flex flex-col gap-6 p-4 lg:p-8">
@@ -207,23 +212,12 @@ export default async function EvolutionsPage({ searchParams }: EvolutionsPagePro
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="rootElfId">根节点精灵</Label>
-                <select
-                  id="rootElfId"
+                <Label>根节点精灵</Label>
+                <SearchableSelect
                   name="rootElfId"
-                  required
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-                  defaultValue=""
-                >
-                  <option value="" disabled>
-                    选择第一阶段精灵
-                  </option>
-                  {elves.map((elf) => (
-                    <option key={elf.id} value={elf.id}>
-                      {elf.name}
-                    </option>
-                  ))}
-                </select>
+                  options={elfOptions}
+                  placeholder="选择第一阶段精灵（支持搜索）"
+                />
               </div>
 
               <div className="space-y-2">
@@ -280,43 +274,24 @@ export default async function EvolutionsPage({ searchParams }: EvolutionsPagePro
                           <input type="hidden" name="chainId" value={chain.id} />
 
                           <div className="space-y-2">
-                            <Label htmlFor={`parent-${chain.id}`}>父节点精灵</Label>
-                            <select
-                              id={`parent-${chain.id}`}
+                            <Label>父节点精灵</Label>
+                            <SearchableSelect
                               name="parentElfId"
-                              required
-                              defaultValue=""
-                              className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-                            >
-                              <option value="" disabled>
-                                选择当前要展开的节点
-                              </option>
-                              {chain.links.map((link) => (
-                                <option key={link.id} value={link.childElfId}>
-                                  第 {link.stage} 阶段 / {link.childElf.name}
-                                </option>
-                              ))}
-                            </select>
+                              options={chain.links.map((link) => ({
+                                value: link.childElfId,
+                                label: `第 ${link.stage} 阶段 / ${link.childElf.name}`,
+                              }))}
+                              placeholder="选择当前要展开的节点（支持搜索）"
+                            />
                           </div>
 
                           <div className="space-y-2">
-                            <Label htmlFor={`child-${chain.id}`}>子节点精灵</Label>
-                            <select
-                              id={`child-${chain.id}`}
+                            <Label>子节点精灵</Label>
+                            <SearchableSelect
                               name="childElfId"
-                              required
-                              defaultValue=""
-                              className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-                            >
-                              <option value="" disabled>
-                                选择新增的进化形态
-                              </option>
-                              {elves.map((elf) => (
-                                <option key={elf.id} value={elf.id}>
-                                  {elf.name}
-                                </option>
-                              ))}
-                            </select>
+                              options={elfOptions}
+                              placeholder="选择新增的进化形态（支持搜索）"
+                            />
                           </div>
 
                           <div className="space-y-2">

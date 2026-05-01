@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
 import { DashboardFormDialog } from "@/components/dashboard-form-dialog"
 import { ItemEditDialog } from "@/components/item-edit-dialog"
+import { SearchableSelect } from "@/components/searchable-select"
 import {
   DASHBOARD_PAGE_SIZE,
   DashboardPagination,
@@ -148,20 +149,16 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
           <CardContent>
             <form className="grid gap-3 md:grid-cols-[110px_1fr_auto_auto]">
               <div className="space-y-2">
-                <Label htmlFor="category">分类</Label>
-                <select
-                  id="category"
+                <Label>分类</Label>
+                <SearchableSelect
                   name="category"
                   defaultValue={filters.categoryId}
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-                >
-                  <option value="">全部分类</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                  options={[
+                    { value: "", label: "全部分类" },
+                    ...categories.map((category) => ({ value: category.id, label: category.name })),
+                  ]}
+                  placeholder="全部分类"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="keyword">关键词</Label>
@@ -265,20 +262,13 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
               resetFormOnOpen
             >
               <div className="space-y-2">
-                <Label htmlFor="new-item-category">分类</Label>
-                <select
-                  id="new-item-category"
+                <Label>分类</Label>
+                <SearchableSelect
                   name="categoryId"
-                  required
                   defaultValue={categories[0]?.id || ""}
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-                >
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                  options={categories.map((category) => ({ value: category.id, label: category.name }))}
+                  placeholder="选择分类（支持搜索）"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="new-item-name">道具名称</Label>

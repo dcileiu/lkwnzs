@@ -2,6 +2,7 @@
 
 import { updateElf } from "@/app/actions/elves"
 import { DashboardFormDialog } from "@/components/dashboard-form-dialog"
+import { SearchableSelect } from "@/components/searchable-select"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -71,20 +72,16 @@ export function ElfEditDialog({
               <Input id={`group-${elf.id}`} name="group" defaultValue={elf.group ?? ""} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor={`category-${elf.id}`}>分类</Label>
-              <select
-                id={`category-${elf.id}`}
+              <Label>分类</Label>
+              <SearchableSelect
                 name="category"
                 defaultValue={elf.category ?? ""}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-              >
-                <option value="">未分类</option>
-                {categoryOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+                options={[
+                  { value: "", label: "未分类" },
+                  ...categoryOptions.map((option) => ({ value: option, label: option })),
+                ]}
+                placeholder="选择分类（支持搜索）"
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor={`rarity-${elf.id}`}>稀有度</Label>

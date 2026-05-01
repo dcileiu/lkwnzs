@@ -13,6 +13,7 @@ import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
 import { DashboardFormDialog } from "@/components/dashboard-form-dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { SearchableSelect } from "@/components/searchable-select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Textarea } from "@/components/ui/textarea"
 import {
@@ -161,23 +162,12 @@ export default async function EggGroupsPage({ searchParams }: EggGroupsPageProps
               resetFormOnOpen
             >
               <div className="space-y-2">
-                <Label htmlFor="new-elf-group">所属蛋组</Label>
-                <select
-                  id="new-elf-group"
+                <Label>所属蛋组</Label>
+                <SearchableSelect
                   name="groupId"
-                  required
-                  defaultValue=""
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-                >
-                  <option value="" disabled>
-                    -- 选择蛋组 --
-                  </option>
-                  {groupOptions.map((group) => (
-                    <option key={group.id} value={group.id}>
-                      {group.name}
-                    </option>
-                  ))}
-                </select>
+                  options={groupOptions.map((group) => ({ value: group.id, label: group.name }))}
+                  placeholder="选择蛋组（支持搜索）"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="new-elf-name">精灵名称</Label>

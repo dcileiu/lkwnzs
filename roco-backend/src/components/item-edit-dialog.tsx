@@ -2,6 +2,7 @@
 
 import { updateItem } from "@/app/actions/items"
 import { DashboardFormDialog } from "@/components/dashboard-form-dialog"
+import { SearchableSelect } from "@/components/searchable-select"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -38,20 +39,13 @@ export function ItemEditDialog({ item, categories }: ItemEditDialogProps) {
           <input type="hidden" name="redirectTo" value="/dashboard/items" />
 
           <div className="space-y-2">
-            <Label htmlFor={`edit-item-category-${item.id}`}>分类</Label>
-            <select
-              id={`edit-item-category-${item.id}`}
+            <Label>分类</Label>
+            <SearchableSelect
               name="categoryId"
-              required
               defaultValue={item.categoryId}
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-            >
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
+              options={categories.map((category) => ({ value: category.id, label: category.name }))}
+              placeholder="选择分类（支持搜索）"
+            />
           </div>
 
           <div className="space-y-2">
