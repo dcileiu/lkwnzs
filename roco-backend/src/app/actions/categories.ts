@@ -171,3 +171,62 @@ export async function deleteCategory(formData: FormData) {
   revalidatePath("/dashboard/elves/new")
   revalidatePath("/dashboard/items")
 }
+
+export async function updateCategory(formData: FormData) {
+  const id = ((formData.get("id") as string | null) ?? "").trim()
+  const targetRaw = ((formData.get("target") as string | null) ?? "elf").trim()
+  const target = (targetRaw === "item" ? "item" : "elf") as CategoryTarget
+  const name = ((formData.get("name") as string | null) ?? "").trim()
+  const icon = ((formData.get("icon") as string | null) ?? "").trim()
+  const description = ((formData.get("description") as string | null) ?? "").trim()
+
+  if (!id) {
+    throw new Error("分类 ID 不能为空")
+  }
+
+  if (!name) {
+    throw new Error("分类名称不能为空")
+  }
+
+  if (target === "item") {
+    await prisma.itemCategory.update({
+      where: { id },
+      data: {
+        name,
+        icon: icon || null,
+        description: description || null,
+      },
+    })
+
+    revalidatePath("/dashboard/categories")
+    revalidatePath("/dashboard/items")
+    return
+  }
+
+  const categories = await readCategoriesData()
+  const duplicate = categories.some(
+    (category) =>
+      category.target === target &&
+      category.id !== id &&
+      category.name.trim().toLowerCase() === name.toLowerCase(),
+  )
+
+  if (duplicate) {
+    throw new Error("分类名称已存在")
+  }
+
+  const nextCategories = categories.map((category) =>
+    category.id === id && category.target === target
+      ? {
+          ...category,
+          name,
+        }
+      : category,
+  )
+
+  await writeCategoriesData(nextCategories)
+
+  revalidatePath("/dashboard/categories")
+  revalidatePath("/dashboard/elves/new")
+  revalidatePath("/dashboard/items")
+}

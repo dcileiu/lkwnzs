@@ -16,16 +16,18 @@
 
 .hero {
   position: relative;
-  min-height: 332rpx;
+  height: 500rpx;
+  background: #183158;
   border-radius: 0 0 22rpx 22rpx;
   overflow: hidden;
   box-sizing: border-box;
 }
 
 .hero-bg {
-  display: block;
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
 
 .hero-overlay {
@@ -373,4 +375,3 @@
   font-size: 24rpx;
   line-height: 1.6;
 }
-

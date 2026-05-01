@@ -290,6 +290,7 @@
   background: #f05f4a;
   color: #fff;
   padding: 4rpx 12rpx;
+  margin-right: 10rpx;
   border-radius: 12rpx;
   font-weight: 700;
 }

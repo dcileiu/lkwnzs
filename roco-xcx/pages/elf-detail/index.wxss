@@ -120,6 +120,7 @@
 
 .section-card {
   max-height: 760rpx;
+  min-height: 680rpx;
   /* overflow: hidden; */
 }
 

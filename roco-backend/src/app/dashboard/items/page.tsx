@@ -11,6 +11,14 @@ import {
   DashboardPagination,
   parsePageParam,
 } from "@/components/dashboard-pagination"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -228,68 +236,82 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
       ) : null}
 
       <Card>
-        <CardHeader>
-          <CardTitle>新增道具</CardTitle>
-          <CardDescription>快速添加新道具到指定分类，后续可继续完善字段。</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between gap-3">
+          <div>
+            <CardTitle>新增道具</CardTitle>
+            <CardDescription>点击按钮后以弹窗方式新增道具。</CardDescription>
+          </div>
+          <Dialog>
+            <DialogTrigger render={<Button />}>新增道具</DialogTrigger>
+            <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-4xl">
+              <DialogHeader>
+                <DialogTitle>新增道具</DialogTitle>
+                <DialogDescription>快速添加新道具到指定分类，后续可继续完善字段。</DialogDescription>
+              </DialogHeader>
+              {categories.length === 0 ? (
+                <p className="text-sm text-muted-foreground">暂无分类，无法新增道具。请先创建或导入分类。</p>
+              ) : (
+                <form action={createItem} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="new-item-category">分类</Label>
+                    <select
+                      id="new-item-category"
+                      name="categoryId"
+                      required
+                      defaultValue={categories[0]?.id || ""}
+                      className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+                    >
+                      {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="new-item-name">道具名称</Label>
+                    <Input id="new-item-name" name="name" required placeholder="例如：高级咕噜球" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="new-item-rarity">品质</Label>
+                    <Input id="new-item-rarity" name="rarity" placeholder="普通/稀有/史诗..." />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="new-item-image">图片路径</Label>
+                    <Input id="new-item-image" name="image" placeholder="/imgs/props/xxx.webp" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="new-item-attr">属性</Label>
+                    <Input id="new-item-attr" name="attr" placeholder="例如：火 / 恶魔" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="new-item-sort">排序</Label>
+                    <Input id="new-item-sort" name="sortOrder" type="number" defaultValue={0} />
+                  </div>
+                  <div className="space-y-2 md:col-span-2 lg:col-span-3">
+                    <Label htmlFor="new-item-effect">效果</Label>
+                    <Textarea id="new-item-effect" name="effect" rows={2} placeholder="可选" />
+                  </div>
+                  <div className="space-y-2 md:col-span-2 lg:col-span-3">
+                    <Label htmlFor="new-item-obtain">获取方式</Label>
+                    <Textarea id="new-item-obtain" name="obtain" rows={2} placeholder="可选" />
+                  </div>
+                  <div className="space-y-2 md:col-span-2 lg:col-span-3">
+                    <Label htmlFor="new-item-desc">描述</Label>
+                    <Textarea id="new-item-desc" name="desc" rows={2} placeholder="可选" />
+                  </div>
+                  <div className="md:col-span-2 lg:col-span-3">
+                    <Button type="submit">新增道具</Button>
+                  </div>
+                </form>
+              )}
+            </DialogContent>
+          </Dialog>
         </CardHeader>
         <CardContent>
-          {categories.length === 0 ? (
-            <p className="text-sm text-muted-foreground">暂无分类，无法新增道具。请先创建或导入分类。</p>
-          ) : (
-            <form action={createItem} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <div className="space-y-2">
-                <Label htmlFor="new-item-category">分类</Label>
-                <select
-                  id="new-item-category"
-                  name="categoryId"
-                  required
-                  defaultValue={categories[0]?.id || ""}
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-                >
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="new-item-name">道具名称</Label>
-                <Input id="new-item-name" name="name" required placeholder="例如：高级咕噜球" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="new-item-rarity">品质</Label>
-                <Input id="new-item-rarity" name="rarity" placeholder="普通/稀有/史诗..." />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="new-item-image">图片路径</Label>
-                <Input id="new-item-image" name="image" placeholder="/imgs/props/xxx.webp" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="new-item-attr">属性</Label>
-                <Input id="new-item-attr" name="attr" placeholder="例如：火 / 恶魔" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="new-item-sort">排序</Label>
-                <Input id="new-item-sort" name="sortOrder" type="number" defaultValue={0} />
-              </div>
-              <div className="space-y-2 md:col-span-2 lg:col-span-3">
-                <Label htmlFor="new-item-effect">效果</Label>
-                <Textarea id="new-item-effect" name="effect" rows={2} placeholder="可选" />
-              </div>
-              <div className="space-y-2 md:col-span-2 lg:col-span-3">
-                <Label htmlFor="new-item-obtain">获取方式</Label>
-                <Textarea id="new-item-obtain" name="obtain" rows={2} placeholder="可选" />
-              </div>
-              <div className="space-y-2 md:col-span-2 lg:col-span-3">
-                <Label htmlFor="new-item-desc">描述</Label>
-                <Textarea id="new-item-desc" name="desc" rows={2} placeholder="可选" />
-              </div>
-              <div className="md:col-span-2 lg:col-span-3">
-                <Button type="submit">新增道具</Button>
-              </div>
-            </form>
-          )}
+          <p className="text-sm text-muted-foreground">
+            点击右上角“新增道具”按钮后，将以弹窗形式展示新增表单。
+          </p>
         </CardContent>
       </Card>
 

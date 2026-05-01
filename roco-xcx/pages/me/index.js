@@ -15,6 +15,10 @@ Page({
     likeCount: 0,
     favoriteCount: 0,
     menus: [],
+    showNicknameDialog: false,
+    nicknameDraft: '',
+    wechatNickname: '',
+    showWechatSuggestion: false,
   },
 
   onLoad() {
@@ -57,8 +61,8 @@ Page({
         avatar: user?.avatar || DEFAULT_PROFILE.avatar
       },
       uid: user?.id || user?.uid || '',
-      likeCount: stats.likes,
-      favoriteCount: stats.favorites,
+      likeCount,
+      favoriteCount,
       menus,
     })
   },
@@ -76,46 +80,74 @@ Page({
   },
 
   editNickname() {
-    wx.showModal({
-      title: '修改名称',
-      editable: true,
-      placeholderText: '请输入新的用户名',
-      content: this.data.profile.nickname,
-      success: (res) => {
-        if (!res.confirm) return
-        const nickname = (res.content || '').trim()
-        if (!nickname) {
-          wx.showToast({ title: '用户名不能为空', icon: 'none' })
-          return
-        }
-        const next = auth.updateCurrentUser({ nickname })
+    this.setData({
+      showNicknameDialog: true,
+      nicknameDraft: this.data.profile.nickname || '',
+      showWechatSuggestion: false,
+    })
+  },
+
+  closeNicknameDialog() {
+    this.setData({
+      showNicknameDialog: false,
+      showWechatSuggestion: false,
+    })
+  },
+
+  onNicknameInput(e) {
+    this.setData({
+      nicknameDraft: (e.detail.value || '').trimStart()
+    })
+  },
+
+  onNicknameFocus() {
+    const wechatNickname = (this.data.wechatNickname || '').trim()
+    if (wechatNickname) {
+      this.setData({ showWechatSuggestion: true })
+      return
+    }
+
+    wx.getUserProfile({
+      desc: '用于获取微信昵称候选',
+      success: ({ userInfo }) => {
+        const nickname = (userInfo && userInfo.nickName) ? String(userInfo.nickName).trim() : ''
+        if (!nickname) return
         this.setData({
-          profile: {
-            ...this.data.profile,
-            nickname: next?.nickname || nickname
-          }
+          wechatNickname: nickname,
+          showWechatSuggestion: true,
         })
-        wx.showToast({ title: '已更新', icon: 'success' })
+      },
+      fail: () => {
+        this.setData({ showWechatSuggestion: false })
       }
     })
   },
 
-  useWechatNickname() {
-    wx.getUserProfile({
-      desc: '用于同步微信昵称',
-      success: ({ userInfo }) => {
-        const nickname = userInfo?.nickName
-        if (!nickname) return
-        const next = auth.updateCurrentUser({ nickname })
-        this.setData({
-          profile: {
-            ...this.data.profile,
-            nickname: next?.nickname || nickname
-          }
-        })
-        wx.showToast({ title: '微信昵称已同步', icon: 'none' })
+  fillWechatNickname() {
+    const nickname = (this.data.wechatNickname || '').trim()
+    if (!nickname) return
+    this.setData({
+      nicknameDraft: nickname,
+      showWechatSuggestion: true,
+    })
+  },
+
+  submitNickname() {
+    const nickname = (this.data.nicknameDraft || '').trim()
+    if (!nickname) {
+      wx.showToast({ title: '用户名不能为空', icon: 'none' })
+      return
+    }
+    const next = auth.updateCurrentUser({ nickname })
+    this.setData({
+      showNicknameDialog: false,
+      showWechatSuggestion: false,
+      profile: {
+        ...this.data.profile,
+        nickname: next?.nickname || nickname
       }
     })
+    wx.showToast({ title: '已更新', icon: 'success' })
   },
 
   openLikedArticles() {
@@ -156,5 +188,7 @@ Page({
       })
     }
   },
+
+  noop() { }
 })
 

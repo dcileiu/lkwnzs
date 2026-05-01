@@ -125,23 +125,6 @@
   color: rgba(232, 240, 255, 0.78);
 }
 
-.wx-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 44rpx;
-  padding: 0 16rpx;
-  border-radius: 18rpx;
-  line-height: 1;
-  font-size: 20rpx;
-  font-weight: 600;
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1rpx solid rgba(255, 255, 255, 0.32);
-  backdrop-filter: blur(10rpx);
-  -webkit-backdrop-filter: blur(10rpx);
-}
-
 .edit-btn {
   display: inline-flex;
   align-items: center;
@@ -282,4 +265,100 @@ button.menu-share-btn::after {
   backdrop-filter: blur(10rpx);
   -webkit-backdrop-filter: blur(10rpx);
   flex-shrink: 0;
+}
+
+.nickname-dialog-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 18, 44, 0.55);
+  padding: 0 40rpx;
+  box-sizing: border-box;
+}
+
+.nickname-dialog {
+  width: 100%;
+  max-width: 620rpx;
+  border-radius: 20rpx;
+  background: rgba(220, 231, 255, 0.18);
+  border: 1rpx solid rgba(255, 255, 255, 0.38);
+  backdrop-filter: blur(24rpx) saturate(120%);
+  -webkit-backdrop-filter: blur(24rpx) saturate(120%);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.28),
+    0 20rpx 40rpx rgba(8, 20, 48, 0.35);
+  overflow: hidden;
+}
+
+.nickname-dialog-title {
+  padding: 30rpx 32rpx 14rpx;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #eef5ff;
+  text-shadow: 0 2rpx 8rpx rgba(7, 18, 44, 0.38);
+  text-align: center;
+}
+
+.nickname-dialog-input {
+  margin: 0 32rpx;
+  height: 82rpx;
+  padding: 0 20rpx;
+  border-radius: 12rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1rpx solid rgba(255, 255, 255, 0.26);
+  font-size: 30rpx;
+  color: #eef5ff;
+  box-sizing: border-box;
+}
+
+.nickname-suggestion-wrap {
+  margin: 14rpx 32rpx 0;
+  padding: 14rpx 16rpx;
+  border-radius: 12rpx;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.nickname-suggestion-label {
+  display: block;
+  margin-bottom: 10rpx;
+  font-size: 22rpx;
+  color: rgba(229, 239, 255, 0.82);
+}
+
+.nickname-suggestion-chip {
+  display: inline-block;
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(170, 205, 255, 0.24);
+  border: 1rpx solid rgba(188, 219, 255, 0.45);
+  color: #e8f2ff;
+  font-size: 24rpx;
+}
+
+.nickname-dialog-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 22rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.nickname-dialog-btn {
+  height: 96rpx;
+  line-height: 96rpx;
+  text-align: center;
+  font-size: 32rpx;
+}
+
+.nickname-dialog-btn.cancel {
+  color: rgba(230, 239, 255, 0.9);
+  border-right: 1rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.nickname-dialog-btn.confirm {
+  color: #a9c8ff;
+  font-weight: 700;
 }
