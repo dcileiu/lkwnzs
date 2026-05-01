@@ -81,6 +81,7 @@ export function ElfEditDialog({
                   ...categoryOptions.map((option) => ({ value: option, label: option })),
                 ]}
                 placeholder="选择分类（支持搜索）"
+                noOptionsText="没有匹配的分类"
               />
             </div>
             <div className="space-y-2">

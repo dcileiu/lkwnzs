@@ -167,6 +167,7 @@ export default async function EggGroupsPage({ searchParams }: EggGroupsPageProps
                   name="groupId"
                   options={groupOptions.map((group) => ({ value: group.id, label: group.name }))}
                   placeholder="选择蛋组（支持搜索）"
+                  noOptionsText="没有匹配的蛋组"
                 />
               </div>
               <div className="space-y-2">

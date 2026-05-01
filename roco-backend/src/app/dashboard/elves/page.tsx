@@ -153,6 +153,7 @@ export default async function ElvesPage({ searchParams }: ElvesPageProps) {
                   ...groupOptions.map((option) => ({ value: option, label: option })),
                 ]}
                 placeholder="全部组别"
+                noOptionsText="没有匹配的组别"
               />
             </div>
             <div className="space-y-2">
@@ -165,6 +166,7 @@ export default async function ElvesPage({ searchParams }: ElvesPageProps) {
                   ...categoryOptions.map((option) => ({ value: option, label: option })),
                 ]}
                 placeholder="全部分类"
+                noOptionsText="没有匹配的分类"
               />
             </div>
             <div className="space-y-2">
@@ -177,6 +179,7 @@ export default async function ElvesPage({ searchParams }: ElvesPageProps) {
                   ...elementOptions.map((option) => ({ value: option, label: option })),
                 ]}
                 placeholder="全部属性"
+                noOptionsText="没有匹配的属性"
               />
             </div>
             <div className="flex items-end">

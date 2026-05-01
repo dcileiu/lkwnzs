@@ -57,6 +57,7 @@ export default async function NewElfPage() {
                     ...categories.map((category) => ({ value: category.name, label: category.name })),
                   ]}
                   placeholder="选择分类（支持搜索）"
+                  noOptionsText="没有匹配的分类"
                 />
               </div>
               <div className="space-y-2">

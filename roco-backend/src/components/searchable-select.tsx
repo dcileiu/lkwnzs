@@ -18,31 +18,30 @@ type SearchableSelectProps = {
   defaultValue?: string
   noOptionsText?: string
   maxVisibleOptions?: number
+  helperText?: string
+  helperTextRenderer?: (selectedOption: SearchableOption | null) => string
 }
 
 export function SearchableSelect({
   name,
   options,
-  placeholder = "请选择",
+  placeholder = "输入关键词搜索",
   defaultValue = "",
   noOptionsText = "没有匹配选项",
   maxVisibleOptions = 120,
+  helperText,
+  helperTextRenderer,
 }: SearchableSelectProps) {
+  const initialSelectedOption = options.find((option) => option.value === defaultValue) || null
   const rootRef = React.useRef<HTMLDivElement | null>(null)
   const [open, setOpen] = React.useState(false)
-  const [query, setQuery] = React.useState("")
+  const [focused, setFocused] = React.useState(false)
   const [selectedValue, setSelectedValue] = React.useState(defaultValue)
+  const [query, setQuery] = React.useState(initialSelectedOption ? initialSelectedOption.label : "")
 
-  const selectedOption = React.useMemo(
-    () => options.find((option) => option.value === selectedValue) || null,
-    [options, selectedValue],
-  )
-
-  React.useEffect(() => {
-    if (selectedOption) {
-      setQuery(selectedOption.label)
-    }
-  }, [selectedOption])
+  const selectedOption = React.useMemo(() => {
+    return options.find((option) => option.value === selectedValue) || null
+  }, [options, selectedValue])
 
   React.useEffect(() => {
     function handleOutsideClick(event: MouseEvent) {
@@ -67,18 +66,44 @@ export function SearchableSelect({
       .slice(0, maxVisibleOptions)
   }, [maxVisibleOptions, options, query])
 
+  function restoreSelectedLabel() {
+    setQuery(selectedOption ? selectedOption.label : "")
+  }
+
+  function handleFocus() {
+    setFocused(true)
+    if (selectedOption) {
+      setQuery("")
+    }
+    setOpen(true)
+  }
+
+  function handleBlur() {
+    setTimeout(() => {
+      setFocused(false)
+      setOpen(false)
+      restoreSelectedLabel()
+    }, 120)
+  }
+
+  const inputPlaceholder = focused
+    ? (selectedOption?.label || placeholder)
+    : (selectedOption ? "" : placeholder)
+  const resolvedHelperText = helperTextRenderer ? helperTextRenderer(selectedOption) : helperText
+
   return (
     <div ref={rootRef} className="space-y-2">
       <input type="hidden" name={name} value={selectedValue} />
       <div className="relative">
         <input
           value={query}
-          onFocus={() => setOpen(true)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           onChange={(event) => {
             setQuery(event.target.value)
             setOpen(true)
           }}
-          placeholder={placeholder}
+          placeholder={inputPlaceholder}
           className="flex h-9 w-full rounded-md border border-input bg-background px-3 pr-10 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
         />
         <ChevronDownIcon
@@ -105,6 +130,7 @@ export function SearchableSelect({
                   onClick={() => {
                     setSelectedValue(option.value)
                     setQuery(option.label)
+                    setFocused(false)
                     setOpen(false)
                   }}
                   className={cn(
@@ -121,6 +147,9 @@ export function SearchableSelect({
           <p className="px-3 py-4 text-center text-sm text-muted-foreground">{noOptionsText}</p>
         )}
       </div>
+      {resolvedHelperText ? (
+        <p className="text-xs text-muted-foreground">{resolvedHelperText}</p>
+      ) : null}
     </div>
   )
 }

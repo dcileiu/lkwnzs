@@ -45,6 +45,7 @@ export function ItemEditDialog({ item, categories }: ItemEditDialogProps) {
               defaultValue={item.categoryId}
               options={categories.map((category) => ({ value: category.id, label: category.name }))}
               placeholder="选择分类（支持搜索）"
+              noOptionsText="没有匹配的分类"
             />
           </div>
 

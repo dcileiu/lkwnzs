@@ -158,6 +158,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                     ...categories.map((category) => ({ value: category.id, label: category.name })),
                   ]}
                   placeholder="全部分类"
+                  noOptionsText="没有匹配的分类"
                 />
               </div>
               <div className="space-y-2">
@@ -268,6 +269,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                   defaultValue={categories[0]?.id || ""}
                   options={categories.map((category) => ({ value: category.id, label: category.name }))}
                   placeholder="选择分类（支持搜索）"
+                  noOptionsText="没有匹配的分类"
                 />
               </div>
               <div className="space-y-2">

@@ -217,6 +217,7 @@ export default async function EvolutionsPage({ searchParams }: EvolutionsPagePro
                   name="rootElfId"
                   options={elfOptions}
                   placeholder="选择第一阶段精灵（支持搜索）"
+                  noOptionsText="没有匹配的精灵"
                 />
               </div>
 
@@ -282,6 +283,7 @@ export default async function EvolutionsPage({ searchParams }: EvolutionsPagePro
                                 label: `第 ${link.stage} 阶段 / ${link.childElf.name}`,
                               }))}
                               placeholder="选择当前要展开的节点（支持搜索）"
+                              noOptionsText="没有匹配的父节点"
                             />
                           </div>
 
@@ -291,6 +293,7 @@ export default async function EvolutionsPage({ searchParams }: EvolutionsPagePro
                               name="childElfId"
                               options={elfOptions}
                               placeholder="选择新增的进化形态（支持搜索）"
+                              noOptionsText="没有匹配的精灵"
                             />
                           </div>
 

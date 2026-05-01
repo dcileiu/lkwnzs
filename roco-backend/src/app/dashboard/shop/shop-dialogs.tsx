@@ -76,7 +76,7 @@ export function CreateShopItemDialog({ availableItems }: CreateShopItemDialogPro
         <select
           id="new-currency"
           name="currency"
-          defaultValue="gold"
+          defaultValue="rocoshell"
           className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
         >
           {SHOP_CURRENCY_OPTIONS.map((option) => (
