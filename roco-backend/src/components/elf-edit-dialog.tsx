@@ -1,15 +1,8 @@
 "use client"
 
 import { updateElf } from "@/app/actions/elves"
+import { DashboardFormDialog } from "@/components/dashboard-form-dialog"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -57,20 +50,15 @@ export function ElfEditDialog({
   const galleryImages = elf.images.map((image) => image.url).join("\n")
 
   return (
-    <Dialog>
-      <DialogTrigger
-        render={
-          <Button type="button" variant="outline" size="sm" className="mr-2" />
-        }
-      >
-        编辑
-      </DialogTrigger>
-      <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto sm:max-w-4xl">
-        <DialogHeader>
-          <DialogTitle>编辑精灵</DialogTitle>
-          <DialogDescription>当前编辑：{elf.name}</DialogDescription>
-        </DialogHeader>
-        <form action={updateElf} className="space-y-4">
+    <DashboardFormDialog
+      triggerRender={<Button type="button" variant="outline" size="sm" className="mr-2" />}
+      triggerChildren="编辑"
+      title="编辑精灵"
+      description={`当前编辑：${elf.name}`}
+      contentClassName="max-h-[90vh] max-w-4xl overflow-y-auto sm:max-w-4xl"
+      formClassName="space-y-4"
+      action={updateElf}
+    >
           <input type="hidden" name="id" value={elf.id} />
           <input type="hidden" name="redirectTo" value={redirectTo} />
           <div className="grid grid-cols-2 gap-4">
@@ -195,8 +183,6 @@ export function ElfEditDialog({
           <Button type="submit" className="w-full">
             保存修改
           </Button>
-        </form>
-      </DialogContent>
-    </Dialog>
+    </DashboardFormDialog>
   )
 }

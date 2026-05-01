@@ -94,6 +94,19 @@ export async function updateShopItem(formData: FormData) {
     throw new Error("缺少远行商人商品 ID")
   }
 
+  const itemId = readString(formData, "itemId")
+  if (!itemId) {
+    throw new Error("请选择道具")
+  }
+
+  const item = await prisma.item.findUnique({
+    where: { id: itemId },
+    select: { id: true },
+  })
+  if (!item) {
+    throw new Error("道具不存在")
+  }
+
   const roundSlot = readOptionalRoundSlot(formData, "roundSlot")
   const manualStartAt = readDate(formData, "startAt")
   const manualEndAt = readDate(formData, "endAt")
@@ -101,6 +114,7 @@ export async function updateShopItem(formData: FormData) {
   await prisma.shopItem.update({
     where: { id },
     data: {
+      itemId,
       price: readInt(formData, "price", 0),
       currency: normalizeCurrency(readString(formData, "currency") || "gold"),
       stock: readOptionalInt(formData, "stock"),

@@ -14,15 +14,17 @@ type ShopItemOption = {
 interface ShopItemPickerProps {
   items: ShopItemOption[]
   name?: string
+  /** 编辑已有上架记录时传入当前道具 id，保证隐藏域与可选列表一致 */
+  defaultItemId?: string | null
 }
 
 function buildItemLabel(item: ShopItemOption) {
   return `[${item.categoryName}] ${item.name}${item.rarity ? ` · ${item.rarity}` : ""}`
 }
 
-export function ShopItemPicker({ items, name = "itemId" }: ShopItemPickerProps) {
+export function ShopItemPicker({ items, name = "itemId", defaultItemId = "" }: ShopItemPickerProps) {
   const [query, setQuery] = React.useState("")
-  const [selectedId, setSelectedId] = React.useState("")
+  const [selectedId, setSelectedId] = React.useState(() => defaultItemId ?? "")
 
   const selectedItem = React.useMemo(
     () => items.find((item) => item.id === selectedId) || null,

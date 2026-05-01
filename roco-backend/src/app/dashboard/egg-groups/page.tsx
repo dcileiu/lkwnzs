@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ConfirmSubmitButton } from "@/components/confirm-submit-button"
+import { DashboardFormDialog } from "@/components/dashboard-form-dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -19,14 +20,6 @@ import {
   DashboardPagination,
   parsePageParam,
 } from "@/components/dashboard-pagination"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { resolveImageUrl } from "@/lib/media"
 import { prisma } from "@/lib/prisma"
 
@@ -127,89 +120,89 @@ export default async function EggGroupsPage({ searchParams }: EggGroupsPageProps
             <CardDescription>新增与编辑均通过弹窗完成，适配移动端与 PC 端。</CardDescription>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Dialog>
-              <DialogTrigger render={<Button />}>新增蛋组</DialogTrigger>
-              <DialogContent className="sm:max-w-lg">
-                <DialogHeader>
-                  <DialogTitle>新增蛋组</DialogTitle>
-                  <DialogDescription>手动新增组别，后续可持续扩展新蛋组。</DialogDescription>
-                </DialogHeader>
-                <form action={createEggGroup} className="grid gap-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="new-group-id">蛋组 ID</Label>
-                    <Input id="new-group-id" name="id" required placeholder="例如：ancient_beast_group" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-group-name">蛋组名称</Label>
-                    <Input id="new-group-name" name="name" required placeholder="例如：远古兽组" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-group-sort">排序</Label>
-                    <Input id="new-group-sort" name="sortOrder" type="number" defaultValue={0} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-group-desc">描述</Label>
-                    <Textarea id="new-group-desc" name="description" rows={2} placeholder="可选" />
-                  </div>
-                  <Button type="submit" className="w-fit">
-                    新增蛋组
-                  </Button>
-                </form>
-              </DialogContent>
-            </Dialog>
-            <Dialog>
-              <DialogTrigger render={<Button variant="outline" />}>新增组内精灵</DialogTrigger>
-              <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
-                <DialogHeader>
-                  <DialogTitle>新增组内精灵</DialogTitle>
-                  <DialogDescription>为已有蛋组添加精灵成员，可持续维护。</DialogDescription>
-                </DialogHeader>
-                <form action={createEggGroupElf} className="grid gap-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="new-elf-group">所属蛋组</Label>
-                    <select
-                      id="new-elf-group"
-                      name="groupId"
-                      required
-                      defaultValue=""
-                      className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-                    >
-                      <option value="" disabled>
-                        -- 选择蛋组 --
-                      </option>
-                      {groupOptions.map((group) => (
-                        <option key={group.id} value={group.id}>
-                          {group.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-elf-name">精灵名称</Label>
-                    <Input id="new-elf-name" name="name" required placeholder="例如：迪莫" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-elf-image">图片路径</Label>
-                    <Input id="new-elf-image" name="image" placeholder="/imgs/jingling/迪莫.webp（可选）" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-elf-attr">属性标签</Label>
-                    <Input id="new-elf-attr" name="attrNames" placeholder="火, 恶魔（逗号分隔，可选）" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-elf-attributes">属性文本</Label>
-                    <Input id="new-elf-attributes" name="attributes" placeholder="可选，原始属性文案" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-elf-sort">排序</Label>
-                    <Input id="new-elf-sort" name="sortOrder" type="number" defaultValue={0} />
-                  </div>
-                  <Button type="submit" className="w-fit">
-                    添加精灵
-                  </Button>
-                </form>
-              </DialogContent>
-            </Dialog>
+            <DashboardFormDialog
+              triggerRender={<Button />}
+              triggerChildren="新增蛋组"
+              title="新增蛋组"
+              description="手动新增组别，后续可持续扩展新蛋组。"
+              contentClassName="sm:max-w-lg"
+              formClassName="grid gap-3"
+              action={createEggGroup}
+              resetFormOnOpen
+            >
+              <div className="space-y-2">
+                <Label htmlFor="new-group-id">蛋组 ID</Label>
+                <Input id="new-group-id" name="id" required placeholder="例如：ancient_beast_group" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-group-name">蛋组名称</Label>
+                <Input id="new-group-name" name="name" required placeholder="例如：远古兽组" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-group-sort">排序</Label>
+                <Input id="new-group-sort" name="sortOrder" type="number" defaultValue={0} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-group-desc">描述</Label>
+                <Textarea id="new-group-desc" name="description" rows={2} placeholder="可选" />
+              </div>
+              <Button type="submit" className="w-fit">
+                新增蛋组
+              </Button>
+            </DashboardFormDialog>
+            <DashboardFormDialog
+              triggerRender={<Button variant="outline" />}
+              triggerChildren="新增组内精灵"
+              title="新增组内精灵"
+              description="为已有蛋组添加精灵成员，可持续维护。"
+              contentClassName="max-h-[85vh] overflow-y-auto sm:max-w-xl"
+              formClassName="grid gap-3"
+              action={createEggGroupElf}
+              resetFormOnOpen
+            >
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-group">所属蛋组</Label>
+                <select
+                  id="new-elf-group"
+                  name="groupId"
+                  required
+                  defaultValue=""
+                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+                >
+                  <option value="" disabled>
+                    -- 选择蛋组 --
+                  </option>
+                  {groupOptions.map((group) => (
+                    <option key={group.id} value={group.id}>
+                      {group.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-name">精灵名称</Label>
+                <Input id="new-elf-name" name="name" required placeholder="例如：迪莫" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-image">图片路径</Label>
+                <Input id="new-elf-image" name="image" placeholder="/imgs/jingling/迪莫.webp（可选）" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-attr">属性标签</Label>
+                <Input id="new-elf-attr" name="attrNames" placeholder="火, 恶魔（逗号分隔，可选）" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-attributes">属性文本</Label>
+                <Input id="new-elf-attributes" name="attributes" placeholder="可选，原始属性文案" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-elf-sort">排序</Label>
+                <Input id="new-elf-sort" name="sortOrder" type="number" defaultValue={0} />
+              </div>
+              <Button type="submit" className="w-fit">
+                添加精灵
+              </Button>
+            </DashboardFormDialog>
           </div>
         </CardHeader>
       </Card>
@@ -243,45 +236,42 @@ export default async function EggGroupsPage({ searchParams }: EggGroupsPageProps
                       </div>
                       <div className="flex items-center gap-2">
                         <Badge variant="secondary">{group.elves.length} 只精灵</Badge>
-                        <Dialog>
-                          <DialogTrigger render={<Button type="button" size="sm" variant="outline" />}>
-                            编辑蛋组
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-lg">
-                            <DialogHeader>
-                              <DialogTitle>编辑蛋组：{group.name}</DialogTitle>
-                              <DialogDescription>修改蛋组基础信息。</DialogDescription>
-                            </DialogHeader>
-                            <form action={updateEggGroup} className="grid gap-3">
-                              <input type="hidden" name="id" value={group.id} />
-                              <div className="space-y-2">
-                                <Label htmlFor={`group-name-${group.id}`}>蛋组名称</Label>
-                                <Input id={`group-name-${group.id}`} name="name" defaultValue={group.name} required />
-                              </div>
-                              <div className="space-y-2">
-                                <Label htmlFor={`group-sort-${group.id}`}>排序</Label>
-                                <Input
-                                  id={`group-sort-${group.id}`}
-                                  name="sortOrder"
-                                  type="number"
-                                  defaultValue={group.sortOrder}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label htmlFor={`group-desc-${group.id}`}>描述</Label>
-                                <Input
-                                  id={`group-desc-${group.id}`}
-                                  name="description"
-                                  defaultValue={group.description ?? ""}
-                                  placeholder="可选"
-                                />
-                              </div>
-                              <Button type="submit" size="sm" className="w-fit">
-                                保存蛋组
-                              </Button>
-                            </form>
-                          </DialogContent>
-                        </Dialog>
+                        <DashboardFormDialog
+                          triggerRender={<Button type="button" size="sm" variant="outline" />}
+                          triggerChildren="编辑蛋组"
+                          title={`编辑蛋组：${group.name}`}
+                          description="修改蛋组基础信息。"
+                          contentClassName="sm:max-w-lg"
+                          formClassName="grid gap-3"
+                          action={updateEggGroup}
+                        >
+                          <input type="hidden" name="id" value={group.id} />
+                          <div className="space-y-2">
+                            <Label htmlFor={`group-name-${group.id}`}>蛋组名称</Label>
+                            <Input id={`group-name-${group.id}`} name="name" defaultValue={group.name} required />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`group-sort-${group.id}`}>排序</Label>
+                            <Input
+                              id={`group-sort-${group.id}`}
+                              name="sortOrder"
+                              type="number"
+                              defaultValue={group.sortOrder}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`group-desc-${group.id}`}>描述</Label>
+                            <Input
+                              id={`group-desc-${group.id}`}
+                              name="description"
+                              defaultValue={group.description ?? ""}
+                              placeholder="可选"
+                            />
+                          </div>
+                          <Button type="submit" size="sm" className="w-fit">
+                            保存蛋组
+                          </Button>
+                        </DashboardFormDialog>
                         <form action={deleteEggGroup}>
                           <input type="hidden" name="id" value={group.id} />
                           <ConfirmSubmitButton
@@ -352,44 +342,41 @@ export default async function EggGroupsPage({ searchParams }: EggGroupsPageProps
                             <TableCell>{elf.sortOrder}</TableCell>
                             <TableCell>
                               <div className="flex justify-end gap-2">
-                              <Dialog>
-                                <DialogTrigger render={<Button type="button" size="sm" variant="outline" />}>
-                                  编辑
-                                </DialogTrigger>
-                                <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
-                                  <DialogHeader>
-                                    <DialogTitle>编辑精灵：{elf.name}</DialogTitle>
-                                    <DialogDescription>调整该精灵在当前蛋组下的展示信息。</DialogDescription>
-                                  </DialogHeader>
-                                  <form action={updateEggGroupElf} className="grid gap-3">
-                                    <input type="hidden" name="id" value={elf.id} />
-                                    <input type="hidden" name="groupId" value={group.id} />
-                                    <div className="space-y-2">
-                                      <Label htmlFor={`elf-name-${elf.id}`}>精灵名称</Label>
-                                      <Input id={`elf-name-${elf.id}`} name="name" defaultValue={elf.name} required />
-                                    </div>
-                                    <div className="space-y-2">
-                                      <Label htmlFor={`elf-image-${elf.id}`}>图片路径</Label>
-                                      <Input id={`elf-image-${elf.id}`} name="image" defaultValue={elf.image ?? ""} placeholder="图片路径" />
-                                    </div>
-                                    <div className="space-y-2">
-                                      <Label htmlFor={`elf-attr-${elf.id}`}>属性标签</Label>
-                                      <Input id={`elf-attr-${elf.id}`} name="attrNames" defaultValue={attrNames.join(", ")} placeholder="属性标签" />
-                                    </div>
-                                    <div className="space-y-2">
-                                      <Label htmlFor={`elf-attributes-${elf.id}`}>属性文本</Label>
-                                      <Input id={`elf-attributes-${elf.id}`} name="attributes" defaultValue={elf.attributes ?? ""} placeholder="属性文本" />
-                                    </div>
-                                    <div className="space-y-2">
-                                      <Label htmlFor={`elf-sort-${elf.id}`}>排序</Label>
-                                      <Input id={`elf-sort-${elf.id}`} name="sortOrder" type="number" defaultValue={elf.sortOrder} />
-                                    </div>
-                                    <Button type="submit" size="sm" className="w-fit">
-                                      保存
-                                    </Button>
-                                  </form>
-                                </DialogContent>
-                              </Dialog>
+                              <DashboardFormDialog
+                                triggerRender={<Button type="button" size="sm" variant="outline" />}
+                                triggerChildren="编辑"
+                                title={`编辑精灵：${elf.name}`}
+                                description="调整该精灵在当前蛋组下的展示信息。"
+                                contentClassName="max-h-[85vh] overflow-y-auto sm:max-w-xl"
+                                formClassName="grid gap-3"
+                                action={updateEggGroupElf}
+                              >
+                                <input type="hidden" name="id" value={elf.id} />
+                                <input type="hidden" name="groupId" value={group.id} />
+                                <div className="space-y-2">
+                                  <Label htmlFor={`elf-name-${elf.id}`}>精灵名称</Label>
+                                  <Input id={`elf-name-${elf.id}`} name="name" defaultValue={elf.name} required />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor={`elf-image-${elf.id}`}>图片路径</Label>
+                                  <Input id={`elf-image-${elf.id}`} name="image" defaultValue={elf.image ?? ""} placeholder="图片路径" />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor={`elf-attr-${elf.id}`}>属性标签</Label>
+                                  <Input id={`elf-attr-${elf.id}`} name="attrNames" defaultValue={attrNames.join(", ")} placeholder="属性标签" />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor={`elf-attributes-${elf.id}`}>属性文本</Label>
+                                  <Input id={`elf-attributes-${elf.id}`} name="attributes" defaultValue={elf.attributes ?? ""} placeholder="属性文本" />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label htmlFor={`elf-sort-${elf.id}`}>排序</Label>
+                                  <Input id={`elf-sort-${elf.id}`} name="sortOrder" type="number" defaultValue={elf.sortOrder} />
+                                </div>
+                                <Button type="submit" size="sm" className="w-fit">
+                                  保存
+                                </Button>
+                              </DashboardFormDialog>
                             <form action={deleteEggGroupElf}>
                               <input type="hidden" name="id" value={elf.id} />
                               <ConfirmSubmitButton

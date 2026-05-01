@@ -1,15 +1,8 @@
 "use client"
 
 import { updateItem } from "@/app/actions/items"
+import { DashboardFormDialog } from "@/components/dashboard-form-dialog"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -32,16 +25,15 @@ type ItemEditDialogProps = {
 
 export function ItemEditDialog({ item, categories }: ItemEditDialogProps) {
   return (
-    <Dialog>
-      <DialogTrigger render={<Button type="button" variant="outline" size="sm" />}>
-        编辑
-      </DialogTrigger>
-      <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto sm:max-w-4xl">
-        <DialogHeader>
-          <DialogTitle>编辑道具</DialogTitle>
-          <DialogDescription>当前编辑：{item.name}</DialogDescription>
-        </DialogHeader>
-        <form action={updateItem} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <DashboardFormDialog
+      triggerRender={<Button type="button" variant="outline" size="sm" />}
+      triggerChildren="编辑"
+      title="编辑道具"
+      description={`当前编辑：${item.name}`}
+      contentClassName="max-h-[90vh] max-w-4xl overflow-y-auto sm:max-w-4xl"
+      formClassName="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+      action={updateItem}
+    >
           <input type="hidden" name="id" value={item.id} />
           <input type="hidden" name="redirectTo" value="/dashboard/items" />
 
@@ -107,8 +99,6 @@ export function ItemEditDialog({ item, categories }: ItemEditDialogProps) {
               保存修改
             </Button>
           </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+    </DashboardFormDialog>
   )
 }
