@@ -93,6 +93,7 @@ Page({
     wx.showModal({
       title: '公告',
       content: noticeContent,
+      showCancel: false,
       confirmText: '我知道了',
       success: (res) => {
         if (res.confirm) {
