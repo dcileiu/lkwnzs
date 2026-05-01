@@ -1,6 +1,6 @@
 .page-container {
   width: 100%;
-  min-height: 100vh;
+  background: #19335d;
   padding-bottom: calc(env(safe-area-inset-bottom) + 28rpx);
   background-image:
     linear-gradient(rgba(30, 58, 100, 0.45), rgba(30, 58, 100, 0.45)),
@@ -14,8 +14,7 @@
 }
 
 .content-area {
-  position: relative;
-  top: -40rpx;
+  margin-top: -80rpx;
   padding: 0 18rpx 20rpx;
   box-sizing: border-box;
 }
@@ -28,9 +27,11 @@
 
 .hero-bg {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 .hero-overlay {
@@ -59,6 +60,9 @@
 .nav-btn {
   width: 58rpx;
   height: 58rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   background: rgba(20, 43, 82, 0.5);
   border: 1rpx solid rgba(255, 255, 255, 0.3);
@@ -71,6 +75,11 @@
 
 .nav-back {
   flex-shrink: 0;
+}
+
+.nav-back-icon {
+  width: 58rpx;
+  height: 58rpx;
 }
 
 .nav-title {
@@ -147,8 +156,17 @@
 }
 
 .meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
   font-size: 24rpx;
   color: rgba(240, 247, 255, 0.95);
+}
+
+.meta-icon {
+  width: 24rpx;
+  height: 24rpx;
+  flex-shrink: 0;
 }
 
 .action-bar-anchor {
@@ -168,9 +186,13 @@
   align-items: stretch;
   overflow: hidden;
   border-radius: 22rpx;
-  border: 2rpx solid #d6c39f;
-  background: linear-gradient(180deg, #f8f0df 0%, #f1e5cc 100%);
-  box-shadow: 0 10rpx 24rpx rgba(21, 35, 69, 0.24);
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
+  background: rgba(18, 38, 76, 0.52);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.12),
+    0 10rpx 24rpx rgba(21, 35, 69, 0.24);
+  backdrop-filter: blur(10rpx) saturate(120%);
+  -webkit-backdrop-filter: blur(10rpx) saturate(120%);
 }
 
 .action-btn {
@@ -183,7 +205,7 @@
   gap: 10rpx;
   background: transparent;
   border-radius: 0;
-  border-right: 1rpx solid rgba(164, 132, 81, 0.26);
+  border-right: 1rpx solid rgba(255, 255, 255, 0.18);
   box-sizing: border-box;
 }
 
@@ -210,15 +232,21 @@
   color: #a25b3f;
 }
 
+.action-icon-img {
+  width: 30rpx;
+  height: 30rpx;
+  flex-shrink: 0;
+}
+
 .action-label {
   font-size: 30rpx;
-  color: #46351f;
+  color: rgba(240, 247, 255, 0.95);
   font-weight: 600;
 }
 
 .action-btn.active .action-icon,
 .action-btn.active .action-label {
-  color: #b6452f;
+  color: #ffd680;
 }
 
 .action-bar.is-docked {
@@ -228,11 +256,11 @@
   margin: 0;
   flex-direction: column;
   border-radius: 28rpx;
-  border-color: rgba(214, 195, 159, 0.94);
-  background: rgba(248, 240, 223, 0.94);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(18, 38, 76, 0.92);
   box-shadow: 0 12rpx 30rpx rgba(21, 35, 69, 0.28);
-  backdrop-filter: blur(10rpx);
-  -webkit-backdrop-filter: blur(10rpx);
+  backdrop-filter: blur(12rpx) saturate(120%);
+  -webkit-backdrop-filter: blur(12rpx) saturate(120%);
 }
 
 .action-bar.is-docked .action-btn {
@@ -243,7 +271,7 @@
   flex-direction: column;
   gap: 4rpx;
   border-right: none;
-  border-bottom: 1rpx solid rgba(164, 132, 81, 0.26);
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.18);
   line-height: 1.2;
 }
 
@@ -270,9 +298,13 @@
   margin-top: 16rpx;
   padding: 16rpx;
   border-radius: 24rpx;
-  border: 2rpx solid rgba(233, 216, 184, 0.95);
-  background: #f8f2e5;
-  box-shadow: 0 10rpx 20rpx rgba(17, 29, 57, 0.14);
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
+  background: rgba(18, 38, 76, 0.52);
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.12),
+    0 10rpx 20rpx rgba(17, 29, 57, 0.14);
+  backdrop-filter: blur(10rpx) saturate(120%);
+  -webkit-backdrop-filter: blur(10rpx) saturate(120%);
 }
 
 .source-link-row {
@@ -331,15 +363,15 @@
   margin-top: 18rpx;
   font-size: 28rpx;
   line-height: 1.84;
-  color: #2f2a21;
+  color: rgba(240, 247, 255, 0.95);
   word-break: break-word;
 }
 
 .article-source {
   margin-top: 24rpx;
   padding-top: 18rpx;
-  border-top: 1rpx solid rgba(111, 87, 56, 0.16);
-  color: #8a6e42;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.18);
+  color: rgba(224, 233, 255, 0.82);
   font-size: 24rpx;
   line-height: 1.4;
   text-align: right;

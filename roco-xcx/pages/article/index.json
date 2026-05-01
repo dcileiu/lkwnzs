@@ -1,5 +1,7 @@
 {
   "navigationStyle": "custom",
   "navigationBarTitleText": "攻略详情",
+  "navigationBarBackgroundColor": "#19335d",
+  "navigationBarTextStyle": "white",
   "usingComponents": {}
 }

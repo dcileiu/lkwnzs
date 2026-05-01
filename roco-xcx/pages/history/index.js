@@ -76,6 +76,11 @@ Page({
           targetId: item.targetId,
           title: item.target.title || '未命名文章',
           thumbnail: normalizeImageUrl(item.target.thumbnail),
+          summary: item.target.summary || '',
+          views: item.target.views || 0,
+          likes: item.target.likes || 0,
+          favorites: item.target.favorites || item.target.likes || 0,
+          commentCount: item.target.commentCount || 0,
           viewedAt: formatViewedAt(item.viewedAt),
           viewCount: item.viewCount || 1
         }))

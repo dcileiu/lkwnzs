@@ -97,12 +97,24 @@
           <view class="hot-title line-clamp-2">{{item.title}}</view>
           <view class="hot-summary line-clamp-1">{{item.summary}}</view>
           <view class="hot-stats">
-            <text>👁 {{item.views}}</text>
-            <text>♡ {{item.likes}}</text>
-            <text>💬 {{item.commentCount}}</text>
+            <view class="hot-stats-item">
+              <image class="hot-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/see.svg" mode="aspectFit"></image>
+              <text>{{item.views}}</text>
+            </view>
+            <view class="hot-stats-item">
+              <image class="hot-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/approve.svg" mode="aspectFit"></image>
+              <text>{{item.likes}}</text>
+            </view>
+            <view class="hot-stats-item">
+              <image class="hot-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/collect.svg" mode="aspectFit"></image>
+              <text>{{item.favorites || item.likes || 0}}</text>
+            </view>
+            <view class="hot-stats-item">
+              <image class="hot-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/comment.svg" mode="aspectFit"></image>
+              <text>{{item.commentCount}}</text>
+            </view>
           </view>
         </view>
-        <view class="hot-arrow">›</view>
       </view>
     </block>
 

@@ -66,6 +66,21 @@ function getIdsByType(type) {
   return getArray(type === 'like' ? LIKE_IDS_KEY : FAVORITE_IDS_KEY)
 }
 
+function setInteractionState(type, articleId, active) {
+  if (!articleId) return
+  const key = type === 'like' ? LIKE_IDS_KEY : FAVORITE_IDS_KEY
+  const ids = getArray(key)
+  const index = ids.indexOf(articleId)
+  if (active) {
+    if (index < 0) {
+      ids.unshift(articleId)
+    }
+  } else if (index >= 0) {
+    ids.splice(index, 1)
+  }
+  setArray(key, ids)
+}
+
 function getStats() {
   return {
     likes: getArray(LIKE_IDS_KEY).length,
@@ -100,6 +115,12 @@ module.exports = {
   },
   getFavoritedArticleIds() {
     return getIdsByType('favorite')
+  },
+  setLikeState(articleId, active) {
+    setInteractionState('like', articleId, active)
+  },
+  setFavoriteState(articleId, active) {
+    setInteractionState('favorite', articleId, active)
   },
   isLiked,
   isFavorited,

@@ -3,7 +3,9 @@
     <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp" mode="aspectFill"></image>
     <view class="hero-overlay"></view>
     <view class="top-nav" style="padding-top: {{navTopPadding}}px;">
-      <view class="nav-btn nav-back" bindtap="onBackTap">‹</view>
+      <view class="nav-btn nav-back" bindtap="onBackTap">
+        <image class="nav-back-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/bg-left.svg" mode="aspectFit"></image>
+      </view>
       <text class="nav-title">✦ 浏览历史 ✦</text>
     </view>
   </view>
@@ -25,11 +27,29 @@
     <view wx:if="{{activeTab === 'article'}}">
       <view wx:if="{{articleItems.length === 0}}" class="empty-state">暂无文章浏览记录</view>
       <block wx:for="{{articleItems}}" wx:key="id">
-        <view class="article-card" data-id="{{item.targetId}}" bindtap="openArticle">
-          <image class="thumb" src="{{item.thumbnail || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/default-article.png'}}" mode="aspectFill"></image>
-          <view class="content">
-            <text class="title">{{item.title}}</text>
-            <text class="meta">浏览 {{item.viewCount}} 次 · {{item.viewedAt}}</text>
+        <view class="history-hot-card" data-id="{{item.targetId}}" bindtap="openArticle">
+          <image class="history-hot-thumb" src="{{item.thumbnail || 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/default-article.png'}}" mode="aspectFill"></image>
+          <view class="history-hot-info">
+            <view class="history-hot-title line-clamp-2">{{item.title}}</view>
+            <view class="history-hot-summary line-clamp-1">{{item.summary || ('浏览 ' + item.viewCount + ' 次 · ' + item.viewedAt)}}</view>
+            <view class="history-hot-stats">
+              <view class="history-hot-stats-item">
+                <image class="history-hot-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/see.svg" mode="aspectFit"></image>
+                <text>{{item.views}}</text>
+              </view>
+              <view class="history-hot-stats-item">
+                <image class="history-hot-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/approve.svg" mode="aspectFit"></image>
+                <text>{{item.likes}}</text>
+              </view>
+              <view class="history-hot-stats-item">
+                <image class="history-hot-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/collect.svg" mode="aspectFit"></image>
+                <text>{{item.favorites || item.likes || 0}}</text>
+              </view>
+              <view class="history-hot-stats-item">
+                <image class="history-hot-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/comment.svg" mode="aspectFit"></image>
+                <text>{{item.commentCount}}</text>
+              </view>
+            </view>
           </view>
         </view>
       </block>

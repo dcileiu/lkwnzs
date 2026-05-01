@@ -18,7 +18,10 @@
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "洛克王国助手",
-    "navigationBarBackgroundColor": "#ffffff"
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#19335d",
+    "backgroundColorTop": "#19335d",
+    "backgroundColorBottom": "#19335d"
   },
   "tabBar": {
     "custom": true,

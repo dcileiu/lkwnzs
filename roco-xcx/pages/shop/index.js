@@ -137,9 +137,35 @@ function getCurrentRoundCount(roundGroups = [], date = new Date()) {
   return currentGroup?.items?.length || 0
 }
 
+function buildVisibleRoundGroups(roundGroups = [], date = new Date()) {
+  const currentRound = getCurrentRound(date)
+  const groups = Array.isArray(roundGroups) ? roundGroups.slice() : []
+  const currentIndex = groups.findIndex((group) => group.round === currentRound)
+
+  if (currentRound > 0 && currentIndex > 0) {
+    const [currentGroup] = groups.splice(currentIndex, 1)
+    groups.unshift(currentGroup)
+  }
+
+  return groups.map((group) => {
+    const isCurrent = currentRound > 0 && group.round === currentRound
+    const isPassed = currentRound > 0 && group.round < currentRound
+    const isUpcoming = currentRound === 0 || group.round > currentRound
+    const maskText = isPassed ? '该轮次已过' : isUpcoming ? '该轮次时间未到' : ''
+    return {
+      ...group,
+      isCurrent,
+      isPassed,
+      isUpcoming,
+      maskText
+    }
+  })
+}
+
 Page({
   data: {
     items: [],
+    sourceRoundGroups: [],
     roundGroups: [],
     totalCount: 0,
     todayRoundText: getTodayRoundText(),
@@ -186,11 +212,13 @@ Page({
       const items = (res?.items || []).map((shop) => buildShopCard(shop))
       const baseDate = res?.serverTime ? new Date(res.serverTime) : new Date()
       const roundGroups = buildTodayRoundGroups(items, baseDate)
+      const visibleRoundGroups = buildVisibleRoundGroups(roundGroups, baseDate)
       const todayItems = roundGroups.flatMap((group) => group.items)
       const currentRoundCount = getCurrentRoundCount(roundGroups, baseDate)
       this.setData({
         items: todayItems,
-        roundGroups,
+        sourceRoundGroups: roundGroups,
+        roundGroups: visibleRoundGroups,
         totalCount: currentRoundCount,
         serverTime: res?.serverTime || ''
       })
@@ -206,8 +234,9 @@ Page({
     const updateRound = () => {
       const now = new Date()
       const todayRoundText = getTodayRoundText(now)
-      const totalCount = getCurrentRoundCount(this.data.roundGroups, now)
-      this.setData({ todayRoundText, totalCount })
+      const totalCount = getCurrentRoundCount(this.data.sourceRoundGroups, now)
+      const roundGroups = buildVisibleRoundGroups(this.data.sourceRoundGroups, now)
+      this.setData({ todayRoundText, totalCount, roundGroups })
     }
     updateRound()
     this.roundTimer = setInterval(updateRound, 60 * 1000)
@@ -220,16 +249,22 @@ Page({
     const items = this.data.items.map((item) =>
       String(item.id) === targetId ? { ...item, imageUrl: '' } : item
     )
-    const roundGroups = this.data.roundGroups.map((group) => ({
+    const sourceRoundGroups = this.data.sourceRoundGroups.map((group) => ({
       ...group,
       items: group.items.map((item) =>
         String(item.id) === targetId ? { ...item, imageUrl: '' } : item
       )
     }))
-    this.setData({ items, roundGroups })
+    const roundGroups = buildVisibleRoundGroups(sourceRoundGroups, new Date())
+    this.setData({ items, sourceRoundGroups, roundGroups })
   },
 
   showItemDetail(e) {
+    const { locked } = e.currentTarget.dataset
+    if (locked === true || locked === 'true') {
+      wx.showToast({ title: '当前轮次外商品暂不可查看', icon: 'none' })
+      return
+    }
     const { id } = e.currentTarget.dataset
     const targetId = String(id)
     const shop = this.data.items.find((item) => String(item.id) === targetId)

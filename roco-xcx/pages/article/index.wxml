@@ -1,23 +1,40 @@
 <view class="page-container">
-  <view class="hero" wx:if="{{article}}">
-    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp" mode="aspectFill"></image>
+  <view
+    class="hero"
+    >
+    <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp" mode="widthFix"></image>
     <view class="hero-overlay"></view>
 
     <view class="top-nav" style="padding-top: {{navTopPadding}}px;">
-      <view class="nav-btn nav-back" bindtap="onBackTap">‹</view>
+      <view class="nav-btn nav-back" bindtap="onBackTap">
+        <image class="nav-back-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/bg-left.svg" mode="aspectFit"></image>
+      </view>
       <text class="nav-title">✦ 攻略详情 ✦</text>
     </view>
 
-    <view class="hero-main">
+    <view class="hero-main" wx:if="{{article}}">
       <text class="hero-title">{{article.title}}</text>
       <view class="hero-tags">
         <text class="tag-hot" wx:if="{{article.isHot}}">🔥 HOT</text>
         <text class="tag-category" wx:if="{{article.category}}">{{article.category}}</text>
       </view>
       <view class="hero-meta">
-        <text class="meta-item">👁 {{article.views || 0}}</text>
-        <text class="meta-item">☆ {{article.favorites || article.likes || 0}}</text>
-        <text class="meta-item">⏱ {{article.readingTime || 1}}分钟前阅读</text>
+        <view class="meta-item">
+          <image class="meta-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/see.svg" mode="aspectFit"></image>
+          <text>{{article.views || 0}}</text>
+        </view>
+        <view class="meta-item">
+          <image class="meta-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/approve.svg" mode="aspectFit"></image>
+          <text>{{article.likes || 0}}</text>
+        </view>
+        <view class="meta-item">
+          <image class="meta-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/collect.svg" mode="aspectFit"></image>
+          <text>{{article.favorites || article.likes || 0}}</text>
+        </view>
+        <view class="meta-item">
+          <image class="meta-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/time.svg" mode="aspectFit"></image>
+          <text>{{article.readingTime || 1}}分钟前阅读</text>
+        </view>
       </view>
     </view>
   </view>
@@ -27,15 +44,23 @@
     <view wx:if="{{isActionBarDocked}}" class="action-bar-placeholder"></view>
     <view class="action-bar {{isActionBarDocked ? 'is-docked' : ''}}" style="top: {{actionBarStickyTop}}px;">
       <view class="action-btn {{isLiked ? 'active' : ''}}" bindtap="toggleLike">
-        <text class="action-icon">{{isLiked ? '❤' : '♡'}}</text>
+        <image
+          class="action-icon-img"
+          src="{{isLiked ? 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/approve-active.svg' : 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/approve.svg'}}"
+          mode="aspectFit"
+        ></image>
         <text class="action-label">点赞</text>
       </view>
       <view class="action-btn {{isFavorited ? 'active' : ''}}" bindtap="toggleFavorite">
-        <text class="action-icon">{{isFavorited ? '★' : '☆'}}</text>
+        <image
+          class="action-icon-img"
+          src="{{isFavorited ? 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/collect-active.svg' : 'https://wallpaper.cdn.itianci.cn/imgs/miniapp/collect-yello.svg'}}"
+          mode="aspectFit"
+        ></image>
         <text class="action-label">收藏</text>
       </view>
       <button class="action-btn action-share" open-type="share">
-        <text class="action-icon">↗</text>
+        <image class="action-icon-img" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/share.svg" mode="aspectFit"></image>
         <text class="action-label">分享</text>
       </button>
     </view>

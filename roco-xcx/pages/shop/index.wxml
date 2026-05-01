@@ -3,7 +3,9 @@
     <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp" mode="aspectFill"></image>
     <view class="hero-overlay"></view>
     <view class="top-nav" style="padding-top: {{navTopPadding}}px;">
-      <view class="nav-btn nav-back" bindtap="onBackTap">‹</view>
+      <view class="nav-btn nav-back" bindtap="onBackTap">
+        <image class="nav-back-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/bg-left.svg" mode="aspectFit"></image>
+      </view>
       <text class="nav-title">✦ 远行商人 ✦</text>
     </view>
     <view class="hero-content">
@@ -23,49 +25,59 @@
 
   <view class="shop-main">
     <view wx:if="{{roundGroups.length}}">
-      <block wx:for="{{roundGroups}}" wx:key="round">
+      <block wx:for="{{roundGroups}}" wx:key="round" wx:for-item="group">
         <view class="round-section">
           <view class="round-header">
-            <text class="round-title">{{item.roundLabel}}</text>
-            <text class="round-time">{{item.timeRange}}</text>
+            <text class="round-title">{{group.roundLabel}}</text>
+            <text class="round-time">{{group.timeRange}}</text>
           </view>
-          <view wx:if="{{item.items.length}}" class="shop-grid">
-            <block wx:for="{{item.items}}" wx:key="id">
-              <view class="shop-card" bindtap="showItemDetail" data-id="{{item.id}}">
+          <view class="round-body {{group.isCurrent ? '' : 'round-body--masked'}}">
+            <view wx:if="{{group.items.length}}" class="shop-grid">
+              <block wx:for="{{group.items}}" wx:key="id" wx:for-item="shop">
+                <view
+                  class="shop-card"
+                  bindtap="showItemDetail"
+                  data-id="{{shop.id}}"
+                  data-locked="{{!group.isCurrent}}"
+                >
                 <view class="shop-image-wrap">
                   <image
-                    wx:if="{{item.imageUrl}}"
+                    wx:if="{{shop.imageUrl}}"
                     class="shop-image"
-                    src="{{item.imageUrl}}"
+                    src="{{shop.imageUrl}}"
                     mode="aspectFit"
                     lazy-load
                     binderror="onItemImageError"
-                    data-id="{{item.id}}"
+                    data-id="{{shop.id}}"
                   ></image>
-                  <text wx:else class="shop-image-fallback">{{item.fallbackText}}</text>
+                  <text wx:else class="shop-image-fallback">{{shop.fallbackText}}</text>
                 </view>
 
-                <text class="shop-name">{{item.name}}</text>
+                <text class="shop-name">{{shop.name}}</text>
                 <view class="shop-tags">
-                  <text class="shop-category">{{item.categoryName}}</text>
-                  <text wx:if="{{item.rarityLabel}}" class="shop-rarity">{{item.rarityLabel}}</text>
+                  <text class="shop-category">{{shop.categoryName}}</text>
+                  <text wx:if="{{shop.rarityLabel}}" class="shop-rarity">{{shop.rarityLabel}}</text>
                 </view>
 
                 <view class="shop-price-row">
-                  <text class="shop-price">{{item.priceLabel}}</text>
-                  <text class="shop-currency">{{item.currencyLabel}}</text>
+                  <text class="shop-price">{{shop.priceLabel}}</text>
+                  <text class="shop-currency">{{shop.currencyLabel}}</text>
                 </view>
 
                 <view class="shop-meta">
-                  <text class="shop-stock">限购 {{item.stockLabel}}</text>
+                  <text class="shop-stock">限购 {{shop.stockLabel}}</text>
                 </view>
 
-                <view wx:if="{{item.periodLabel}}" class="shop-period">⏰ {{item.periodLabel}}</view>
-                <view wx:if="{{item.note}}" class="shop-note">{{item.note}}</view>
-              </view>
-            </block>
+                <view wx:if="{{shop.periodLabel}}" class="shop-period">⏰ {{shop.periodLabel}}</view>
+                <view wx:if="{{shop.note}}" class="shop-note">{{shop.note}}</view>
+                </view>
+              </block>
+            </view>
+            <view wx:else class="round-empty">本轮暂无商品</view>
+            <view wx:if="{{!group.isCurrent}}" class="round-mask">
+              <text class="round-mask-text">{{group.maskText}}</text>
+            </view>
           </view>
-          <view wx:else class="round-empty">本轮暂无商品</view>
         </view>
       </block>
     </view>

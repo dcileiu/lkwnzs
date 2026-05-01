@@ -34,7 +34,7 @@
             </view>
             <text class="menu-desc">{{item.desc}}</text>
           </view>
-          <text class="menu-arrow">›</text>
+            <image class="menu-arrow-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/bg-left.svg" mode="aspectFit"></image>
         </button>
         <view
           wx:else
@@ -50,7 +50,7 @@
             </view>
             <text class="menu-desc">{{item.desc}}</text>
           </view>
-          <text class="menu-arrow">›</text>
+            <image class="menu-arrow-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/bg-left.svg" mode="aspectFit"></image>
         </view>
       </block>
     </view>

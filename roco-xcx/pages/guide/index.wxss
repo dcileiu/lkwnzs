@@ -369,15 +369,15 @@
   color: rgba(217, 229, 255, 0.78);
 }
 
-.hot-arrow {
-  width: 42rpx;
-  height: 42rpx;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(244, 231, 207, 0.9);
-  font-size: 34rpx;
-  line-height: 42rpx;
-  text-align: center;
+.hot-stats-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.hot-stats-icon {
+  width: 20rpx;
+  height: 20rpx;
   flex-shrink: 0;
 }
 

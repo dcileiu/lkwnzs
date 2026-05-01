@@ -3,7 +3,9 @@
     <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp" mode="aspectFill"></image>
     <view class="hero-overlay"></view>
     <view class="top-nav" style="padding-top: {{navTopPadding}}px;">
-      <view class="nav-btn nav-back" bindtap="onBackTap">‹</view>
+      <view class="nav-btn nav-back" bindtap="onBackTap">
+        <image class="nav-back-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/bg-left.svg" mode="aspectFit"></image>
+      </view>
       <text class="nav-title">✦ 精灵详情 ✦</text>
     </view>
   </view>

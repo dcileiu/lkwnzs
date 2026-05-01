@@ -1,6 +1,8 @@
 .page-container {
+  height: 100vh;
   width: 100%;
   padding: 0;
+  background: #19335d;
   padding-bottom: calc(env(safe-area-inset-bottom) + 160rpx);
   background-image:
     linear-gradient(rgba(30, 58, 100, 0.8), rgba(30, 58, 100, 0.8)),
@@ -10,7 +12,6 @@
   background-position:
     center top,
     center top;
-  min-height: 100vh;
   box-sizing: border-box;
 }
 
@@ -403,4 +404,3 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-

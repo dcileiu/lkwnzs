@@ -34,6 +34,7 @@ Page({
     commentInput: '',
     articleContentHtml: '',
     navTopPadding: 32,
+    heroSafeTop: 20,
     actionBarStickyTop: 64,
     isActionBarDocked: false
   },
@@ -60,11 +61,13 @@ Page({
         20
       this.setData({
         navTopPadding: statusBarHeight + 10,
+        heroSafeTop: statusBarHeight,
         actionBarStickyTop: statusBarHeight + 44
       })
     } catch (err) {
       this.setData({
         navTopPadding: 32,
+        heroSafeTop: 20,
         actionBarStickyTop: 64
       })
     }
@@ -84,6 +87,29 @@ Page({
       userActions.saveArticleSnapshot(article)
       const user = await auth.ensureLogin()
       if (user?.openId) {
+        api.getArticleInteractionState(id, { openId: user.openId })
+          .then((state) => {
+            const nextArticle = this.data.article || article
+            const likes = Number(state.likes || 0)
+            const bookmarks = Number(state.bookmarks || state.favorites || 0)
+            const patchedArticle = {
+              ...nextArticle,
+              likes,
+              bookmarks,
+              favorites: bookmarks
+            }
+            userActions.saveArticleSnapshot(patchedArticle)
+            userActions.setLikeState(id, !!state.isLiked)
+            userActions.setFavoriteState(id, !!state.isFavorited)
+            this.setData({
+              article: patchedArticle,
+              isLiked: !!state.isLiked,
+              isFavorited: !!state.isFavorited
+            })
+          })
+          .catch((err) => {
+            console.warn('fetch article interaction state failed', err)
+          })
         api.recordHistory({
           openId: user.openId,
           targetType: 'article',
@@ -131,25 +157,79 @@ Page({
   toggleLike() {
     const { article } = this.data
     if (!article) return
-    const nextState = userActions.toggleLike(article)
-    this.setData({ isLiked: nextState })
-    wx.showToast({
-      title: nextState ? '已点赞！' : '取消点赞',
-      icon: 'none',
-      duration: 800
-    })
+    auth.ensureLogin()
+      .then((user) => {
+        if (!user?.openId) throw new Error('missing openId')
+        return api.updateArticleInteraction(article.id, {
+          openId: user.openId,
+          type: 'like',
+          active: !this.data.isLiked
+        })
+      })
+      .then((state) => {
+        const likes = Number(state.likes || 0)
+        const bookmarks = Number(state.bookmarks || state.favorites || 0)
+        const nextArticle = {
+          ...this.data.article,
+          likes,
+          bookmarks,
+          favorites: bookmarks
+        }
+        userActions.saveArticleSnapshot(nextArticle)
+        userActions.setLikeState(article.id, !!state.isLiked)
+        this.setData({
+          article: nextArticle,
+          isLiked: !!state.isLiked
+        })
+        wx.showToast({
+          title: state.isLiked ? '已点赞！' : '取消点赞',
+          icon: 'none',
+          duration: 800
+        })
+      })
+      .catch((err) => {
+        console.error(err)
+        wx.showToast({ title: '操作失败，请稍后重试', icon: 'none' })
+      })
   },
 
   toggleFavorite() {
     const { article } = this.data
     if (!article) return
-    const nextState = userActions.toggleFavorite(article)
-    this.setData({ isFavorited: nextState })
-    wx.showToast({
-      title: nextState ? '收藏成功！' : '取消收藏',
-      icon: 'none',
-      duration: 800
-    })
+    auth.ensureLogin()
+      .then((user) => {
+        if (!user?.openId) throw new Error('missing openId')
+        return api.updateArticleInteraction(article.id, {
+          openId: user.openId,
+          type: 'favorite',
+          active: !this.data.isFavorited
+        })
+      })
+      .then((state) => {
+        const likes = Number(state.likes || 0)
+        const bookmarks = Number(state.bookmarks || state.favorites || 0)
+        const nextArticle = {
+          ...this.data.article,
+          likes,
+          bookmarks,
+          favorites: bookmarks
+        }
+        userActions.saveArticleSnapshot(nextArticle)
+        userActions.setFavoriteState(article.id, !!state.isFavorited)
+        this.setData({
+          article: nextArticle,
+          isFavorited: !!state.isFavorited
+        })
+        wx.showToast({
+          title: state.isFavorited ? '收藏成功！' : '取消收藏',
+          icon: 'none',
+          duration: 800
+        })
+      })
+      .catch((err) => {
+        console.error(err)
+        wx.showToast({ title: '操作失败，请稍后重试', icon: 'none' })
+      })
   },
 
   onCommentInput(e) {
