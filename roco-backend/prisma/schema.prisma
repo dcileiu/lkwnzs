@@ -17,6 +17,7 @@ model Admin {
 
 model User {
   id           String              @id @default(cuid())
+  uid          Int?                @unique
   openId       String              @unique
   nickname     String?
   avatar       String?

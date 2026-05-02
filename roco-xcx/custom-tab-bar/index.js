@@ -54,11 +54,15 @@ Component({
         return
       }
 
+      this.isSwitchingTab = true
+      this.pendingPath = targetTab.pagePath
       this.setData({ selectedPath: targetTab.pagePath })
 
       wx.switchTab({
         url: targetTab.pagePath,
         fail: () => {
+          this.isSwitchingTab = false
+          this.pendingPath = ""
           this.syncSelected()
         },
       })
@@ -73,6 +77,14 @@ Component({
       }
 
       const currentPath = `/${currentPage.route}`
+      if (this.isSwitchingTab) {
+        if (this.pendingPath && currentPath !== this.pendingPath) {
+          return
+        }
+        this.isSwitchingTab = false
+        this.pendingPath = ""
+      }
+
       if (currentPath !== this.data.selectedPath) {
         this.setData({ selectedPath: currentPath })
       }

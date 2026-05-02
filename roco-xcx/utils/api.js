@@ -42,6 +42,9 @@ const api = {
   getArticleDetail(id) {
     return request(`/articles/${id}`, 'GET');
   },
+  getUserArticleStats(params) {
+    return request('/user/article-stats', 'GET', params);
+  },
   getArticleInteractionState(id, params) {
     return request(`/articles/${id}/interaction`, 'GET', params);
   },

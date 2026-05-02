@@ -1,6 +1,6 @@
-const userActions = require('../../utils/user-actions.js')
 const { setTabBarSelected } = require('../../utils/tabbar.js')
 const auth = require('../../utils/auth.js')
+const api = require('../../utils/api.js')
 const { getArticleFeatureVisible } = require('../../utils/system-config.js')
 
 const DEFAULT_PROFILE = {
@@ -14,6 +14,7 @@ Page({
     uid: '',
     likeCount: 0,
     favoriteCount: 0,
+    historyCount: 0,
     menus: [],
     showNicknameDialog: false,
     nicknameDraft: '',
@@ -39,14 +40,33 @@ Page({
 
   async loadData() {
     const user = await auth.ensureLogin()
-    const stats = userActions.getStats()
     const articleFeatureVisible = getArticleFeatureVisible()
+    let likeCount = 0
+    let favoriteCount = 0
+    let historyCount = 0
+
+    if (articleFeatureVisible && user?.openId) {
+      try {
+        const stats = await api.getUserArticleStats({ openId: user.openId })
+        likeCount = Number(stats.likeCount || 0)
+        favoriteCount = Number(stats.favoriteCount || 0)
+        historyCount = Number(stats.historyCount || 0)
+      } catch (error) {
+        console.warn('fetch user article stats failed', error)
+      }
+    }
 
     const menus = []
     if (articleFeatureVisible) {
-      menus.push({ key: 'like', title: '文章点赞', desc: '查看我点赞的文章' })
-      menus.push({ key: 'favorite', title: '文章收藏', desc: '查看我收藏的文章' })
-      menus.push({ key: 'history', title: '浏览历史', desc: '查看浏览记录' })
+      if (likeCount > 0) {
+        menus.push({ key: 'like', title: '文章点赞', desc: '查看我点赞的文章' })
+      }
+      if (favoriteCount > 0) {
+        menus.push({ key: 'favorite', title: '文章收藏', desc: '查看我收藏的文章' })
+      }
+      if (historyCount > 0) {
+        menus.push({ key: 'history', title: '浏览历史', desc: '查看浏览记录' })
+      }
     }
     menus.push(
       { key: 'share', title: '分享小程序', desc: '推荐给好友' },
@@ -60,9 +80,10 @@ Page({
         nickname: user?.nickname || DEFAULT_PROFILE.nickname,
         avatar: user?.avatar || DEFAULT_PROFILE.avatar
       },
-      uid: user?.id || user?.uid || '',
-      likeCount: stats.likes || 0,
-      favoriteCount: stats.favorites || 0,
+      uid: user?.uid || user?.id || '',
+      likeCount,
+      favoriteCount,
+      historyCount,
       menus,
     })
   },

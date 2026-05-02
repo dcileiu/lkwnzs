@@ -13,7 +13,7 @@
           value="{{searchKeyword}}"
           bindinput="onSearchInput"
           bindconfirm="onSearchConfirm"
-        />
+        />  
       </view>
     </view>
   </view>
@@ -56,9 +56,26 @@
               <view class="guide-info">
                 <view class="guide-title">{{item.title}}</view>
                 <view class="guide-meta">
-                <text>{{item.views || 0}}阅读</text>
-                <text wx:if="{{item.isHot}}" class="tag-hot">HOT</text>
-              </view>
+                  <view class="guide-stats">
+                    <view class="guide-stats-item">
+                      <image class="guide-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/see-yello.svg" mode="aspectFit"></image>
+                      <text>{{item.views || 0}}</text>
+                    </view>
+                    <view class="guide-stats-item">
+                      <image class="guide-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/approve-yello.svg" mode="aspectFit"></image>
+                      <text>{{item.likes || 0}}</text>
+                    </view>
+                    <view class="guide-stats-item">
+                      <image class="guide-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/collect-yello.svg" mode="aspectFit"></image>
+                      <text>{{item.favorites || 0}}</text>
+                    </view>
+                    <view class="guide-stats-item">
+                      <image class="guide-stats-icon" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/comment-yello.svg" mode="aspectFit"></image>
+                      <text>{{item.commentCount || 0}}</text>
+                    </view>
+                  </view>
+                  <text wx:if="{{item.isHot}}" class="tag-hot">HOT</text>
+                </view>
               </view>
             </view>
           </swiper-item>

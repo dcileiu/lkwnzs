@@ -46,7 +46,13 @@ Page({
 
       this.setData({
         articleFeatureVisible,
-        hotArticles: (articles || []).slice(0, 3),
+        hotArticles: (articles || []).slice(0, 3).map((item) => ({
+          ...item,
+          views: item.views || 0,
+          likes: item.likes || 0,
+          favorites: item.favorites || item.bookmarks || 0,
+          commentCount: item.commentCount || 0
+        })),
         hotElves: (elvesData?.items || []).map((item) => ({
           ...item,
           coverImage: normalizeImageUrl(item.coverImage),

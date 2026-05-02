@@ -1,7 +1,6 @@
 .page-container {
   width: 100%;
-  background: #19335d;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 28rpx);
+  height: 100vh;
   background-image:
     linear-gradient(rgba(30, 58, 100, 0.45), rgba(30, 58, 100, 0.45)),
     url("https://wallpaper.cdn.itianci.cn/imgs/miniapp/bgi.webp");
@@ -14,9 +13,8 @@
 }
 
 .content-area {
-  margin-top: -80rpx;
+  margin-top: -40rpx;
   padding: 0 18rpx 20rpx;
-  box-sizing: border-box;
 }
 
 .hero {
@@ -110,6 +108,7 @@
   display: -webkit-box;
   font-size: 32rpx;
   line-height: 1.28;
+  min-height: 80rpx;
   color: #ffffff;
   font-weight: 700;
   text-shadow: 0 4rpx 14rpx rgba(8, 16, 36, 1);

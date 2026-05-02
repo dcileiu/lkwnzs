@@ -1,5 +1,5 @@
 .page-container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   padding: 0;
   background: #19335d;
@@ -280,10 +280,33 @@
 
 .guide-meta {
   margin-top: auto;
-  font-size: 26rpx;
   color: #7d7d7d;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 10rpx;
+}
+
+.guide-stats {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.guide-stats-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4rpx;
+  font-size: 22rpx;
+  color: #a25b3f;
+}
+
+.guide-stats-icon {
+  width: 20rpx;
+  height: 20rpx;
+  flex-shrink: 0;
 }
 
 .tag-hot {

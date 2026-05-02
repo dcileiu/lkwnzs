@@ -1,6 +1,7 @@
 .page-container {
   width: 100%;
   min-height: 100vh;
+  background: #19335d;
   padding-bottom: calc(env(safe-area-inset-bottom) + 28rpx);
   background-image:
     linear-gradient(rgba(30, 58, 100, 0.45), rgba(30, 58, 100, 0.45)),
@@ -13,19 +14,25 @@
   box-sizing: border-box;
 }
 
+.content-area {
+  margin-top: 20rpx;
+  padding: 0 18rpx 20rpx;
+  box-sizing: border-box;
+}
+
 .hero {
   position: relative;
-  margin-top: calc(-1 * env(safe-area-inset-top));
-  padding-top: env(safe-area-inset-top);
-  height: calc(460rpx + env(safe-area-inset-top));
+  height: 460rpx;
   overflow: hidden;
 }
 
 .hero-bg {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 .hero-overlay {
@@ -35,8 +42,10 @@
   background: linear-gradient(
     180deg,
     rgba(25, 51, 93, 0) 0%,
-    rgba(25, 51, 93, 0.25) 60%,
-    #0e2143 100%
+    rgba(25, 51, 93, 0) 45%,
+    rgba(25, 51, 93, 0.35) 65%,
+    rgba(25, 51, 93, 0.75) 85%,
+    #0f1f3e 100%
   );
 }
 
@@ -144,9 +153,17 @@
   margin-top: 24rpx;
   padding: 80rpx 0;
   border-radius: 20rpx;
-  background: rgba(248, 242, 229, 0.9);
+  background: linear-gradient(
+    180deg,
+    rgba(34, 64, 120, 0.98) 0%,
+    rgba(42, 67, 117, 0.98) 100%
+  );
+  box-shadow:
+    inset 0 0 0 1rpx rgba(193, 213, 255, 0.14),
+    0 10rpx 22rpx rgba(9, 23, 55, 0.18);
+  box-sizing: border-box;
   text-align: center;
-  color: #7b6a4f;
+  color: #f3f0e8;
   font-size: 26rpx;
 }
 

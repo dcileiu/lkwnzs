@@ -1,7 +1,5 @@
 <view class="page-container">
-  <view
-    class="hero"
-    >
+  <view class="hero">
     <image class="hero-bg" src="https://wallpaper.cdn.itianci.cn/imgs/miniapp/articles-bg.webp" mode="widthFix"></image>
     <view class="hero-overlay"></view>
 

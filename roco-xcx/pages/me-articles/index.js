@@ -1,5 +1,6 @@
 const userActions = require('../../utils/user-actions.js')
 const api = require('../../utils/api.js')
+const auth = require('../../utils/auth.js')
 
 Page({
   data: {
@@ -35,9 +36,21 @@ Page({
   },
 
   async loadArticles() {
-    const ids = this.type === 'favorite'
+    let ids = this.type === 'favorite'
       ? userActions.getFavoritedArticleIds()
       : userActions.getLikedArticleIds()
+
+    try {
+      const user = await auth.ensureLogin()
+      if (user?.openId) {
+        const stats = await api.getUserArticleStats({ openId: user.openId })
+        ids = this.type === 'favorite'
+          ? (stats.favoritedArticleIds || [])
+          : (stats.likedArticleIds || [])
+      }
+    } catch (error) {
+      console.warn('fetch interaction ids failed, fallback to local cache', error)
+    }
 
     if (!ids.length) {
       this.setData({ articles: [], loading: false })

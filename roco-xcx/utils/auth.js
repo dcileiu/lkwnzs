@@ -1,7 +1,11 @@
-const USERS_KEY = 'wx_users'
 const CURRENT_USER_KEY = 'wx_current_user'
-const OPEN_ID_KEY = 'wx_local_openid'
-const AUTO_ID_KEY = 'wx_user_auto_id'
+const OPEN_ID_KEY = 'wx_openid'
+const LEGACY_OPEN_ID_KEY = 'wx_local_openid'
+const WX_API_BASE = 'https://roco.itianci.cn/api/wx'
+
+function isLegacyFakeOpenId(openId) {
+  return typeof openId === 'string' && openId.indexOf('local_openid_') === 0
+}
 
 function wxLogin() {
   return new Promise((resolve) => {
@@ -12,42 +16,95 @@ function wxLogin() {
   })
 }
 
-function generateFallbackOpenId(code) {
-  return `local_openid_${code || Date.now()}_${Math.random().toString(36).slice(2, 10)}`
+function requestLogin(code) {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: `${WX_API_BASE}/auth/login`,
+      method: 'POST',
+      data: { code },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: (res) => {
+        if (res.statusCode === 200 && res.data && res.data.code === 200) {
+          resolve(res.data.data || null)
+          return
+        }
+        reject(res.data || new Error('微信登录失败'))
+      },
+      fail: (err) => reject(err)
+    })
+  })
 }
 
-function ensureOpenId(code) {
-  const cached = wx.getStorageSync(OPEN_ID_KEY)
-  if (cached) return cached
-  const openId = generateFallbackOpenId(code)
-  wx.setStorageSync(OPEN_ID_KEY, openId)
-  return openId
+function requestUserByOpenId(openId) {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: `${WX_API_BASE}/auth/user`,
+      method: 'GET',
+      data: { openId },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: (res) => {
+        if (res.statusCode === 200 && res.data && res.data.code === 200) {
+          resolve(res.data.data || null)
+          return
+        }
+        reject(res.data || new Error('获取用户信息失败'))
+      },
+      fail: (err) => reject(err)
+    })
+  })
 }
 
 async function ensureLogin() {
-  const code = await wxLogin()
-  const openId = ensureOpenId(code)
+  const cachedUser = getCurrentUser()
+  const cachedOpenId =
+    wx.getStorageSync(OPEN_ID_KEY) ||
+    wx.getStorageSync(LEGACY_OPEN_ID_KEY) ||
+    cachedUser?.openId ||
+    ''
 
-  const users = wx.getStorageSync(USERS_KEY) || []
-  let autoId = wx.getStorageSync(AUTO_ID_KEY) || 1
-  let user = users.find((item) => item.openId === openId)
-
-  if (!user) {
-    user = {
-      id: autoId,
-      openId,
-      nickname: `小洛克${autoId}`,
-      avatar: 'https://wallpaper.cdn.itianci.cn/imgs/avatar/default-avatar.webp',
-      createdAt: Date.now()
+  if (cachedOpenId && !isLegacyFakeOpenId(cachedOpenId)) {
+    try {
+      const user = await requestUserByOpenId(cachedOpenId)
+      if (user?.openId) {
+        wx.setStorageSync(OPEN_ID_KEY, user.openId)
+        wx.setStorageSync(CURRENT_USER_KEY, user)
+        return user
+      }
+    } catch (error) {
+      // Ignore and fallback to wx.login flow.
     }
-    users.push(user)
-    autoId += 1
-    wx.setStorageSync(AUTO_ID_KEY, autoId)
-    wx.setStorageSync(USERS_KEY, users)
   }
 
-  wx.setStorageSync(CURRENT_USER_KEY, user)
-  return user
+  if (isLegacyFakeOpenId(cachedOpenId)) {
+    wx.removeStorageSync(LEGACY_OPEN_ID_KEY)
+    wx.removeStorageSync(OPEN_ID_KEY)
+    wx.removeStorageSync(CURRENT_USER_KEY)
+  }
+
+  try {
+    const code = await wxLogin()
+    if (!code) {
+      throw new Error('wx.login failed')
+    }
+
+    const user = await requestLogin(code)
+    if (!user || !user.openId) {
+      throw new Error('invalid login response')
+    }
+
+    wx.setStorageSync(OPEN_ID_KEY, user.openId)
+    wx.setStorageSync(CURRENT_USER_KEY, user)
+    return user
+  } catch (error) {
+    if (cachedUser?.openId && !isLegacyFakeOpenId(cachedUser.openId)) {
+      return cachedUser
+    }
+    throw error
+  }
 }
 
 function getCurrentUser() {
@@ -63,10 +120,6 @@ function updateCurrentUser(patch = {}) {
     ...patch
   }
 
-  const users = wx.getStorageSync(USERS_KEY) || []
-  const updatedUsers = users.map((item) => (item.openId === nextUser.openId ? nextUser : item))
-
-  wx.setStorageSync(USERS_KEY, updatedUsers)
   wx.setStorageSync(CURRENT_USER_KEY, nextUser)
   return nextUser
 }

@@ -47,6 +47,7 @@
               <text class="menu-title">{{item.title}}</text>
               <text wx:if="{{item.key === 'like'}}" class="menu-count">{{likeCount}}</text>
               <text wx:if="{{item.key === 'favorite'}}" class="menu-count">{{favoriteCount}}</text>
+              <text wx:if="{{item.key === 'history'}}" class="menu-count">{{historyCount}}</text>
             </view>
             <text class="menu-desc">{{item.desc}}</text>
           </view>
